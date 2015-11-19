@@ -72,7 +72,7 @@ npm start
 
 Alternatively, click the button below:
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/facebook/mention-bot)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ## License
 mention-bot is BSD-licensed. We also provide an additional patent grant.

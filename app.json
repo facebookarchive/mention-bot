@@ -1,5 +1,13 @@
 {
-  "name": "Mention Bot",
+  "name": "mention-bot",
+  "description": "Automatically mention potential reviewers on pull requests.",
   "repository": "https://github.com/facebook/mention-bot",
-  "logo": "https://avatars3.githubusercontent.com/u/15710697?v=3&s=400"
+  "logo": "https://avatars0.githubusercontent.com/u/15710697",
+  "keywords": ["node", "express", "github", "pull requests"],
+  "env": {
+    "GITHUB_TOKEN": {
+      "description": "A token generated for the account which will comment on your pull requests.",
+      "required": true
+    }
+  }
 }
