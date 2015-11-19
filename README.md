@@ -21,7 +21,7 @@ Once awakened, the bot will download the diff of the pull request and figure out
 
 <img width="1139" src="https://cloud.githubusercontent.com/assets/197597/11022818/92edd20e-861d-11e5-8c44-c64c1a7de79f.png">
 
-For these, it will download the associated blame to figure out who last touched that line last as he may be a good reviewer.
+For these, it will download the associated blame to figure out who last touched that line last as he or she may be a good reviewer.
 
 <img width="923" src="https://cloud.githubusercontent.com/assets/197597/11022820/973166aa-861d-11e5-83b1-b05e8228f974.png">
 
