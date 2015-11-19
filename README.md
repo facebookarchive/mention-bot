@@ -4,6 +4,7 @@ Do you have a GitHub project that is too big for people to subscribe to all the 
 
 <img width="769" src="https://cloud.githubusercontent.com/assets/197597/11023035/a2f8733e-8622-11e5-84df-49a3d9425938.png">
 
+
 ## How To Use?
 
 - Go to your project on GitHub > Settings > Webhooks & services > Add Webhook
@@ -68,6 +69,10 @@ npm install
 npm start
 # Follow the instructions there
 ```
+
+Alternatively, click the button below:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/facebook/mention-bot)
 
 ## License
 mention-bot is BSD-licensed. We also provide an additional patent grant.
