@@ -1,27 +1,27 @@
 # mention-bot
 
-Do you have a GitHub project that is too big for people to subscribe to all the notifications? The mention bot will automatically mention potential reviewers on pull requests. It helps getting faster turnaround on pull requests by involving the right persons early on.
+Do you have a GitHub project that is too big for people to subscribe to all the notifications? The mention bot will automatically mention potential reviewers on pull requests. It helps getting faster turnaround on pull requests by involving the right people early on.
 
 <img width="769" src="https://cloud.githubusercontent.com/assets/197597/11023035/a2f8733e-8622-11e5-84df-49a3d9425938.png">
 
-## How to use?
+## How To Use?
 
 - Go to your project on GitHub > Settings > Webhooks & services > Add Webhook
 - Payload URL: `https://mention-bot.herokuapp.com/`
 - Let me select individual events > Check `Pull Request`
 - Add Webhook
 
-And you are done, next time a pull request is opened, you should see the bot add a comment ;)
+And you are done. Next time a pull request is opened, you should see the bot add a comment ;)
 
-## How does it work?
+## How Does It Work?
 
 Every time there's a new pull request, GitHub wakes up the mention bot <img src="https://avatars0.githubusercontent.com/u/15710697?v=3&s=40" width="20" height="20" /> using Webhooks.
 
-Once awaken, the bot will download the diff of the pull request and figure out which files and lines have been touched.
+Once awakened, the bot will download the diff of the pull request and figure out which files and lines have been touched.
 
 <img width="1139" src="https://cloud.githubusercontent.com/assets/197597/11022818/92edd20e-861d-11e5-8c44-c64c1a7de79f.png">
 
-For those, it will download the associated blame to figure out who last touched that line last as he may be a good reviewer.
+For these, it will download the associated blame to figure out who last touched that line last as he may be a good reviewer.
 
 <img width="923" src="https://cloud.githubusercontent.com/assets/197597/11022820/973166aa-861d-11e5-83b1-b05e8228f974.png">
 
@@ -31,7 +31,7 @@ After running the algorithm described in the next section, it will comment on th
 
 ## Algorithm
 
-The problem of finding who are the best reviewers is really hard and I don't think that any algorithm will achieve perfection. Instead, what we want here is to be **best effort**. We want to notify people that are likely going to be interested and be good reviewers. If we ping a few too many people that's not the end of the world neither if we don't ping the exact right person.
+The problem of finding who the best reviewers are is really hard and I don't think that any algorithm will achieve perfection. Instead, what we want here is to be **best effort**. We want to notify people that are likely going to be interested and be good reviewers. If we ping a few too many people that's not the end of the world neither if we don't ping the exact right person.
 
 We use two heuristics:
 - If a line was deleted or modified, the person that last touched that line is likely going to care about this pull request.
@@ -57,7 +57,7 @@ Since getting the blame information is sending an http request to GitHub it is p
 - concat `DeletedLines` with `AllLines`
 - take the first three names
 
-## How to contribute or run your own bot?
+## How To Contribute or Run Your Own Bot?
 
 If you want to use a different account for the bot, change the message or extend it with more functionalities, we've tried to make it super easy:
 
