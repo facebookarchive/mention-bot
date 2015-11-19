@@ -46,7 +46,7 @@ Create two empty hash map:
 **Filling the data structures**
 
 - for each deleted line, find the author in the blame and increase its count by one in the `DeletedLines` map.
-- for each line in every file that was changed, find the author in the blame and increate its ocunt by one in the `AllLines` map.
+- for each line in every file that was changed, find the author in the blame and increase its count by one in the `AllLines` map.
 
 Since getting the blame information is sending an http request to GitHub it is pretty expensive. We first sort the files by number of deleted lines and only pick the top 5. Since we're only looking for 3 names and the algorithm is best effort, this greatly speeds up the algorithm in case of large pull requests for little loss in precision.
 
