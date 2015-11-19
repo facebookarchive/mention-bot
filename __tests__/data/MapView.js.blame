@@ -1,0 +1,3003 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class=" is-copy-enabled">
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# object: http://ogp.me/ns/object# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="viewport" content="width=1020">
+
+
+    <title>react-native/Libraries/Components/MapView/MapView.js at master · facebook/react-native</title>
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub">
+    <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-144.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144.png">
+    <meta property="fb:app_id" content="1401488693436528">
+
+      <meta content="@github" name="twitter:site" /><meta content="summary" name="twitter:card" /><meta content="facebook/react-native" name="twitter:title" /><meta content="react-native - A framework for building native apps with React." name="twitter:description" /><meta content="https://avatars2.githubusercontent.com/u/69631?v=3&amp;s=400" name="twitter:image:src" />
+      <meta content="GitHub" property="og:site_name" /><meta content="object" property="og:type" /><meta content="https://avatars2.githubusercontent.com/u/69631?v=3&amp;s=400" property="og:image" /><meta content="facebook/react-native" property="og:title" /><meta content="https://github.com/facebook/react-native" property="og:url" /><meta content="react-native - A framework for building native apps with React." property="og:description" />
+      <meta name="browser-stats-url" content="https://api.github.com/_private/browser/stats">
+    <meta name="browser-errors-url" content="https://api.github.com/_private/browser/errors">
+    <link rel="assets" href="https://assets-cdn.github.com/">
+    <link rel="web-socket" href="wss://live.github.com/_sockets/MTk3NTk3OmUzMWYwNDNhZjA3YjU2ZjRkY2M1NjIyNGRmY2FkYTEzOmZiMjYzMTk2ZmYzMDQxZWYzMjc2MGIyMDlmZjBiZTAzMWY0ZTI1YTQ1ODM4NWZlYjk2YjhlMWY2NzQ0OTI2Mjg=--1e2b699198c12917e0fd9ba6d25e5cad4d78c1ee">
+    <meta name="pjax-timeout" content="1000">
+    <link rel="sudo-modal" href="/sessions/sudo_modal">
+
+    <meta name="msapplication-TileImage" content="/windows-tile.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="selected-link" value="repo_source" data-pjax-transient>
+
+    <meta name="google-site-verification" content="KT5gs8h0wvaagLKAVWq8bbeNwnZZK1r1XQysX3xurLU">
+    <meta name="google-analytics" content="UA-3769691-2">
+
+<meta content="collector.githubapp.com" name="octolytics-host" /><meta content="collector-cdn.github.com" name="octolytics-script-host" /><meta content="github" name="octolytics-app-id" /><meta content="C7C94002:108C:16F747D3:56118F83" name="octolytics-dimension-request_id" /><meta content="197597" name="octolytics-actor-id" /><meta content="vjeux" name="octolytics-actor-login" /><meta content="d22e65db6869b990da835c7e82811d8236cd5febc28a08dde8a27c79cdc58078" name="octolytics-actor-hash" />
+
+<meta content="Rails, view, blob#blame" data-pjax-transient="true" name="analytics-event" />
+
+
+  <meta class="js-ga-set" name="dimension1" content="Logged In">
+    <meta class="js-ga-set" name="dimension4" content="Current repo nav">
+
+
+
+
+    <meta name="is-dotcom" content="true">
+        <meta name="hostname" content="github.com">
+    <meta name="user-login" content="vjeux">
+
+      <link rel="mask-icon" href="https://assets-cdn.github.com/pinned-octocat.svg" color="#4078c0">
+      <link rel="icon" type="image/x-icon" href="https://assets-cdn.github.com/favicon.ico">
+
+      <!-- </textarea> --><!-- '"` --><meta content="authenticity_token" name="csrf-param" />
+<meta content="7+uoMuy0oVMu5j0iEjxKFI+f1SaSpr4Z7yOL9MHYZYfXCm2HeieXPViabAD5PHXcaqdubX8OeZ3XV6m6j5y0Dw==" name="csrf-token" />
+    <meta content="46901c28300e326bcdc9e9383e7aebb327ab69dc" name="form-nonce" />
+
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/github-7d448613a60a84dcd1e1f4f2d4939266979ea193aa79a9525436f58f3f66b98c.css" integrity="sha256-fUSGE6YKhNzR4fTy1JOSZpeeoZOqealSVDb1jz9muYw=" media="all" rel="stylesheet" />
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/github2-4a69aa85ab5a62a47bdaae736e455ee040443ccfb3564d1472a088d07f9a1cbd.css" integrity="sha256-SmmqhataYqR72q5zbkVe4EBEPM+zVk0UcqCI0H+aHL0=" media="all" rel="stylesheet" />
+
+
+
+
+
+    <meta http-equiv="x-pjax-version" content="a9fc5a900b5ca90c888ebebc183cea5a">
+
+
+  <meta name="description" content="react-native - A framework for building native apps with React.">
+  <meta name="go-import" content="github.com/facebook/react-native git https://github.com/facebook/react-native.git">
+
+  <meta content="69631" name="octolytics-dimension-user_id" /><meta content="facebook" name="octolytics-dimension-user_login" /><meta content="29028775" name="octolytics-dimension-repository_id" /><meta content="facebook/react-native" name="octolytics-dimension-repository_nwo" /><meta content="true" name="octolytics-dimension-repository_public" /><meta content="false" name="octolytics-dimension-repository_is_fork" /><meta content="29028775" name="octolytics-dimension-repository_network_root_id" /><meta content="facebook/react-native" name="octolytics-dimension-repository_network_root_nwo" />
+  <link href="https://github.com/facebook/react-native/commits/master.atom" rel="alternate" title="Recent Commits to react-native:master" type="application/atom+xml">
+
+  </head>
+
+
+  <body class="logged_in   env-production macintosh vis-public">
+    <a href="#start-of-content" tabindex="1" class="accessibility-aid js-skip-to-content">Skip to content</a>
+
+
+
+
+
+
+
+      <div class="header header-logged-in true" role="banner">
+  <div class="container clearfix">
+
+    <a class="header-logo-invertocat" href="https://github.com/" data-hotkey="g d" aria-label="Homepage" data-ga-click="Header, go to dashboard, icon:logo">
+  <span class="mega-octicon octicon-mark-github"></span>
+</a>
+
+
+      <div class="site-search repo-scope js-site-search" role="search">
+          <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/facebook/react-native/search" class="js-site-search-form" data-global-search-url="/search" data-repo-search-url="/facebook/react-native/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+  <label class="js-chromeless-input-container form-control">
+    <div class="scope-badge">This repository</div>
+    <input type="text"
+      class="js-site-search-focus js-site-search-field is-clearable chromeless-input"
+      data-hotkey="s"
+      name="q"
+      placeholder="Search"
+      aria-label="Search this repository"
+      data-global-scope-placeholder="Search GitHub"
+      data-repo-scope-placeholder="Search"
+      tabindex="1"
+      autocapitalize="off">
+  </label>
+</form>
+      </div>
+
+      <ul class="header-nav left" role="navigation">
+        <li class="header-nav-item">
+          <a href="/pulls" class="js-selected-navigation-item header-nav-link" data-ga-click="Header, click, Nav menu - item:pulls context:user" data-hotkey="g p" data-selected-links="/pulls /pulls/assigned /pulls/mentioned /pulls">
+            Pull requests
+</a>        </li>
+        <li class="header-nav-item">
+          <a href="/issues" class="js-selected-navigation-item header-nav-link" data-ga-click="Header, click, Nav menu - item:issues context:user" data-hotkey="g i" data-selected-links="/issues /issues/assigned /issues/mentioned /issues">
+            Issues
+</a>        </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="https://gist.github.com/" data-ga-click="Header, go to gist, text:gist">Gist</a>
+          </li>
+      </ul>
+
+
+<ul class="header-nav user-nav right" id="user-links">
+  <li class="header-nav-item">
+      <span class="js-socket-channel js-updatable-content"
+        data-channel="notification-changed:vjeux"
+        data-url="/notifications/header">
+      <a href="/notifications" aria-label="You have unread notifications" class="header-nav-link notification-indicator tooltipped tooltipped-s" data-ga-click="Header, go to notifications, icon:unread" data-hotkey="g n">
+          <span class="mail-status unread"></span>
+          <span class="octicon octicon-bell"></span>
+</a>  </span>
+
+  </li>
+
+  <li class="header-nav-item dropdown js-menu-container">
+    <a class="header-nav-link tooltipped tooltipped-s js-menu-target" href="/new"
+       aria-label="Create new…"
+       data-ga-click="Header, create new, icon:add">
+      <span class="octicon octicon-plus left"></span>
+      <span class="dropdown-caret"></span>
+    </a>
+
+    <div class="dropdown-menu-content js-menu-content">
+      <ul class="dropdown-menu dropdown-menu-sw">
+
+<a class="dropdown-item" href="/new" data-ga-click="Header, create new repository">
+  New repository
+</a>
+
+
+  <a class="dropdown-item" href="/organizations/new" data-ga-click="Header, create new organization">
+    New organization
+  </a>
+
+
+
+  <div class="dropdown-divider"></div>
+  <div class="dropdown-header">
+    <span title="facebook/react-native">This repository</span>
+  </div>
+    <a class="dropdown-item" href="/facebook/react-native/issues/new" data-ga-click="Header, create new issue">
+      New issue
+    </a>
+    <a class="dropdown-item" href="/facebook/react-native/settings/collaboration" data-ga-click="Header, create new collaborator">
+      New collaborator
+    </a>
+
+      </ul>
+    </div>
+  </li>
+
+  <li class="header-nav-item dropdown js-menu-container">
+    <a class="header-nav-link name tooltipped tooltipped-s js-menu-target" href="/vjeux"
+       aria-label="View profile and more"
+       data-ga-click="Header, show menu, icon:avatar">
+      <img alt="@vjeux" class="avatar" height="20" src="https://avatars0.githubusercontent.com/u/197597?v=3&amp;s=40" width="20" />
+      <span class="dropdown-caret"></span>
+    </a>
+
+    <div class="dropdown-menu-content js-menu-content">
+      <div class="dropdown-menu  dropdown-menu-sw">
+        <div class=" dropdown-header header-nav-current-user css-truncate">
+            Signed in as <strong class="css-truncate-target">vjeux</strong>
+
+        </div>
+
+
+        <div class="dropdown-divider"></div>
+
+          <a class="dropdown-item" href="/vjeux" data-ga-click="Header, go to profile, text:your profile">
+            Your profile
+          </a>
+        <a class="dropdown-item" href="/stars" data-ga-click="Header, go to starred repos, text:your stars">
+          Your stars
+        </a>
+        <a class="dropdown-item" href="/explore" data-ga-click="Header, go to explore, text:explore">
+          Explore
+        </a>
+          <a class="dropdown-item" href="/integrations" data-ga-click="Header, go to integrations, text:integrations">
+            Integrations
+          </a>
+        <a class="dropdown-item" href="https://help.github.com" data-ga-click="Header, go to help, text:help">
+          Help
+        </a>
+
+          <div class="dropdown-divider"></div>
+
+          <a class="dropdown-item" href="/settings/profile" data-ga-click="Header, go to settings, icon:settings">
+            Settings
+          </a>
+
+          <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/logout" class="logout-form" data-form-nonce="46901c28300e326bcdc9e9383e7aebb327ab69dc" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="yl0+nJvgH006zIdij99tiQi+uHGX4VWDFGHrgWqRP/OdSDRo1MFPtjKnMJruK6BjbLnK1wCC1he66KB4ZdAdwA==" /></div>
+            <button class="dropdown-item dropdown-signout" data-ga-click="Header, sign out, icon:logout">
+              Sign out
+            </button>
+</form>
+      </div>
+    </div>
+  </li>
+</ul>
+
+
+
+  </div>
+</div>
+
+
+
+
+
+
+    <div id="start-of-content" class="accessibility-aid"></div>
+
+    <div id="js-flash-container">
+</div>
+
+
+    <div role="main" class="main-content">
+        <div itemscope itemtype="http://schema.org/WebPage">
+    <div class="pagehead repohead instapaper_ignore readability-menu">
+
+      <div class="container">
+
+        <div class="clearfix">
+
+<ul class="pagehead-actions">
+
+  <li>
+      <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/notifications/subscribe" class="js-social-container" data-autosubmit="true" data-form-nonce="46901c28300e326bcdc9e9383e7aebb327ab69dc" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="FH4R576R5pRa6Px4HB+PWV4Qoo89Y/uqDLeegXPqoWirYscgRAewwkatXjQEmO+15eGxCTWDp57zlMFZsA6gGQ==" /></div>    <input id="repository_id" name="repository_id" type="hidden" value="29028775" />
+
+      <div class="select-menu js-menu-container js-select-menu">
+        <a href="/facebook/react-native/subscription"
+          class="btn btn-sm btn-with-count select-menu-button js-menu-target" role="button" tabindex="0" aria-haspopup="true"
+          data-ga-click="Repository, click Watch settings, action:blob#blame">
+          <span class="js-select-button">
+            <span class="octicon octicon-eye"></span>
+            Watch
+          </span>
+        </a>
+        <a class="social-count js-social-count" href="/facebook/react-native/watchers">
+          1,405
+        </a>
+
+        <div class="select-menu-modal-holder">
+          <div class="select-menu-modal subscription-menu-modal js-menu-content" aria-hidden="true">
+            <div class="select-menu-header">
+              <span class="select-menu-title">Notifications</span>
+              <span class="octicon octicon-x js-menu-close" role="button" aria-label="Close"></span>
+            </div>
+
+            <div class="select-menu-list js-navigation-container" role="menu">
+
+              <div class="select-menu-item js-navigation-item selected" role="menuitem" tabindex="0">
+                <span class="select-menu-item-icon octicon octicon-check"></span>
+                <div class="select-menu-item-text">
+                  <input checked="checked" id="do_included" name="do" type="radio" value="included" />
+                  <span class="select-menu-item-heading">Not watching</span>
+                  <span class="description">Be notified when participating or @mentioned.</span>
+                  <span class="js-select-button-text hidden-select-button-text">
+                    <span class="octicon octicon-eye"></span>
+                    Watch
+                  </span>
+                </div>
+              </div>
+
+              <div class="select-menu-item js-navigation-item " role="menuitem" tabindex="0">
+                <span class="select-menu-item-icon octicon octicon octicon-check"></span>
+                <div class="select-menu-item-text">
+                  <input id="do_subscribed" name="do" type="radio" value="subscribed" />
+                  <span class="select-menu-item-heading">Watching</span>
+                  <span class="description">Be notified of all conversations.</span>
+                  <span class="js-select-button-text hidden-select-button-text">
+                    <span class="octicon octicon-eye"></span>
+                    Unwatch
+                  </span>
+                </div>
+              </div>
+
+              <div class="select-menu-item js-navigation-item " role="menuitem" tabindex="0">
+                <span class="select-menu-item-icon octicon octicon-check"></span>
+                <div class="select-menu-item-text">
+                  <input id="do_ignore" name="do" type="radio" value="ignore" />
+                  <span class="select-menu-item-heading">Ignoring</span>
+                  <span class="description">Never be notified.</span>
+                  <span class="js-select-button-text hidden-select-button-text">
+                    <span class="octicon octicon-mute"></span>
+                    Stop ignoring
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+</form>
+  </li>
+
+  <li>
+
+  <div class="js-toggler-container js-social-container starring-container on">
+
+    <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/facebook/react-native/unstar" class="js-toggler-form starred js-unstar-button" data-form-nonce="46901c28300e326bcdc9e9383e7aebb327ab69dc" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="+OVC2t8ClqGGaNMPlf0x3m1pQwSJEfOQuHMALwezSEerXd7Kb+cV69UkYb+EEf/4vHQBtBnw7mDvD0NKuW+pDg==" /></div>
+      <button
+        class="btn btn-sm btn-with-count js-toggler-target"
+        aria-label="Unstar this repository" title="Unstar facebook/react-native"
+        data-ga-click="Repository, click unstar button, action:blob#blame; text:Unstar">
+        <span class="octicon octicon-star"></span>
+        Unstar
+      </button>
+        <a class="social-count js-social-count" href="/facebook/react-native/stargazers">
+          20,219
+        </a>
+</form>
+    <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/facebook/react-native/star" class="js-toggler-form unstarred js-star-button" data-form-nonce="46901c28300e326bcdc9e9383e7aebb327ab69dc" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="HjbmBc4T1npHmvCOHHsSfpz1r20ErjOu7CB7cHzibYNar58jud3JTVC5tnKSGh8JWuWRJQU692haYiSDA9X9/g==" /></div>
+      <button
+        class="btn btn-sm btn-with-count js-toggler-target"
+        aria-label="Star this repository" title="Star facebook/react-native"
+        data-ga-click="Repository, click star button, action:blob#blame; text:Star">
+        <span class="octicon octicon-star"></span>
+        Star
+      </button>
+        <a class="social-count js-social-count" href="/facebook/react-native/stargazers">
+          20,219
+        </a>
+</form>  </div>
+
+  </li>
+
+  <li>
+          <a href="#fork-destination-box" class="btn btn-sm btn-with-count"
+              title="Fork your own copy of facebook/react-native to your account"
+              aria-label="Fork your own copy of facebook/react-native to your account"
+              rel="facebox"
+              data-ga-click="Repository, show fork modal, action:blob#blame; text:Fork">
+            <span class="octicon octicon-repo-forked"></span>
+            Fork
+          </a>
+
+          <div id="fork-destination-box" style="display: none;">
+            <h2 class="facebox-header" data-facebox-id="facebox-header">Where should we fork this repository?</h2>
+            <include-fragment src=""
+                class="js-fork-select-fragment fork-select-fragment"
+                data-url="/facebook/react-native/fork?fragment=1">
+              <img alt="Loading" height="64" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-128.gif" width="64" />
+            </include-fragment>
+          </div>
+
+    <a href="/facebook/react-native/network" class="social-count">
+      2,894
+    </a>
+  </li>
+</ul>
+
+          <h1 itemscope itemtype="http://data-vocabulary.org/Breadcrumb" class="entry-title public ">
+  <span class="mega-octicon octicon-repo"></span>
+  <span class="author"><a href="/facebook" class="url fn" itemprop="url" rel="author"><span itemprop="title">facebook</span></a></span><!--
+--><span class="path-divider">/</span><!--
+--><strong><a href="/facebook/react-native" data-pjax="#js-repo-pjax-container">react-native</a></strong>
+
+  <span class="page-context-loader">
+    <img alt="" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+  </span>
+
+</h1>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="repository-with-sidebar repo-container new-discussion-timeline ">
+        <div class="repository-sidebar clearfix">
+
+<nav class="sunken-menu repo-nav js-repo-nav js-sidenav-container-pjax js-octicon-loaders"
+     role="navigation"
+     data-pjax="#js-repo-pjax-container"
+     data-issue-count-url="/facebook/react-native/issues/counts">
+  <ul class="sunken-menu-group">
+    <li class="tooltipped tooltipped-w" aria-label="Code">
+      <a href="/facebook/react-native" aria-label="Code" aria-selected="true" class="js-selected-navigation-item selected sunken-menu-item" data-hotkey="g c" data-selected-links="repo_source repo_downloads repo_commits repo_releases repo_tags repo_branches /facebook/react-native">
+        <span class="octicon octicon-code"></span> <span class="full-word">Code</span>
+        <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>    </li>
+
+      <li class="tooltipped tooltipped-w" aria-label="Issues">
+        <a href="/facebook/react-native/issues" aria-label="Issues" class="js-selected-navigation-item sunken-menu-item" data-hotkey="g i" data-selected-links="repo_issues repo_labels repo_milestones /facebook/react-native/issues">
+          <span class="octicon octicon-issue-opened"></span> <span class="full-word">Issues</span>
+          <span class="js-issue-replace-counter"></span>
+          <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>      </li>
+
+    <li class="tooltipped tooltipped-w" aria-label="Pull requests">
+      <a href="/facebook/react-native/pulls" aria-label="Pull requests" class="js-selected-navigation-item sunken-menu-item" data-hotkey="g p" data-selected-links="repo_pulls /facebook/react-native/pulls">
+          <span class="octicon octicon-git-pull-request"></span> <span class="full-word">Pull requests</span>
+          <span class="js-pull-replace-counter"></span>
+          <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>    </li>
+
+      <li class="tooltipped tooltipped-w" aria-label="Wiki">
+        <a href="/facebook/react-native/wiki" aria-label="Wiki" class="js-selected-navigation-item sunken-menu-item" data-hotkey="g w" data-selected-links="repo_wiki /facebook/react-native/wiki">
+          <span class="octicon octicon-book"></span> <span class="full-word">Wiki</span>
+          <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>      </li>
+  </ul>
+  <div class="sunken-menu-separator"></div>
+  <ul class="sunken-menu-group">
+
+    <li class="tooltipped tooltipped-w" aria-label="Pulse">
+      <a href="/facebook/react-native/pulse" aria-label="Pulse" class="js-selected-navigation-item sunken-menu-item" data-selected-links="pulse /facebook/react-native/pulse">
+        <span class="octicon octicon-pulse"></span> <span class="full-word">Pulse</span>
+        <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>    </li>
+
+    <li class="tooltipped tooltipped-w" aria-label="Graphs">
+      <a href="/facebook/react-native/graphs" aria-label="Graphs" class="js-selected-navigation-item sunken-menu-item" data-selected-links="repo_graphs repo_contributors /facebook/react-native/graphs">
+        <span class="octicon octicon-graph"></span> <span class="full-word">Graphs</span>
+        <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>    </li>
+  </ul>
+
+
+    <div class="sunken-menu-separator"></div>
+    <ul class="sunken-menu-group">
+      <li class="tooltipped tooltipped-w" aria-label="Settings">
+        <a href="/facebook/react-native/settings" aria-label="Settings" class="js-selected-navigation-item sunken-menu-item" data-selected-links="repo_settings repo_branch_settings hooks /facebook/react-native/settings">
+          <span class="octicon octicon-gear"></span> <span class="full-word">Settings</span>
+          <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>      </li>
+    </ul>
+</nav>
+
+            <div class="only-with-full-nav">
+
+<div class="js-clone-url clone-url "
+  data-protocol-type="http">
+  <h3 class="text-small"><span class="text-emphasized">HTTPS</span> clone URL</h3>
+  <div class="input-group js-zeroclipboard-container">
+    <input type="text" class="input-mini text-small input-monospace js-url-field js-zeroclipboard-target"
+           value="https://github.com/facebook/react-native.git" readonly="readonly" aria-label="HTTPS clone URL">
+    <span class="input-group-button">
+      <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+    </span>
+  </div>
+</div>
+
+
+<div class="js-clone-url clone-url open"
+  data-protocol-type="ssh">
+  <h3 class="text-small"><span class="text-emphasized">SSH</span> clone URL</h3>
+  <div class="input-group js-zeroclipboard-container">
+    <input type="text" class="input-mini text-small input-monospace js-url-field js-zeroclipboard-target"
+           value="git@github.com:facebook/react-native.git" readonly="readonly" aria-label="SSH clone URL">
+    <span class="input-group-button">
+      <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+    </span>
+  </div>
+</div>
+
+
+<div class="js-clone-url clone-url "
+  data-protocol-type="subversion">
+  <h3 class="text-small"><span class="text-emphasized">Subversion</span> checkout URL</h3>
+  <div class="input-group js-zeroclipboard-container">
+    <input type="text" class="input-mini text-small input-monospace js-url-field js-zeroclipboard-target"
+           value="https://github.com/facebook/react-native" readonly="readonly" aria-label="Subversion checkout URL">
+    <span class="input-group-button">
+      <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+    </span>
+  </div>
+</div>
+
+
+
+<div class="clone-options text-small">You can clone with
+  <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol?protocol_selector=http&amp;protocol_type=push" class="inline-form js-clone-selector-form is-enabled" data-form-nonce="46901c28300e326bcdc9e9383e7aebb327ab69dc" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="R1aYZ3C+uwpgotrNLiaNer00WKheJDTJMOd6n3mhQSidUB8F+epLasMkNohtRN8cyBUhNj82CajlFSyMLPoiAA==" /></div><button class="btn-link js-clone-selector" data-protocol="http" type="submit">HTTPS</button></form>, <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol?protocol_selector=ssh&amp;protocol_type=push" class="inline-form js-clone-selector-form is-enabled" data-form-nonce="46901c28300e326bcdc9e9383e7aebb327ab69dc" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="5Evk2yqmZTc6Be7WW9uX43pVADBDzhqrzoMXKrF4pFPACD4GF3jop2DYOXHXQDLmR7J1IAMkdh65td6vLymRZg==" /></div><button class="btn-link js-clone-selector" data-protocol="ssh" type="submit">SSH</button></form>, or <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol?protocol_selector=subversion&amp;protocol_type=push" class="inline-form js-clone-selector-form is-enabled" data-form-nonce="46901c28300e326bcdc9e9383e7aebb327ab69dc" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="6Npf3X9CgLKQfJlQKI5lqlI4oz08YvYAldCWv9a2d+4zQoXrHxDKQvJ/hv7QBmrnVUei+EkZ1yVLwnTxeaUjbA==" /></div><button class="btn-link js-clone-selector" data-protocol="subversion" type="submit">Subversion</button></form>.
+  <a href="https://help.github.com/articles/which-remote-url-should-i-use" class="help tooltipped tooltipped-n" aria-label="Get help on which URL is right for you.">
+    <span class="octicon octicon-question"></span>
+  </a>
+</div>
+  <a href="github-mac://openRepo/https://github.com/facebook/react-native" class="btn btn-sm sidebar-button" title="Save facebook/react-native to your computer and use it in GitHub Desktop." aria-label="Save facebook/react-native to your computer and use it in GitHub Desktop.">
+    <span class="octicon octicon-desktop-download"></span>
+    Clone in Desktop
+  </a>
+
+              <a href="/facebook/react-native/archive/master.zip"
+                 class="btn btn-sm sidebar-button"
+                 aria-label="Download the contents of facebook/react-native as a zip file"
+                 title="Download the contents of facebook/react-native as a zip file"
+                 rel="nofollow">
+                <span class="octicon octicon-cloud-download"></span>
+                Download ZIP
+              </a>
+            </div>
+        </div>
+        <div id="js-repo-pjax-container" class="repository-content context-loader-container" data-pjax-container>
+
+
+<a href="/facebook/react-native/blame/8356b609a59809807f17f49da4f173a3452540b7/Libraries/Components/MapView/MapView.js" class="hidden js-permalink-shortcut" data-hotkey="y">Permalink</a>
+
+<div class="breadcrumb css-truncate blame-breadcrumb js-zeroclipboard-container">
+  <span class="css-truncate-target js-zeroclipboard-target"><span class="repo-root js-repo-root"><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/facebook/react-native" class="" data-branch="master" data-pjax="true" itemscope="url"><span itemprop="title">react-native</span></a></span></span><span class="separator">/</span><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/facebook/react-native/tree/master/Libraries" class="" data-branch="master" data-pjax="true" itemscope="url"><span itemprop="title">Libraries</span></a></span><span class="separator">/</span><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/facebook/react-native/tree/master/Libraries/Components" class="" data-branch="master" data-pjax="true" itemscope="url"><span itemprop="title">Components</span></a></span><span class="separator">/</span><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/facebook/react-native/tree/master/Libraries/Components/MapView" class="" data-branch="master" data-pjax="true" itemscope="url"><span itemprop="title">MapView</span></a></span><span class="separator">/</span><strong class="final-path">MapView.js</strong></span>
+  <button aria-label="Copy file path to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+</div>
+
+<div class="line-age-legend">
+  <span>Newer</span>
+  <ol>
+      <li class="heat" data-heat="1"></li>
+      <li class="heat" data-heat="2"></li>
+      <li class="heat" data-heat="3"></li>
+      <li class="heat" data-heat="4"></li>
+      <li class="heat" data-heat="5"></li>
+      <li class="heat" data-heat="6"></li>
+      <li class="heat" data-heat="7"></li>
+      <li class="heat" data-heat="8"></li>
+      <li class="heat" data-heat="9"></li>
+      <li class="heat" data-heat="10"></li>
+  </ol>
+  <span>Older</span>
+</div>
+
+<div class="file">
+  <div class="file-header">
+    <div class="file-actions">
+      <div class="btn-group">
+        <a href="/facebook/react-native/raw/master/Libraries/Components/MapView/MapView.js" class="btn btn-sm" id="raw-url">Raw</a>
+        <a href="/facebook/react-native/blob/master/Libraries/Components/MapView/MapView.js" class="btn btn-sm js-update-url-with-hash">Normal view</a>
+        <a href="/facebook/react-native/commits/master/Libraries/Components/MapView/MapView.js" class="btn btn-sm" rel="nofollow">History</a>
+      </div>
+    </div>
+
+
+
+    <div class="file-info">
+      <span class="octicon octicon-file-text"></span>
+      <span class="file-mode" title="File Mode">100644</span>
+      <span class="file-info-divider"></span>
+        286 lines (245 sloc)
+        <span class="file-info-divider"></span>
+      8.08 KB
+    </div>
+  </div>
+
+  <div class="blob-wrapper">
+    <table class="blame-container highlight data js-file-line-container">
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 9, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L1">1</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC1"><span class="pl-c">/**</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="7">
+            <a href="/facebook/react-native/commit/e1ef0328d9e8aa5437bb3b2b9602247d41fe9465" class="blame-sha">e1ef032</a>
+            <img alt="@vjeux" class="avatar blame-commit-avatar" height="32" src="https://avatars3.githubusercontent.com/u/197597?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/e1ef0328d9e8aa5437bb3b2b9602247d41fe9465" class="blame-commit-title" title="[ReactNative] Expanded license on js files">[ReactNative] Expanded license on js files</a>
+            <div class="blame-commit-meta">
+              <a href="/vjeux" class="muted-link" rel="contributor">vjeux</a> authored
+              <time datetime="2015-03-23T20:35:08Z" is="relative-time">Mar 23, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L2">2</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC2"><span class="pl-c"> * Copyright (c) 2015-present, Facebook, Inc.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L3">3</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC3"><span class="pl-c"> * All rights reserved.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L4">4</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC4"><span class="pl-c"> *</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L5">5</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC5"><span class="pl-c"> * This source code is licensed under the BSD-style license found in the</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L6">6</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC6"><span class="pl-c"> * LICENSE file in the root directory of this source tree. An additional grant</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L7">7</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC7"><span class="pl-c"> * of patent rights can be found in the PATENTS file in the same directory.</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="3">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L8">8</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC8"><span class="pl-c"> *</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L9">9</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC9"><span class="pl-c"> * @providesModule MapView</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/95deed578c3ce9fcece53c7c5bc02015b06d956c" class="blame-sha">95deed5</a>
+            <img alt="@bhosmer" class="avatar blame-commit-avatar" height="32" src="https://avatars3.githubusercontent.com/u/355313?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/95deed578c3ce9fcece53c7c5bc02015b06d956c" class="blame-commit-title" title="flowified Libraries from Avik">flowified Libraries from Avik</a>
+            <div class="blame-commit-meta">
+              <a href="/bhosmer" class="muted-link" rel="contributor">bhosmer</a> authored
+              <time datetime="2015-03-25T19:55:10Z" is="relative-time">Mar 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L10">10</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC10"><span class="pl-c"> * @flow</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="6">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L11">11</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC11"><span class="pl-c"> */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L12">12</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC12"><span class="pl-s"><span class="pl-pds">&#39;</span>use strict<span class="pl-pds">&#39;</span></span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L13">13</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC13"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L14">14</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC14"><span class="pl-k">var</span> EdgeInsetsPropType <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">&#39;</span>EdgeInsetsPropType<span class="pl-pds">&#39;</span></span>);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L15">15</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC15"><span class="pl-k">var</span> NativeMethodsMixin <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">&#39;</span>NativeMethodsMixin<span class="pl-pds">&#39;</span></span>);</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/58a550fa0625f31108e06f32ebb2958e2ffefcf0" class="blame-sha">58a550f</a>
+            <img alt="@sahrens" class="avatar blame-commit-avatar" height="32" src="https://avatars3.githubusercontent.com/u/1509831?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/58a550fa0625f31108e06f32ebb2958e2ffefcf0" class="blame-commit-title" title="[ReactNative] use requireNativeComponent to clean up a bunch of boilerplate">[ReactNative] use requireNativeComponent to clean up a bunch of boile…</a>
+            <div class="blame-commit-meta">
+              <a href="/sahrens" class="muted-link" rel="contributor">sahrens</a> authored
+              <time datetime="2015-04-22T04:07:17Z" is="relative-time">Apr 21, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L16">16</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC16"><span class="pl-k">var</span> Platform <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">&#39;</span>Platform<span class="pl-pds">&#39;</span></span>);</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L17">17</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC17"><span class="pl-k">var</span> React <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">&#39;</span>React<span class="pl-pds">&#39;</span></span>);</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/ff00e1496c10ddf854672b49037c83c1351a00cb" class="blame-sha">ff00e14</a>
+            <img alt="@kmagiera" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/726445?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/ff00e1496c10ddf854672b49037c83c1351a00cb" class="blame-commit-title" title="[ReactNative] Rename ReactIOS JS module (and relatives) to ReactNative.">[ReactNative] Rename ReactIOS JS module (and relatives) to ReactNative.</a>
+            <div class="blame-commit-meta">
+              <a href="/kmagiera" class="muted-link" rel="contributor">kmagiera</a> authored
+              <time datetime="2015-05-08T16:45:43Z" is="relative-time">May 8, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="6"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L18">18</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC18"><span class="pl-k">var</span> ReactNativeViewAttributes <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">&#39;</span>ReactNativeViewAttributes<span class="pl-pds">&#39;</span></span>);</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="3">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L19">19</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC19"><span class="pl-k">var</span> View <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">&#39;</span>View<span class="pl-pds">&#39;</span></span>);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L20">20</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC20"></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/ff00e1496c10ddf854672b49037c83c1351a00cb" class="blame-sha">ff00e14</a>
+            <img alt="@kmagiera" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/726445?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/ff00e1496c10ddf854672b49037c83c1351a00cb" class="blame-commit-title" title="[ReactNative] Rename ReactIOS JS module (and relatives) to ReactNative.">[ReactNative] Rename ReactIOS JS module (and relatives) to ReactNative.</a>
+            <div class="blame-commit-meta">
+              <a href="/kmagiera" class="muted-link" rel="contributor">kmagiera</a> authored
+              <time datetime="2015-05-08T16:45:43Z" is="relative-time">May 8, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="6"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L21">21</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC21"><span class="pl-k">var</span> createReactNativeComponentClass <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">&#39;</span>createReactNativeComponentClass<span class="pl-pds">&#39;</span></span>);</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="4">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L22">22</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC22"><span class="pl-k">var</span> deepDiffer <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">&#39;</span>deepDiffer<span class="pl-pds">&#39;</span></span>);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L23">23</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC23"><span class="pl-k">var</span> insetsDiffer <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">&#39;</span>insetsDiffer<span class="pl-pds">&#39;</span></span>);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L24">24</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC24"><span class="pl-k">var</span> merge <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">&#39;</span>merge<span class="pl-pds">&#39;</span></span>);</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/58a550fa0625f31108e06f32ebb2958e2ffefcf0" class="blame-sha">58a550f</a>
+            <img alt="@sahrens" class="avatar blame-commit-avatar" height="32" src="https://avatars3.githubusercontent.com/u/1509831?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/58a550fa0625f31108e06f32ebb2958e2ffefcf0" class="blame-commit-title" title="[ReactNative] use requireNativeComponent to clean up a bunch of boilerplate">[ReactNative] use requireNativeComponent to clean up a bunch of boile…</a>
+            <div class="blame-commit-meta">
+              <a href="/sahrens" class="muted-link" rel="contributor">sahrens</a> authored
+              <time datetime="2015-04-22T04:07:17Z" is="relative-time">Apr 22, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L25">25</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC25"><span class="pl-k">var</span> requireNativeComponent <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">&#39;</span>requireNativeComponent<span class="pl-pds">&#39;</span></span>);</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L26">26</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC26"></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/95deed578c3ce9fcece53c7c5bc02015b06d956c" class="blame-sha">95deed5</a>
+            <img alt="@bhosmer" class="avatar blame-commit-avatar" height="32" src="https://avatars3.githubusercontent.com/u/355313?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/95deed578c3ce9fcece53c7c5bc02015b06d956c" class="blame-commit-title" title="flowified Libraries from Avik">flowified Libraries from Avik</a>
+            <div class="blame-commit-meta">
+              <a href="/bhosmer" class="muted-link" rel="contributor">bhosmer</a> authored
+              <time datetime="2015-03-25T19:55:10Z" is="relative-time">Mar 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L27">27</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC27">type Event <span class="pl-k">=</span> <span class="pl-c1">Object</span>;</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="7">
+            <a href="/facebook/react-native/commit/a0db658982f0b9e8a42fb17bfbbf32da5d876572" class="blame-sha">a0db658</a>
+            <img alt="@philikon" class="avatar blame-commit-avatar" height="32" src="https://avatars3.githubusercontent.com/u/54918?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/a0db658982f0b9e8a42fb17bfbbf32da5d876572" class="blame-commit-title" title="[MAdMan] flowify AdsManagerGeoUtils">[MAdMan] flowify AdsManagerGeoUtils</a>
+            <div class="blame-commit-meta">
+              <a href="/philikon" class="muted-link" rel="contributor">philikon</a> authored
+              <time datetime="2015-04-21T16:01:09Z" is="relative-time">Apr 21, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L28">28</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC28">type MapRegion <span class="pl-k">=</span> {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L29">29</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC29">  latitude<span class="pl-k">:</span> number;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L30">30</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC30">  longitude<span class="pl-k">:</span> number;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L31">31</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC31">  latitudeDelta<span class="pl-k">:</span> number;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L32">32</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC32">  longitudeDelta<span class="pl-k">:</span> number;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L33">33</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC33">};</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/95deed578c3ce9fcece53c7c5bc02015b06d956c" class="blame-sha">95deed5</a>
+            <img alt="@bhosmer" class="avatar blame-commit-avatar" height="32" src="https://avatars3.githubusercontent.com/u/355313?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/95deed578c3ce9fcece53c7c5bc02015b06d956c" class="blame-commit-title" title="flowified Libraries from Avik">flowified Libraries from Avik</a>
+            <div class="blame-commit-meta">
+              <a href="/bhosmer" class="muted-link" rel="contributor">bhosmer</a> authored
+              <time datetime="2015-03-25T19:55:10Z" is="relative-time">Mar 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L34">34</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC34"></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="4">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L35">35</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC35"><span class="pl-k">var</span> MapView <span class="pl-k">=</span> React.createClass({</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L36">36</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC36">  mixins<span class="pl-k">:</span> [NativeMethodsMixin],</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L37">37</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC37"></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="29">
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-sha">99bc08c</a>
+            <img alt="@dvcrn" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/688326?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-commit-title" title="[MapView] Support for annotation callouts, annotation press, callout presses and pin animation
+
+Summary:
+Started from here - https://github.com/facebook/react-native/issues/1120. Most functionality for annotations were missing so I started implementing and somehow got caught up until the entire thing was done.
+
+![screen shot 2015-05-12 at 10 07 43 pm](https://cloud.githubusercontent.com/assets/688326/7588677/8479a7a4-f8f9-11e4-99a4-1dc3c7691810.png)
+
+2 new events:
+- callout presses (left / right)
+- annotation presses
+
+6 new properties for annotations:
+- hasLeftCallout
+- hasRightCallout
+- onLeftCalloutPress
+- onRightCalloutPress
+- animateDrop
+- id
+
+1 new property for MapView
+- onAnnotationPress
+
+---
+Now the important thing is, that I implemented all of this the way &quot;I would do it&quot;. I am not sure this is the &#39;reacty&#39; way so please let me know my mistakes :smile:
+
+The problem is that there is no real way to identify annotations which makes it difficult to distinguish which one got clicked. The idea is to pass a `id` and whether it has callouts the entire way with the annotation. I had to
+Closes https://github.com/facebook/react-native/pull/1247
+Github Author: David Mohl &lt;me@dave.cx&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">[MapView] Support for annotation callouts, annotation press, callout …</a>
+            <div class="blame-commit-meta">
+              <a href="/dvcrn" class="muted-link" rel="contributor">dvcrn</a> authored
+              <time datetime="2015-06-25T16:07:19Z" is="relative-time">Jun 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L38">38</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC38">  <span class="pl-en">checkAnnotationIds</span><span class="pl-k">:</span> <span class="pl-k">function</span> (<span class="pl-smi">annotations</span>: <span class="pl-smi">Array</span>&lt;<span class="pl-smi">Object</span>&gt;) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L39">39</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC39"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L40">40</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC40">    <span class="pl-k">var</span> newAnnotations <span class="pl-k">=</span> annotations.map(<span class="pl-k">function</span> (<span class="pl-smi">annotation</span>) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L41">41</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC41">      <span class="pl-k">if</span> (<span class="pl-k">!</span>annotation.<span class="pl-c1">id</span>) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L42">42</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC42">        <span class="pl-c">// TODO: add a base64 (or similar) encoder here</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L43">43</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC43">        annotation.<span class="pl-c1">id</span> <span class="pl-k">=</span> encodeURIComponent(<span class="pl-c1">JSON</span>.stringify(annotation));</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L44">44</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC44">      }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L45">45</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC45"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L46">46</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC46">      <span class="pl-k">return</span> annotation;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L47">47</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC47">    });</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L48">48</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC48"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L49">49</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC49">    <span class="pl-v">this</span>.setState({</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L50">50</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC50">      annotations<span class="pl-k">:</span> newAnnotations</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L51">51</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC51">    });</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L52">52</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC52">  },</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L53">53</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC53"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L54">54</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC54">  <span class="pl-en">componentWillMount</span><span class="pl-k">:</span> <span class="pl-k">function</span>() {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L55">55</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC55">    <span class="pl-k">if</span> (<span class="pl-v">this</span>.props.annotations) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L56">56</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC56">      <span class="pl-v">this</span>.checkAnnotationIds(<span class="pl-v">this</span>.props.annotations);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L57">57</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC57">    }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L58">58</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC58">  },</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L59">59</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC59"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L60">60</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC60">  <span class="pl-en">componentWillReceiveProps</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">nextProps</span>: <span class="pl-smi">Object</span>) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L61">61</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC61">    <span class="pl-k">if</span> (nextProps.annotations) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L62">62</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC62">      <span class="pl-v">this</span>.checkAnnotationIds(nextProps.annotations);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L63">63</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC63">    }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L64">64</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC64">  },</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L65">65</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC65"></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="20">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L66">66</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC66">  propTypes<span class="pl-k">:</span> {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L67">67</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC67">    <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L68">68</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC68"><span class="pl-c">     * Used to style and layout the `MapView`.  See `StyleSheet.js` and</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L69">69</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC69"><span class="pl-c">     * `ViewStylePropTypes.js` for more info.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L70">70</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC70"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L71">71</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC71">    style<span class="pl-k">:</span> View.propTypes.<span class="pl-c1">style</span>,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L72">72</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC72"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L73">73</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC73">    <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L74">74</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC74"><span class="pl-c">     * If `true` the app will ask for the user&#39;s location and focus on it.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L75">75</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC75"><span class="pl-c">     * Default value is `false`.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L76">76</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC76"><span class="pl-c">     *</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L77">77</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC77"><span class="pl-c">     * **NOTE**: You need to add NSLocationWhenInUseUsageDescription key in</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L78">78</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC78"><span class="pl-c">     * Info.plist to enable geolocation, otherwise it is going</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L79">79</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC79"><span class="pl-c">     * to *fail silently*!</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L80">80</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC80"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L81">81</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC81">    showsUserLocation<span class="pl-k">:</span> React.PropTypes.bool,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L82">82</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC82"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L83">83</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC83">    <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L84">84</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC84"><span class="pl-c">     * If `false` the user won&#39;t be able to pinch/zoom the map.</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/972ae4c18643535289a2e03f224911c668e5aba8" class="blame-sha">972ae4c</a>
+            <img alt="@ultralame" class="avatar blame-commit-avatar" height="32" src="https://avatars1.githubusercontent.com/u/690729?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/972ae4c18643535289a2e03f224911c668e5aba8" class="blame-commit-title" title="fix minor grammar and typo errors in comments
+
+Summary: comments only. no code modified.
+Closes https://github.com/facebook/react-native/pull/2038
+
+Reviewed By: @​svcscm
+
+Differential Revision: D2468021
+
+Pulled By: @vjeux">fix minor grammar and typo errors in comments</a>
+            <div class="blame-commit-meta">
+              <a href="/ultralame" class="muted-link" rel="contributor">ultralame</a> authored
+              <time datetime="2015-09-22T21:38:58Z" is="relative-time">Sep 22, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="1"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L85">85</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC85"><span class="pl-c">     * Default value is `true`.</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="29">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L86">86</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC86"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L87">87</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC87">    zoomEnabled<span class="pl-k">:</span> React.PropTypes.bool,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L88">88</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC88"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L89">89</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC89">    <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L90">90</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC90"><span class="pl-c">     * When this property is set to `true` and a valid camera is associated with</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L91">91</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC91"><span class="pl-c">     * the map, the camera’s heading angle is used to rotate the plane of the</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L92">92</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC92"><span class="pl-c">     * map around its center point. When this property is set to `false`, the</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L93">93</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC93"><span class="pl-c">     * camera’s heading angle is ignored and the map is always oriented so</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L94">94</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC94"><span class="pl-c">     * that true north is situated at the top of the map view</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L95">95</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC95"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L96">96</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC96">    rotateEnabled<span class="pl-k">:</span> React.PropTypes.bool,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L97">97</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC97"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L98">98</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC98">    <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L99">99</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC99"><span class="pl-c">     * When this property is set to `true` and a valid camera is associated</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L100">100</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC100"><span class="pl-c">     * with the map, the camera’s pitch angle is used to tilt the plane</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L101">101</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC101"><span class="pl-c">     * of the map. When this property is set to `false`, the camera’s pitch</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L102">102</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC102"><span class="pl-c">     * angle is ignored and the map is always displayed as if the user</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L103">103</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC103"><span class="pl-c">     * is looking straight down onto it.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L104">104</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC104"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L105">105</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC105">    pitchEnabled<span class="pl-k">:</span> React.PropTypes.bool,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L106">106</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC106"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L107">107</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC107">    <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L108">108</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC108"><span class="pl-c">     * If `false` the user won&#39;t be able to change the map region being displayed.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L109">109</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC109"><span class="pl-c">     * Default value is `true`.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L110">110</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC110"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L111">111</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC111">    scrollEnabled<span class="pl-k">:</span> React.PropTypes.bool,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L112">112</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC112"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L113">113</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC113">    <span class="pl-c">/**</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/04b3b527268bc4038bc911a5d234240841baaba0" class="blame-sha">04b3b52</a>
+            <img alt="" class="avatar blame-commit-avatar" height="32" src="https://2.gravatar.com/avatar/c43613d3c9c2b17a50d89a6e25bbf113?d=https%3A%2F%2Fassets-cdn.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png&amp;r=x&amp;s=140" width="32" />
+            <a href="/facebook/react-native/commit/04b3b527268bc4038bc911a5d234240841baaba0" class="blame-commit-title" title="Add map type property (standard, satellite, hybrid) to MapView.
+
+Summary:
+Here is an example project demonstrating this pull request: [AKMapView](https://github.com/adamkrell/AKMapView)
+Closes https://github.com/facebook/react-native/pull/1503
+Github Author: Adam Krell &lt;akrell@bethanyassociates.com&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">Add map type property (standard, satellite, hybrid) to MapView.</a>
+            <div class="blame-commit-meta">
+              <span class="muted-link">Adam Krell</span> authored
+              <time datetime="2015-06-11T17:46:28Z" is="relative-time">Jun 11, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="5"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L114">114</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC114"><span class="pl-c">     * The map type to be displayed.</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-sha">99bc08c</a>
+            <img alt="@dvcrn" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/688326?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-commit-title" title="[MapView] Support for annotation callouts, annotation press, callout presses and pin animation
+
+Summary:
+Started from here - https://github.com/facebook/react-native/issues/1120. Most functionality for annotations were missing so I started implementing and somehow got caught up until the entire thing was done.
+
+![screen shot 2015-05-12 at 10 07 43 pm](https://cloud.githubusercontent.com/assets/688326/7588677/8479a7a4-f8f9-11e4-99a4-1dc3c7691810.png)
+
+2 new events:
+- callout presses (left / right)
+- annotation presses
+
+6 new properties for annotations:
+- hasLeftCallout
+- hasRightCallout
+- onLeftCalloutPress
+- onRightCalloutPress
+- animateDrop
+- id
+
+1 new property for MapView
+- onAnnotationPress
+
+---
+Now the important thing is, that I implemented all of this the way &quot;I would do it&quot;. I am not sure this is the &#39;reacty&#39; way so please let me know my mistakes :smile:
+
+The problem is that there is no real way to identify annotations which makes it difficult to distinguish which one got clicked. The idea is to pass a `id` and whether it has callouts the entire way with the annotation. I had to
+Closes https://github.com/facebook/react-native/pull/1247
+Github Author: David Mohl &lt;me@dave.cx&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">[MapView] Support for annotation callouts, annotation press, callout …</a>
+            <div class="blame-commit-meta">
+              <a href="/dvcrn" class="muted-link" rel="contributor">dvcrn</a> authored
+              <time datetime="2015-06-25T16:07:19Z" is="relative-time">Jun 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L115">115</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC115"><span class="pl-c">     *</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="6">
+            <a href="/facebook/react-native/commit/04b3b527268bc4038bc911a5d234240841baaba0" class="blame-sha">04b3b52</a>
+            <img alt="" class="avatar blame-commit-avatar" height="32" src="https://2.gravatar.com/avatar/c43613d3c9c2b17a50d89a6e25bbf113?d=https%3A%2F%2Fassets-cdn.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png&amp;r=x&amp;s=140" width="32" />
+            <a href="/facebook/react-native/commit/04b3b527268bc4038bc911a5d234240841baaba0" class="blame-commit-title" title="Add map type property (standard, satellite, hybrid) to MapView.
+
+Summary:
+Here is an example project demonstrating this pull request: [AKMapView](https://github.com/adamkrell/AKMapView)
+Closes https://github.com/facebook/react-native/pull/1503
+Github Author: Adam Krell &lt;akrell@bethanyassociates.com&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">Add map type property (standard, satellite, hybrid) to MapView.</a>
+            <div class="blame-commit-meta">
+              <span class="muted-link">Adam Krell</span> authored
+              <time datetime="2015-06-11T17:46:28Z" is="relative-time">Jun 11, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="5"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L116">116</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC116"><span class="pl-c">     * - standard: standard road map (default)</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="5"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L117">117</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC117"><span class="pl-c">     * - satellite: satellite view</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="5"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L118">118</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC118"><span class="pl-c">     * - hybrid: satellite view with roads and points of interest overlayed</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="5"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L119">119</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC119"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="5"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L120">120</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC120">    mapType<span class="pl-k">:</span> React.PropTypes.oneOf([</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="3">
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-sha">99bc08c</a>
+            <img alt="@dvcrn" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/688326?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-commit-title" title="[MapView] Support for annotation callouts, annotation press, callout presses and pin animation
+
+Summary:
+Started from here - https://github.com/facebook/react-native/issues/1120. Most functionality for annotations were missing so I started implementing and somehow got caught up until the entire thing was done.
+
+![screen shot 2015-05-12 at 10 07 43 pm](https://cloud.githubusercontent.com/assets/688326/7588677/8479a7a4-f8f9-11e4-99a4-1dc3c7691810.png)
+
+2 new events:
+- callout presses (left / right)
+- annotation presses
+
+6 new properties for annotations:
+- hasLeftCallout
+- hasRightCallout
+- onLeftCalloutPress
+- onRightCalloutPress
+- animateDrop
+- id
+
+1 new property for MapView
+- onAnnotationPress
+
+---
+Now the important thing is, that I implemented all of this the way &quot;I would do it&quot;. I am not sure this is the &#39;reacty&#39; way so please let me know my mistakes :smile:
+
+The problem is that there is no real way to identify annotations which makes it difficult to distinguish which one got clicked. The idea is to pass a `id` and whether it has callouts the entire way with the annotation. I had to
+Closes https://github.com/facebook/react-native/pull/1247
+Github Author: David Mohl &lt;me@dave.cx&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">[MapView] Support for annotation callouts, annotation press, callout …</a>
+            <div class="blame-commit-meta">
+              <a href="/dvcrn" class="muted-link" rel="contributor">dvcrn</a> authored
+              <time datetime="2015-06-25T16:07:19Z" is="relative-time">Jun 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L121">121</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC121">      <span class="pl-s"><span class="pl-pds">&#39;</span>standard<span class="pl-pds">&#39;</span></span>,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L122">122</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC122">      <span class="pl-s"><span class="pl-pds">&#39;</span>satellite<span class="pl-pds">&#39;</span></span>,</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="5">
+            <a href="/facebook/react-native/commit/04b3b527268bc4038bc911a5d234240841baaba0" class="blame-sha">04b3b52</a>
+            <img alt="" class="avatar blame-commit-avatar" height="32" src="https://2.gravatar.com/avatar/c43613d3c9c2b17a50d89a6e25bbf113?d=https%3A%2F%2Fassets-cdn.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png&amp;r=x&amp;s=140" width="32" />
+            <a href="/facebook/react-native/commit/04b3b527268bc4038bc911a5d234240841baaba0" class="blame-commit-title" title="Add map type property (standard, satellite, hybrid) to MapView.
+
+Summary:
+Here is an example project demonstrating this pull request: [AKMapView](https://github.com/adamkrell/AKMapView)
+Closes https://github.com/facebook/react-native/pull/1503
+Github Author: Adam Krell &lt;akrell@bethanyassociates.com&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">Add map type property (standard, satellite, hybrid) to MapView.</a>
+            <div class="blame-commit-meta">
+              <span class="muted-link">Adam Krell</span> authored
+              <time datetime="2015-06-11T17:46:28Z" is="relative-time">Jun 11, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="5"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L123">123</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC123">      <span class="pl-s"><span class="pl-pds">&#39;</span>hybrid<span class="pl-pds">&#39;</span></span>,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="5"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L124">124</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC124">    ]),</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="5"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L125">125</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC125"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="5"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L126">126</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC126">    <span class="pl-c">/**</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="22">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L127">127</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC127"><span class="pl-c">     * The region to be displayed by the map.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L128">128</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC128"><span class="pl-c">     *</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L129">129</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC129"><span class="pl-c">     * The region is defined by the center coordinates and the span of</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L130">130</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC130"><span class="pl-c">     * coordinates to display.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L131">131</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC131"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L132">132</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC132">    region<span class="pl-k">:</span> React.PropTypes.<span class="pl-c1">shape</span>({</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L133">133</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC133">      <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L134">134</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC134"><span class="pl-c">       * Coordinates for the center of the map.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L135">135</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC135"><span class="pl-c">       */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L136">136</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC136">      latitude<span class="pl-k">:</span> React.PropTypes.number.isRequired,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L137">137</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC137">      longitude<span class="pl-k">:</span> React.PropTypes.number.isRequired,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L138">138</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC138"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L139">139</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC139">      <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L140">140</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC140"><span class="pl-c">       * Distance between the minimun and the maximum latitude/longitude</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L141">141</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC141"><span class="pl-c">       * to be displayed.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L142">142</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC142"><span class="pl-c">       */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L143">143</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC143">      latitudeDelta<span class="pl-k">:</span> React.PropTypes.number.isRequired,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L144">144</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC144">      longitudeDelta<span class="pl-k">:</span> React.PropTypes.number.isRequired,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L145">145</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC145">    }),</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L146">146</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC146"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L147">147</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC147">    <span class="pl-c">/**</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="11">
+            <a href="/facebook/react-native/commit/7a68691686d63c9f6c56022b87f751e92d2ab067" class="blame-sha">7a68691</a>
+            <img alt="@ginamdar" class="avatar blame-commit-avatar" height="32" src="https://avatars1.githubusercontent.com/u/845379?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/7a68691686d63c9f6c56022b87f751e92d2ab067" class="blame-commit-title" title="MapView to support MKPointAnnotation using new attribute annotate in Map...
+
+Summary:
+### MapView to support Pin annotation
+
+    var pinLocation = {
+      latitude: property.latitude,
+      longitude: property.longitude,
+      title: property.title
+    };
+    this.state = {propertyPoint: pinLocation};
+    &lt;MapView style={styles.map} region={this.state.region} annotate={this.state.propertyPoint}&gt;
+    &lt;/MapView&gt;
+![mapview-pinannotation](https://cloud.githubusercontent.com/assets/845379/7100280/6c1ffc08-dfe5-11e4-9d1b-8da6a65da1bc.png)
+
+Closes https://github.com/facebook/react-native/pull/810
+Github Author: guru inamdar &lt;guru.inamdar@gmail.com&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">MapView to support MKPointAnnotation using new attribute annotate in …</a>
+            <div class="blame-commit-meta">
+              <a href="/ginamdar" class="muted-link" rel="contributor">ginamdar</a> authored
+              <time datetime="2015-04-15T00:51:28Z" is="relative-time">Apr 14, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L148">148</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC148"><span class="pl-c">     * Map annotations with title/subtitle.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L149">149</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC149"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L150">150</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC150">    annotations<span class="pl-k">:</span> React.PropTypes.arrayOf(React.PropTypes.<span class="pl-c1">shape</span>({</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L151">151</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC151">      <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L152">152</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC152"><span class="pl-c">       * The location of the annotation.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L153">153</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC153"><span class="pl-c">       */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L154">154</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC154">      latitude<span class="pl-k">:</span> React.PropTypes.number.isRequired,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L155">155</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC155">      longitude<span class="pl-k">:</span> React.PropTypes.number.isRequired,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L156">156</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC156"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L157">157</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC157">      <span class="pl-c">/**</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="6">
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-sha">99bc08c</a>
+            <img alt="@dvcrn" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/688326?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-commit-title" title="[MapView] Support for annotation callouts, annotation press, callout presses and pin animation
+
+Summary:
+Started from here - https://github.com/facebook/react-native/issues/1120. Most functionality for annotations were missing so I started implementing and somehow got caught up until the entire thing was done.
+
+![screen shot 2015-05-12 at 10 07 43 pm](https://cloud.githubusercontent.com/assets/688326/7588677/8479a7a4-f8f9-11e4-99a4-1dc3c7691810.png)
+
+2 new events:
+- callout presses (left / right)
+- annotation presses
+
+6 new properties for annotations:
+- hasLeftCallout
+- hasRightCallout
+- onLeftCalloutPress
+- onRightCalloutPress
+- animateDrop
+- id
+
+1 new property for MapView
+- onAnnotationPress
+
+---
+Now the important thing is, that I implemented all of this the way &quot;I would do it&quot;. I am not sure this is the &#39;reacty&#39; way so please let me know my mistakes :smile:
+
+The problem is that there is no real way to identify annotations which makes it difficult to distinguish which one got clicked. The idea is to pass a `id` and whether it has callouts the entire way with the annotation. I had to
+Closes https://github.com/facebook/react-native/pull/1247
+Github Author: David Mohl &lt;me@dave.cx&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">[MapView] Support for annotation callouts, annotation press, callout …</a>
+            <div class="blame-commit-meta">
+              <a href="/dvcrn" class="muted-link" rel="contributor">dvcrn</a> authored
+              <time datetime="2015-06-25T16:07:19Z" is="relative-time">Jun 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L158">158</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC158"><span class="pl-c">       * Whether the pin drop should be animated or not</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L159">159</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC159"><span class="pl-c">       */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L160">160</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC160">      animateDrop<span class="pl-k">:</span> React.PropTypes.bool,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L161">161</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC161"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L162">162</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC162">      <span class="pl-c">/**</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="5">
+            <a href="/facebook/react-native/commit/7a68691686d63c9f6c56022b87f751e92d2ab067" class="blame-sha">7a68691</a>
+            <img alt="@ginamdar" class="avatar blame-commit-avatar" height="32" src="https://avatars1.githubusercontent.com/u/845379?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/7a68691686d63c9f6c56022b87f751e92d2ab067" class="blame-commit-title" title="MapView to support MKPointAnnotation using new attribute annotate in Map...
+
+Summary:
+### MapView to support Pin annotation
+
+    var pinLocation = {
+      latitude: property.latitude,
+      longitude: property.longitude,
+      title: property.title
+    };
+    this.state = {propertyPoint: pinLocation};
+    &lt;MapView style={styles.map} region={this.state.region} annotate={this.state.propertyPoint}&gt;
+    &lt;/MapView&gt;
+![mapview-pinannotation](https://cloud.githubusercontent.com/assets/845379/7100280/6c1ffc08-dfe5-11e4-9d1b-8da6a65da1bc.png)
+
+Closes https://github.com/facebook/react-native/pull/810
+Github Author: guru inamdar &lt;guru.inamdar@gmail.com&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">MapView to support MKPointAnnotation using new attribute annotate in …</a>
+            <div class="blame-commit-meta">
+              <a href="/ginamdar" class="muted-link" rel="contributor">ginamdar</a> authored
+              <time datetime="2015-04-15T00:51:28Z" is="relative-time">Apr 15, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L163">163</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC163"><span class="pl-c">       * Annotation title/subtile.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L164">164</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC164"><span class="pl-c">       */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L165">165</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC165">      title<span class="pl-k">:</span> React.PropTypes.string,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L166">166</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC166">      subtitle<span class="pl-k">:</span> React.PropTypes.string,</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="19">
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-sha">99bc08c</a>
+            <img alt="@dvcrn" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/688326?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-commit-title" title="[MapView] Support for annotation callouts, annotation press, callout presses and pin animation
+
+Summary:
+Started from here - https://github.com/facebook/react-native/issues/1120. Most functionality for annotations were missing so I started implementing and somehow got caught up until the entire thing was done.
+
+![screen shot 2015-05-12 at 10 07 43 pm](https://cloud.githubusercontent.com/assets/688326/7588677/8479a7a4-f8f9-11e4-99a4-1dc3c7691810.png)
+
+2 new events:
+- callout presses (left / right)
+- annotation presses
+
+6 new properties for annotations:
+- hasLeftCallout
+- hasRightCallout
+- onLeftCalloutPress
+- onRightCalloutPress
+- animateDrop
+- id
+
+1 new property for MapView
+- onAnnotationPress
+
+---
+Now the important thing is, that I implemented all of this the way &quot;I would do it&quot;. I am not sure this is the &#39;reacty&#39; way so please let me know my mistakes :smile:
+
+The problem is that there is no real way to identify annotations which makes it difficult to distinguish which one got clicked. The idea is to pass a `id` and whether it has callouts the entire way with the annotation. I had to
+Closes https://github.com/facebook/react-native/pull/1247
+Github Author: David Mohl &lt;me@dave.cx&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">[MapView] Support for annotation callouts, annotation press, callout …</a>
+            <div class="blame-commit-meta">
+              <a href="/dvcrn" class="muted-link" rel="contributor">dvcrn</a> authored
+              <time datetime="2015-06-25T16:07:19Z" is="relative-time">Jun 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L167">167</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC167"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L168">168</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC168">      <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L169">169</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC169"><span class="pl-c">       * Whether the Annotation has callout buttons.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L170">170</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC170"><span class="pl-c">       */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L171">171</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC171">      hasLeftCallout<span class="pl-k">:</span> React.PropTypes.bool,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L172">172</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC172">      hasRightCallout<span class="pl-k">:</span> React.PropTypes.bool,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L173">173</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC173"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L174">174</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC174">      <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L175">175</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC175"><span class="pl-c">       * Event handlers for callout buttons.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L176">176</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC176"><span class="pl-c">       */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L177">177</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC177">      onLeftCalloutPress<span class="pl-k">:</span> React.PropTypes.func,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L178">178</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC178">      onRightCalloutPress<span class="pl-k">:</span> React.PropTypes.func,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L179">179</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC179"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L180">180</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC180">      <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L181">181</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC181"><span class="pl-c">       * annotation id</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L182">182</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC182"><span class="pl-c">       */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L183">183</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC183">      id<span class="pl-k">:</span> React.PropTypes.string</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L184">184</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC184"></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="4">
+            <a href="/facebook/react-native/commit/7a68691686d63c9f6c56022b87f751e92d2ab067" class="blame-sha">7a68691</a>
+            <img alt="@ginamdar" class="avatar blame-commit-avatar" height="32" src="https://avatars1.githubusercontent.com/u/845379?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/7a68691686d63c9f6c56022b87f751e92d2ab067" class="blame-commit-title" title="MapView to support MKPointAnnotation using new attribute annotate in Map...
+
+Summary:
+### MapView to support Pin annotation
+
+    var pinLocation = {
+      latitude: property.latitude,
+      longitude: property.longitude,
+      title: property.title
+    };
+    this.state = {propertyPoint: pinLocation};
+    &lt;MapView style={styles.map} region={this.state.region} annotate={this.state.propertyPoint}&gt;
+    &lt;/MapView&gt;
+![mapview-pinannotation](https://cloud.githubusercontent.com/assets/845379/7100280/6c1ffc08-dfe5-11e4-9d1b-8da6a65da1bc.png)
+
+Closes https://github.com/facebook/react-native/pull/810
+Github Author: guru inamdar &lt;guru.inamdar@gmail.com&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">MapView to support MKPointAnnotation using new attribute annotate in …</a>
+            <div class="blame-commit-meta">
+              <a href="/ginamdar" class="muted-link" rel="contributor">ginamdar</a> authored
+              <time datetime="2015-04-15T00:51:28Z" is="relative-time">Apr 15, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L185">185</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC185">    })),</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L186">186</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC186"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L187">187</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC187">    <span class="pl-c">/**</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="25">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L188">188</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC188"><span class="pl-c">     * Maximum size of area that can be displayed.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L189">189</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC189"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L190">190</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC190">    maxDelta<span class="pl-k">:</span> React.PropTypes.number,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L191">191</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC191"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L192">192</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC192">    <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L193">193</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC193"><span class="pl-c">     * Minimum size of area that can be displayed.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L194">194</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC194"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L195">195</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC195">    minDelta<span class="pl-k">:</span> React.PropTypes.number,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L196">196</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC196"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L197">197</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC197">    <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L198">198</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC198"><span class="pl-c">     * Insets for the map&#39;s legal label, originally at bottom left of the map.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L199">199</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC199"><span class="pl-c">     * See `EdgeInsetsPropType.js` for more information.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L200">200</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC200"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L201">201</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC201">    legalLabelInsets<span class="pl-k">:</span> EdgeInsetsPropType,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L202">202</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC202"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L203">203</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC203">    <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L204">204</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC204"><span class="pl-c">     * Callback that is called continuously when the user is dragging the map.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L205">205</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC205"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L206">206</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC206">    onRegionChange<span class="pl-k">:</span> React.PropTypes.func,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L207">207</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC207"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L208">208</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC208">    <span class="pl-c">/**</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L209">209</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC209"><span class="pl-c">     * Callback that is called once, when the user is done moving the map.</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L210">210</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC210"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L211">211</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC211">    onRegionChangeComplete<span class="pl-k">:</span> React.PropTypes.func,</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="3">
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-sha">99bc08c</a>
+            <img alt="@dvcrn" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/688326?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-commit-title" title="[MapView] Support for annotation callouts, annotation press, callout presses and pin animation
+
+Summary:
+Started from here - https://github.com/facebook/react-native/issues/1120. Most functionality for annotations were missing so I started implementing and somehow got caught up until the entire thing was done.
+
+![screen shot 2015-05-12 at 10 07 43 pm](https://cloud.githubusercontent.com/assets/688326/7588677/8479a7a4-f8f9-11e4-99a4-1dc3c7691810.png)
+
+2 new events:
+- callout presses (left / right)
+- annotation presses
+
+6 new properties for annotations:
+- hasLeftCallout
+- hasRightCallout
+- onLeftCalloutPress
+- onRightCalloutPress
+- animateDrop
+- id
+
+1 new property for MapView
+- onAnnotationPress
+
+---
+Now the important thing is, that I implemented all of this the way &quot;I would do it&quot;. I am not sure this is the &#39;reacty&#39; way so please let me know my mistakes :smile:
+
+The problem is that there is no real way to identify annotations which makes it difficult to distinguish which one got clicked. The idea is to pass a `id` and whether it has callouts the entire way with the annotation. I had to
+Closes https://github.com/facebook/react-native/pull/1247
+Github Author: David Mohl &lt;me@dave.cx&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">[MapView] Support for annotation callouts, annotation press, callout …</a>
+            <div class="blame-commit-meta">
+              <a href="/dvcrn" class="muted-link" rel="contributor">dvcrn</a> authored
+              <time datetime="2015-06-25T16:07:19Z" is="relative-time">Jun 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L212">212</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC212"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L213">213</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC213">    <span class="pl-c">/**</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/972ae4c18643535289a2e03f224911c668e5aba8" class="blame-sha">972ae4c</a>
+            <img alt="@ultralame" class="avatar blame-commit-avatar" height="32" src="https://avatars1.githubusercontent.com/u/690729?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/972ae4c18643535289a2e03f224911c668e5aba8" class="blame-commit-title" title="fix minor grammar and typo errors in comments
+
+Summary: comments only. no code modified.
+Closes https://github.com/facebook/react-native/pull/2038
+
+Reviewed By: @​svcscm
+
+Differential Revision: D2468021
+
+Pulled By: @vjeux">fix minor grammar and typo errors in comments</a>
+            <div class="blame-commit-meta">
+              <a href="/ultralame" class="muted-link" rel="contributor">ultralame</a> authored
+              <time datetime="2015-09-22T21:38:58Z" is="relative-time">Sep 22, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="1"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L214">214</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC214"><span class="pl-c">     * Callback that is called once, when the user taps an annotation.</span></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="3">
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-sha">99bc08c</a>
+            <img alt="@dvcrn" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/688326?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-commit-title" title="[MapView] Support for annotation callouts, annotation press, callout presses and pin animation
+
+Summary:
+Started from here - https://github.com/facebook/react-native/issues/1120. Most functionality for annotations were missing so I started implementing and somehow got caught up until the entire thing was done.
+
+![screen shot 2015-05-12 at 10 07 43 pm](https://cloud.githubusercontent.com/assets/688326/7588677/8479a7a4-f8f9-11e4-99a4-1dc3c7691810.png)
+
+2 new events:
+- callout presses (left / right)
+- annotation presses
+
+6 new properties for annotations:
+- hasLeftCallout
+- hasRightCallout
+- onLeftCalloutPress
+- onRightCalloutPress
+- animateDrop
+- id
+
+1 new property for MapView
+- onAnnotationPress
+
+---
+Now the important thing is, that I implemented all of this the way &quot;I would do it&quot;. I am not sure this is the &#39;reacty&#39; way so please let me know my mistakes :smile:
+
+The problem is that there is no real way to identify annotations which makes it difficult to distinguish which one got clicked. The idea is to pass a `id` and whether it has callouts the entire way with the annotation. I had to
+Closes https://github.com/facebook/react-native/pull/1247
+Github Author: David Mohl &lt;me@dave.cx&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">[MapView] Support for annotation callouts, annotation press, callout …</a>
+            <div class="blame-commit-meta">
+              <a href="/dvcrn" class="muted-link" rel="contributor">dvcrn</a> authored
+              <time datetime="2015-06-25T16:07:19Z" is="relative-time">Jun 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L215">215</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC215"><span class="pl-c">     */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L216">216</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC216">    onAnnotationPress<span class="pl-k">:</span> React.PropTypes.func,</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="3">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L217">217</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC217">  },</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L218">218</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC218"></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/95deed578c3ce9fcece53c7c5bc02015b06d956c" class="blame-sha">95deed5</a>
+            <img alt="@bhosmer" class="avatar blame-commit-avatar" height="32" src="https://avatars3.githubusercontent.com/u/355313?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/95deed578c3ce9fcece53c7c5bc02015b06d956c" class="blame-commit-title" title="flowified Libraries from Avik">flowified Libraries from Avik</a>
+            <div class="blame-commit-meta">
+              <a href="/bhosmer" class="muted-link" rel="contributor">bhosmer</a> authored
+              <time datetime="2015-03-25T19:55:10Z" is="relative-time">Mar 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L219">219</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC219">  <span class="pl-en">_onChange</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">event</span>: <span class="pl-smi">Event</span>) {</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="10">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L220">220</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC220">    <span class="pl-k">if</span> (<span class="pl-c1">event</span>.nativeEvent.continuous) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L221">221</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC221">      <span class="pl-v">this</span>.props.onRegionChange <span class="pl-k">&amp;&amp;</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L222">222</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC222">        <span class="pl-v">this</span>.props.onRegionChange(<span class="pl-c1">event</span>.nativeEvent.region);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L223">223</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC223">    } <span class="pl-k">else</span> {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L224">224</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC224">      <span class="pl-v">this</span>.props.onRegionChangeComplete <span class="pl-k">&amp;&amp;</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L225">225</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC225">        <span class="pl-v">this</span>.props.onRegionChangeComplete(<span class="pl-c1">event</span>.nativeEvent.region);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L226">226</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC226">    }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L227">227</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC227">  },</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L228">228</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC228"></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="27">
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-sha">99bc08c</a>
+            <img alt="@dvcrn" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/688326?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-commit-title" title="[MapView] Support for annotation callouts, annotation press, callout presses and pin animation
+
+Summary:
+Started from here - https://github.com/facebook/react-native/issues/1120. Most functionality for annotations were missing so I started implementing and somehow got caught up until the entire thing was done.
+
+![screen shot 2015-05-12 at 10 07 43 pm](https://cloud.githubusercontent.com/assets/688326/7588677/8479a7a4-f8f9-11e4-99a4-1dc3c7691810.png)
+
+2 new events:
+- callout presses (left / right)
+- annotation presses
+
+6 new properties for annotations:
+- hasLeftCallout
+- hasRightCallout
+- onLeftCalloutPress
+- onRightCalloutPress
+- animateDrop
+- id
+
+1 new property for MapView
+- onAnnotationPress
+
+---
+Now the important thing is, that I implemented all of this the way &quot;I would do it&quot;. I am not sure this is the &#39;reacty&#39; way so please let me know my mistakes :smile:
+
+The problem is that there is no real way to identify annotations which makes it difficult to distinguish which one got clicked. The idea is to pass a `id` and whether it has callouts the entire way with the annotation. I had to
+Closes https://github.com/facebook/react-native/pull/1247
+Github Author: David Mohl &lt;me@dave.cx&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">[MapView] Support for annotation callouts, annotation press, callout …</a>
+            <div class="blame-commit-meta">
+              <a href="/dvcrn" class="muted-link" rel="contributor">dvcrn</a> authored
+              <time datetime="2015-06-25T16:07:19Z" is="relative-time">Jun 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L229">229</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC229">  <span class="pl-en">_onPress</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">event</span>: <span class="pl-smi">Event</span>) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L230">230</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC230">    <span class="pl-k">if</span> (<span class="pl-c1">event</span>.nativeEvent.<span class="pl-c1">action</span> <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">&#39;</span>annotation-click<span class="pl-pds">&#39;</span></span>) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L231">231</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC231">      <span class="pl-v">this</span>.props.onAnnotationPress <span class="pl-k">&amp;&amp;</span> <span class="pl-v">this</span>.props.onAnnotationPress(<span class="pl-c1">event</span>.nativeEvent.annotation);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L232">232</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC232">    }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L233">233</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC233"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L234">234</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC234">    <span class="pl-k">if</span> (<span class="pl-c1">event</span>.nativeEvent.<span class="pl-c1">action</span> <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">&#39;</span>callout-click<span class="pl-pds">&#39;</span></span>) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L235">235</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC235">      <span class="pl-k">if</span> (<span class="pl-k">!</span><span class="pl-v">this</span>.props.annotations) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L236">236</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC236">        <span class="pl-k">return</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L237">237</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC237">      }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L238">238</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC238"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L239">239</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC239">      <span class="pl-c">// Find the annotation with the id of what has been pressed</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L240">240</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC240">      <span class="pl-k">for</span> (<span class="pl-k">var</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> <span class="pl-v">this</span>.props.annotations.<span class="pl-c1">length</span>; i<span class="pl-k">++</span>) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L241">241</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC241">        <span class="pl-k">var</span> annotation <span class="pl-k">=</span> <span class="pl-v">this</span>.props.annotations[i];</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L242">242</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC242">        <span class="pl-k">if</span> (annotation.<span class="pl-c1">id</span> <span class="pl-k">===</span> <span class="pl-c1">event</span>.nativeEvent.annotationId) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L243">243</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC243">          <span class="pl-c">// Pass the right function</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L244">244</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC244">          <span class="pl-k">if</span> (<span class="pl-c1">event</span>.nativeEvent.side <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">&#39;</span>left<span class="pl-pds">&#39;</span></span>) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L245">245</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC245">            annotation.onLeftCalloutPress <span class="pl-k">&amp;&amp;</span> annotation.onLeftCalloutPress(<span class="pl-c1">event</span>.nativeEvent);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L246">246</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC246">          } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-c1">event</span>.nativeEvent.side <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">&#39;</span>right<span class="pl-pds">&#39;</span></span>) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L247">247</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC247">            annotation.onRightCalloutPress <span class="pl-k">&amp;&amp;</span> annotation.onRightCalloutPress(<span class="pl-c1">event</span>.nativeEvent);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L248">248</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC248">          }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L249">249</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC249">        }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L250">250</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC250">      }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L251">251</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC251"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L252">252</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC252">    }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L253">253</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC253">  },</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L254">254</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC254"></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L255">255</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC255">  <span class="pl-en">render</span><span class="pl-k">:</span> <span class="pl-k">function</span>() {</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-sha">99bc08c</a>
+            <img alt="@dvcrn" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/688326?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/99bc08cf615341853c46a439210c2c0d2a492702" class="blame-commit-title" title="[MapView] Support for annotation callouts, annotation press, callout presses and pin animation
+
+Summary:
+Started from here - https://github.com/facebook/react-native/issues/1120. Most functionality for annotations were missing so I started implementing and somehow got caught up until the entire thing was done.
+
+![screen shot 2015-05-12 at 10 07 43 pm](https://cloud.githubusercontent.com/assets/688326/7588677/8479a7a4-f8f9-11e4-99a4-1dc3c7691810.png)
+
+2 new events:
+- callout presses (left / right)
+- annotation presses
+
+6 new properties for annotations:
+- hasLeftCallout
+- hasRightCallout
+- onLeftCalloutPress
+- onRightCalloutPress
+- animateDrop
+- id
+
+1 new property for MapView
+- onAnnotationPress
+
+---
+Now the important thing is, that I implemented all of this the way &quot;I would do it&quot;. I am not sure this is the &#39;reacty&#39; way so please let me know my mistakes :smile:
+
+The problem is that there is no real way to identify annotations which makes it difficult to distinguish which one got clicked. The idea is to pass a `id` and whether it has callouts the entire way with the annotation. I had to
+Closes https://github.com/facebook/react-native/pull/1247
+Github Author: David Mohl &lt;me@dave.cx&gt;
+
+Test Plan: Imported from GitHub, without a `Test Plan:` line.">[MapView] Support for annotation callouts, annotation press, callout …</a>
+            <div class="blame-commit-meta">
+              <a href="/dvcrn" class="muted-link" rel="contributor">dvcrn</a> authored
+              <time datetime="2015-06-25T16:07:19Z" is="relative-time">Jun 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L256">256</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC256">    <span class="pl-k">return</span> <span class="pl-k">&lt;</span>RCTMap {...this.props} onPress<span class="pl-k">=</span>{<span class="pl-v">this</span>._onPress} <span class="pl-c1">onChange</span><span class="pl-k">=</span>{<span class="pl-v">this</span>._onChange} <span class="pl-k">/&gt;</span>;</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="4">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L257">257</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC257">  },</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L258">258</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC258">});</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L259">259</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC259"></td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/58a550fa0625f31108e06f32ebb2958e2ffefcf0" class="blame-sha">58a550f</a>
+            <img alt="@sahrens" class="avatar blame-commit-avatar" height="32" src="https://avatars3.githubusercontent.com/u/1509831?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/58a550fa0625f31108e06f32ebb2958e2ffefcf0" class="blame-commit-title" title="[ReactNative] use requireNativeComponent to clean up a bunch of boilerplate">[ReactNative] use requireNativeComponent to clean up a bunch of boile…</a>
+            <div class="blame-commit-meta">
+              <a href="/sahrens" class="muted-link" rel="contributor">sahrens</a> authored
+              <time datetime="2015-04-22T04:07:17Z" is="relative-time">Apr 22, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L260">260</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC260"><span class="pl-k">if</span> (Platform.OS <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">&#39;</span>android<span class="pl-pds">&#39;</span></span>) {</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/ff00e1496c10ddf854672b49037c83c1351a00cb" class="blame-sha">ff00e14</a>
+            <img alt="@kmagiera" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/726445?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/ff00e1496c10ddf854672b49037c83c1351a00cb" class="blame-commit-title" title="[ReactNative] Rename ReactIOS JS module (and relatives) to ReactNative.">[ReactNative] Rename ReactIOS JS module (and relatives) to ReactNative.</a>
+            <div class="blame-commit-meta">
+              <a href="/kmagiera" class="muted-link" rel="contributor">kmagiera</a> authored
+              <time datetime="2015-05-08T16:45:43Z" is="relative-time">May 8, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="6"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L261">261</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC261">  <span class="pl-k">var</span> RCTMap <span class="pl-k">=</span> createReactNativeComponentClass({</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/58a550fa0625f31108e06f32ebb2958e2ffefcf0" class="blame-sha">58a550f</a>
+            <img alt="@sahrens" class="avatar blame-commit-avatar" height="32" src="https://avatars3.githubusercontent.com/u/1509831?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/58a550fa0625f31108e06f32ebb2958e2ffefcf0" class="blame-commit-title" title="[ReactNative] use requireNativeComponent to clean up a bunch of boilerplate">[ReactNative] use requireNativeComponent to clean up a bunch of boile…</a>
+            <div class="blame-commit-meta">
+              <a href="/sahrens" class="muted-link" rel="contributor">sahrens</a> authored
+              <time datetime="2015-04-22T04:07:17Z" is="relative-time">Apr 22, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L262">262</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC262">    validAttributes<span class="pl-k">:</span> merge(</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/ff00e1496c10ddf854672b49037c83c1351a00cb" class="blame-sha">ff00e14</a>
+            <img alt="@kmagiera" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/726445?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/ff00e1496c10ddf854672b49037c83c1351a00cb" class="blame-commit-title" title="[ReactNative] Rename ReactIOS JS module (and relatives) to ReactNative.">[ReactNative] Rename ReactIOS JS module (and relatives) to ReactNative.</a>
+            <div class="blame-commit-meta">
+              <a href="/kmagiera" class="muted-link" rel="contributor">kmagiera</a> authored
+              <time datetime="2015-05-08T16:45:43Z" is="relative-time">May 8, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="6"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L263">263</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC263">      ReactNativeViewAttributes.UIView, {</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/3ec3312c7cc74d67a62b87fe32ad0a84db78ce93" class="blame-sha">3ec3312</a>
+            <img alt="@fkgozali" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/1095866?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/3ec3312c7cc74d67a62b87fe32ad0a84db78ce93" class="blame-commit-title" title="[madman]: Fix MapView crashing problem.">[madman]: Fix MapView crashing problem.</a>
+            <div class="blame-commit-meta">
+              <a href="/fkgozali" class="muted-link" rel="contributor">fkgozali</a> authored
+              <time datetime="2015-06-26T04:02:53Z" is="relative-time">Jun 25, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="4"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L264">264</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC264">        active<span class="pl-k">:</span> <span class="pl-c1">true</span>,</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="16">
+            <a href="/facebook/react-native/commit/58a550fa0625f31108e06f32ebb2958e2ffefcf0" class="blame-sha">58a550f</a>
+            <img alt="@sahrens" class="avatar blame-commit-avatar" height="32" src="https://avatars3.githubusercontent.com/u/1509831?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/58a550fa0625f31108e06f32ebb2958e2ffefcf0" class="blame-commit-title" title="[ReactNative] use requireNativeComponent to clean up a bunch of boilerplate">[ReactNative] use requireNativeComponent to clean up a bunch of boile…</a>
+            <div class="blame-commit-meta">
+              <a href="/sahrens" class="muted-link" rel="contributor">sahrens</a> authored
+              <time datetime="2015-04-22T04:07:17Z" is="relative-time">Apr 22, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L265">265</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC265">        showsUserLocation<span class="pl-k">:</span> <span class="pl-c1">true</span>,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L266">266</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC266">        zoomEnabled<span class="pl-k">:</span> <span class="pl-c1">true</span>,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L267">267</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC267">        rotateEnabled<span class="pl-k">:</span> <span class="pl-c1">true</span>,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L268">268</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC268">        pitchEnabled<span class="pl-k">:</span> <span class="pl-c1">true</span>,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L269">269</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC269">        scrollEnabled<span class="pl-k">:</span> <span class="pl-c1">true</span>,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L270">270</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC270">        region<span class="pl-k">:</span> {diff<span class="pl-k">:</span> deepDiffer},</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L271">271</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC271">        annotations<span class="pl-k">:</span> {diff<span class="pl-k">:</span> deepDiffer},</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L272">272</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC272">        maxDelta<span class="pl-k">:</span> <span class="pl-c1">true</span>,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L273">273</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC273">        minDelta<span class="pl-k">:</span> <span class="pl-c1">true</span>,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L274">274</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC274">        legalLabelInsets<span class="pl-k">:</span> {diff<span class="pl-k">:</span> insetsDiffer},</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L275">275</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC275">      }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L276">276</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC276">    ),</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L277">277</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC277">    uiViewClassName<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">&#39;</span>RCTMap<span class="pl-pds">&#39;</span></span>,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L278">278</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC278">  });</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L279">279</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC279">} <span class="pl-k">else</span> {</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="4">
+            <a href="/facebook/react-native/commit/848839858b4f4e03b83e625304af21aa8dd8ff05" class="blame-sha">8488398</a>
+            <img alt="@nicklockwood" class="avatar blame-commit-avatar" height="32" src="https://avatars1.githubusercontent.com/u/546885?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/848839858b4f4e03b83e625304af21aa8dd8ff05" class="blame-commit-title" title="Added mechanism for directly mapping JS event handlers to blocks
+
+Summary:
+Currently, the system for mapping JS event handlers to blocks is quite clean on the JS side, but is clunky on the native side. The event property is passed as a boolean, which can then be checked by the native side, and if true, the native side is supposed to send an event via the event dispatcher.
+
+This diff adds the facility to declare the property as a block instead. This means that the event side can simply call the block, and it will automatically send the event. Because the blocks for bubbling and direct events are named differently, we can also use this to generate the event registration data and get rid of the arrays of event names.
+
+The name of the event is inferred from the property name, which means that the property for an event called &quot;load&quot; must be called `onLoad` or the mapping won&#39;t work. This can be optionally remapped to a different property name on the view itself if necessary, e.g.
+
+  RCT_REMAP_VIEW_PROPERTY(onLoad, loadEventBlock, RCTDirectEventBlock)
+
+If you don&#39;t want to use this mechanism then for now it is still possible to declare the property as a BOOL instead and use the old mechanism (this approach is now deprecated however, and may eventually be removed altogether).">Added mechanism for directly mapping JS event handlers to blocks</a>
+            <div class="blame-commit-meta">
+              <a href="/nicklockwood" class="muted-link" rel="contributor">nicklockwood</a> authored
+              <time datetime="2015-09-02T12:58:10Z" is="relative-time">Sep 2, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="2"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L280">280</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC280">  <span class="pl-k">var</span> RCTMap <span class="pl-k">=</span> requireNativeComponent(<span class="pl-s"><span class="pl-pds">&#39;</span>RCTMap<span class="pl-pds">&#39;</span></span>, MapView, {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="2"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L281">281</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC281">    nativeOnly<span class="pl-k">:</span> {<span class="pl-c1">onChange</span><span class="pl-k">:</span> <span class="pl-c1">true</span>, onPress<span class="pl-k">:</span> <span class="pl-c1">true</span>}</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="2"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L282">282</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC282">  });</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="2">
+            <a href="/facebook/react-native/commit/58a550fa0625f31108e06f32ebb2958e2ffefcf0" class="blame-sha">58a550f</a>
+            <img alt="@sahrens" class="avatar blame-commit-avatar" height="32" src="https://avatars3.githubusercontent.com/u/1509831?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/58a550fa0625f31108e06f32ebb2958e2ffefcf0" class="blame-commit-title" title="[ReactNative] use requireNativeComponent to clean up a bunch of boilerplate">[ReactNative] use requireNativeComponent to clean up a bunch of boile…</a>
+            <div class="blame-commit-meta">
+              <a href="/sahrens" class="muted-link" rel="contributor">sahrens</a> authored
+              <time datetime="2015-04-22T04:07:17Z" is="relative-time">Apr 22, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="7"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L283">283</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC283">}</td>
+          </tr>
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="3">
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-sha">fa87d83</a>
+            <img alt="@tadeuzagallo" class="avatar blame-commit-avatar" height="32" src="https://avatars0.githubusercontent.com/u/764414?v=3&amp;s=64" width="32" />
+            <a href="/facebook/react-native/commit/fa87d83af58b4a327bc828eb59d56233bfe910a0" class="blame-commit-title" title="[ReactNative] Oss GeoMap">[ReactNative] Oss GeoMap</a>
+            <div class="blame-commit-meta">
+              <a href="/tadeuzagallo" class="muted-link" rel="contributor">tadeuzagallo</a> authored
+              <time datetime="2015-03-10T01:05:10Z" is="relative-time">Mar 10, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L284">284</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC284"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="8"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L285">285</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC285"><span class="pl-c1">module</span>.exports <span class="pl-k">=</span> MapView;</td>
+          </tr>
+    </table>
+  </div>
+</div>
+
+
+        </div>
+      </div>
+      <div class="modal-backdrop"></div>
+    </div>
+  </div>
+
+
+    </div>
+
+      <div class="container">
+  <div class="site-footer" role="contentinfo">
+    <ul class="site-footer-links right">
+        <li><a href="https://status.github.com/" data-ga-click="Footer, go to status, text:status">Status</a></li>
+      <li><a href="https://developer.github.com" data-ga-click="Footer, go to api, text:api">API</a></li>
+      <li><a href="https://training.github.com" data-ga-click="Footer, go to training, text:training">Training</a></li>
+      <li><a href="https://shop.github.com" data-ga-click="Footer, go to shop, text:shop">Shop</a></li>
+        <li><a href="https://github.com/blog" data-ga-click="Footer, go to blog, text:blog">Blog</a></li>
+        <li><a href="https://github.com/about" data-ga-click="Footer, go to about, text:about">About</a></li>
+        <li><a href="https://github.com/pricing" data-ga-click="Footer, go to pricing, text:pricing">Pricing</a></li>
+
+    </ul>
+
+    <a href="https://github.com" aria-label="Homepage">
+      <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+</a>
+    <ul class="site-footer-links">
+      <li>&copy; 2015 <span title="0.08692s from github-fe130-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
+        <li><a href="https://github.com/site/terms" data-ga-click="Footer, go to terms, text:terms">Terms</a></li>
+        <li><a href="https://github.com/site/privacy" data-ga-click="Footer, go to privacy, text:privacy">Privacy</a></li>
+        <li><a href="https://github.com/security" data-ga-click="Footer, go to security, text:security">Security</a></li>
+        <li><a href="https://github.com/contact" data-ga-click="Footer, go to contact, text:contact">Contact</a></li>
+        <li><a href="https://help.github.com" data-ga-click="Footer, go to help, text:help">Help</a></li>
+    </ul>
+  </div>
+</div>
+
+
+
+
+
+
+
+    <div id="ajax-error-message" class="flash flash-error">
+      <span class="octicon octicon-alert"></span>
+      <button type="button" class="flash-close js-flash-close js-ajax-error-dismiss" aria-label="Dismiss error">
+        <span class="octicon octicon-x"></span>
+      </button>
+      Something went wrong with that request. Please try again.
+    </div>
+
+
+      <script crossorigin="anonymous" integrity="sha256-+Ec97OckLaaiDVIxNjSIGzl1xSzrqh5sOBV8DyYYVpE=" src="https://assets-cdn.github.com/assets/frameworks-f8473dece7242da6a20d52313634881b3975c52cebaa1e6c38157c0f26185691.js"></script>
+      <script async="async" crossorigin="anonymous" integrity="sha256-m/Opn3sG+OjWBq0zNSqiMtGtBf/m8WDZomr344srYOU=" src="https://assets-cdn.github.com/assets/github-9bf3a99f7b06f8e8d606ad33352aa232d1ad05ffe6f160d9a26af7e38b2b60e5.js"></script>
+
+
+    <div class="js-stale-session-flash stale-session-flash flash flash-warn flash-banner hidden">
+      <span class="octicon octicon-alert"></span>
+      <span class="signed-in-tab-flash">You signed in with another tab or window. <a href="">Reload</a> to refresh your session.</span>
+      <span class="signed-out-tab-flash">You signed out in another tab or window. <a href="">Reload</a> to refresh your session.</span>
+    </div>
+  </body>
+</html>

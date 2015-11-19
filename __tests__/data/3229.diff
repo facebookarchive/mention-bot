@@ -1,0 +1,366 @@
+diff --git a/Libraries/WebSocket/WebSocket.ios.js b/Libraries/WebSocket/WebSocket.ios.js
+index c2318b4..c09b931 100644
+--- a/Libraries/WebSocket/WebSocket.ios.js
++++ b/Libraries/WebSocket/WebSocket.ios.js
+@@ -16,16 +16,12 @@ var RCTWebSocketManager = require('NativeModules').WebSocketManager;
+
+ var WebSocketBase = require('WebSocketBase');
+
+-class Event {
+-  constructor(type) {
+-    this.type = type.toString();
+-  }
+-}
+-
+-class MessageEvent extends Event {
++class WebsocketEvent {
+   constructor(type, eventInitDict) {
+-    super(type);
+-    Object.assign(this, eventInitDict);
++    this.type = type.toString();
++    if (typeof eventInitDict === 'object') {
++      Object.assign(this, eventInitDict);
++    }
+   }
+ }
+
+@@ -67,56 +63,60 @@ class WebSocket extends WebSocketBase {
+     this._subs = [
+       RCTDeviceEventEmitter.addListener(
+         'websocketMessage',
+-        function(ev) {
++        ev => {
+           if (ev.id !== id) {
+             return;
+           }
+-          var event = new MessageEvent('message', {
+-            data: ev.data
++          var event = new WebsocketEvent('message', {
++            data: ev.data,
+           });
+-          this.onmessage && this.onmessage(event);
+           this.dispatchEvent(event);
+-        }.bind(this)
++        },
+       ),
+       RCTDeviceEventEmitter.addListener(
+         'websocketOpen',
+-        function(ev) {
++        ev => {
+           if (ev.id !== id) {
+             return;
+           }
+           this.readyState = this.OPEN;
+-          var event = new Event('open');
+-          this.onopen && this.onopen(event);
++          var event = new WebsocketEvent('open');
+           this.dispatchEvent(event);
+-        }.bind(this)
++        }
+       ),
+       RCTDeviceEventEmitter.addListener(
+         'websocketClosed',
+-        function(ev) {
++        (ev) => {
+           if (ev.id !== id) {
+             return;
+           }
+           this.readyState = this.CLOSED;
+-          var event = new Event('close');
+-          this.onclose && this.onclose(event);
++          var event = new WebsocketEvent('close');
+           this.dispatchEvent(event);
++
+           this._unregisterEvents();
+           RCTWebSocketManager.close(id);
+-        }.bind(this)
++        }
+       ),
+       RCTDeviceEventEmitter.addListener(
+         'websocketFailed',
+-        function(ev) {
++        (ev) => {
+           if (ev.id !== id) {
+             return;
+           }
+-          var event = new Event('error');
+-          event.message = ev.message;
+-          this.onerror && this.onerror(event);
+-          this.dispatchEvent(event);
++          this.readyState = this.CLOSED;
++
++          var closeEvent = new WebsocketEvent('close');
++          this.dispatchEvent(closeEvent);
++
++          var errorEvent = new WebsocketEvent('error', {
++            message: ev.message,
++          });
++          this.dispatchEvent(errorEvent);
++
+           this._unregisterEvents();
+           RCTWebSocketManager.close(id);
+-        }.bind(this)
++        }
+       )
+     ];
+   }
+diff --git a/Libraries/WebSocket/WebSocketBase.js b/Libraries/WebSocket/WebSocketBase.js
+index a4cca41..f6cff0e 100644
+--- a/Libraries/WebSocket/WebSocketBase.js
++++ b/Libraries/WebSocket/WebSocketBase.js
+@@ -16,17 +16,12 @@ var EventTarget = require('event-target-shim');
+ /**
+  * Shared base for platform-specific WebSocket implementations.
+  */
+-class WebSocketBase extends EventTarget {
++class WebSocketBase extends EventTarget('close', 'error', 'message', 'open') {
+   CONNECTING: number;
+   OPEN: number;
+   CLOSING: number;
+   CLOSED: number;
+
+-  onclose: ?Function;
+-  onerror: ?Function;
+-  onmessage: ?Function;
+-  onopen: ?Function;
+-
+   binaryType: ?string;
+   bufferedAmount: number;
+   extension: ?string;
+@@ -41,6 +36,8 @@ class WebSocketBase extends EventTarget {
+     this.CLOSING = 2;
+     this.CLOSED = 3;
+
++    this.readyState = this.CONNECTING;
++
+     if (!protocols) {
+       protocols = [];
+     }
+diff --git a/Libraries/WebSocket/__mocks__/event-target-shim.js b/Libraries/WebSocket/__mocks__/event-target-shim.js
+deleted file mode 100644
+index 3b566fc..0000000
+--- a/Libraries/WebSocket/__mocks__/event-target-shim.js
++++ /dev/null
+@@ -1,9 +0,0 @@
+-// Jest fatals for the following statement (minimal repro case)
+-//
+-//   exports.something = Symbol;
+-//
+-// Until it is fixed, mocking the entire node module makes the
+-// problem go away.
+-
+-'use strict';
+-module.exports = function() {};
+diff --git a/Libraries/WebSocket/__tests__/Websocket-test.js b/Libraries/WebSocket/__tests__/Websocket-test.js
+new file mode 100644
+index 0000000..d062ed9
+--- /dev/null
++++ b/Libraries/WebSocket/__tests__/Websocket-test.js
+@@ -0,0 +1,207 @@
++/**
++ * Copyright (c) 2015-present, Facebook, Inc.
++ * All rights reserved.
++ *
++ * This source code is licensed under the BSD-style license found in the
++ * LICENSE file in the root directory of this source tree. An additional grant
++ * of patent rights can be found in the PATENTS file in the same directory.
++ */
++'use strict';
++
++jest
++  .autoMockOff()
++  .mock('ErrorUtils')
++  .setMock('NativeModules', {
++    WebSocketManager: {
++      connect: jest.genMockFunction(),
++      close: jest.genMockFunction(),
++      send: jest.genMockFunction(),
++    },
++  });
++
++var readyStates = {
++  CONNECTING: 0,
++  OPEN: 1,
++  CLOSING: 2,
++  CLOSED: 3,
++};
++
++var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
++var RCTWebSocketManager = require('NativeModules').WebSocketManager;
++
++var WebSocket = require('WebSocket');
++
++// Small utils to keep it DRY
++var simulateEvent = (ws, event, data = {}) => {
++  RCTDeviceEventEmitter.emit(event, {id: ws._socketId, ...data});
++};
++var expectOneCall = fn => expect(fn.mock.calls.length).toBe(1);
++var getSocket = () => new WebSocket('ws://echo.websocket.org');
++
++describe('WebSockets', () => {
++  beforeEach(() => {
++    // Reset RCTWebSocketManager calls
++    Object.assign(RCTWebSocketManager, {
++      connect: jest.genMockFunction(),
++      close: jest.genMockFunction(),
++      send: jest.genMockFunction(),
++    });
++  });
++
++  it('should have readyState CONNECTING initialy', () => {
++    var ws = getSocket();
++    expect(ws.readyState).toBe(readyStates.CONNECTING);
++  });
++
++  // Open event
++  it('Should call native connect when connecting', () => {
++    var ws = getSocket();
++    ws.onopen = jest.genMockFunction();
++
++    expectOneCall(RCTWebSocketManager.connect);
++  });
++
++  it('should have readyState OPEN when connected', () => {
++    var ws = getSocket();
++    simulateEvent(ws, 'websocketOpen');
++    expect(ws.readyState).toBe(readyStates.OPEN);
++  });
++
++  it('should call onopen when connected', () => {
++    var ws = getSocket();
++    ws.onopen = jest.genMockFunction();
++
++    simulateEvent(ws, 'websocketOpen');
++
++    expectOneCall(ws.onopen);
++  });
++
++  it('should trigger listener when connected', () => {
++    var ws = getSocket();
++    var listener = jest.genMockFunction();
++    ws.addEventListener('open', listener);
++
++    simulateEvent(ws, 'websocketOpen');
++
++    expectOneCall(listener);
++  });
++
++  // Sending message
++  it('should call native send when sending a message', () => {
++    var ws = getSocket();
++    simulateEvent(ws, 'websocketOpen');
++    var message = 'Hello websocket!';
++
++    ws.send(message);
++
++    expectOneCall(RCTWebSocketManager.send);
++    expect(RCTWebSocketManager.send.mock.calls[0])
++      .toEqual([message, ws._socketId]);
++  });
++
++  it('should call onmessage when receiving a message', () => {
++    var ws = getSocket();
++    var message = 'Hello listener!';
++    ws.onmessage = jest.genMockFunction();
++
++    simulateEvent(ws, 'websocketOpen');
++    simulateEvent(ws, 'websocketMessage', {data: message});
++
++    expectOneCall(ws.onmessage);
++    expect(ws.onmessage.mock.calls[0][0].data).toBe(message);
++  });
++
++  it('should trigger listeners when recieving a message', () => {
++    var ws = getSocket();
++    var message = 'Hello listener!';
++    var listener = jest.genMockFunction();
++    ws.addEventListener('message', listener);
++
++    simulateEvent(ws, 'websocketOpen');
++    simulateEvent(ws, 'websocketMessage', {data: message});
++
++    expectOneCall(listener);
++    expect(listener.mock.calls[0][0].data).toBe(message);
++  });
++
++  // Close event
++  it('should have readyState CLOSED when closed', () => {
++    var ws = getSocket();
++
++    simulateEvent(ws, 'websocketOpen');
++    simulateEvent(ws, 'websocketClosed');
++
++    expect(ws.readyState).toBe(readyStates.CLOSED);
++  });
++
++  it('should call onclose when closed', () => {
++    var ws = getSocket();
++    ws.onclose = jest.genMockFunction();
++
++    simulateEvent(ws, 'websocketOpen');
++    simulateEvent(ws, 'websocketClosed');
++
++    expectOneCall(ws.onclose);
++  });
++
++  it('should trigger listeners when closed', () => {
++    var ws = getSocket();
++    var listener = jest.genMockFunction();
++    ws.addEventListener('close', listener);
++
++    simulateEvent(ws, 'websocketOpen');
++    simulateEvent(ws, 'websocketClosed');
++
++    expectOneCall(listener);
++  });
++
++  it('should call native close when closed', () => {
++    var ws = getSocket();
++
++    simulateEvent(ws, 'websocketOpen');
++    simulateEvent(ws, 'websocketClosed');
++
++    expectOneCall(RCTWebSocketManager.close);
++    expect(RCTWebSocketManager.close.mock.calls[0]).toEqual([ws._socketId]);
++  });
++
++  // Fail event
++  it('should have readyState CLOSED when failed', () => {
++    var ws = getSocket();
++    simulateEvent(ws, 'websocketFailed');
++    expect(ws.readyState).toBe(readyStates.CLOSED);
++  });
++
++  it('should call native close when failed', () => {
++    var ws = getSocket();
++
++    simulateEvent(ws, 'websocketFailed');
++
++    expectOneCall(RCTWebSocketManager.close);
++    expect(RCTWebSocketManager.close.mock.calls[0]).toEqual([ws._socketId]);
++  });
++
++  it('should call onerror and onclose when failed', () => {
++    var ws = getSocket();
++    ws.onclose = jest.genMockFunction();
++    ws.onerror = jest.genMockFunction();
++
++    simulateEvent(ws, 'websocketFailed');
++
++    expectOneCall(ws.onclose);
++    expectOneCall(ws.onerror);
++  });
++
++  it('should call onerror and onclose when failed', () => {
++    var ws = getSocket();
++    var onclose = jest.genMockFunction();
++    var onerror = jest.genMockFunction();
++    ws.addEventListener('close', onclose);
++    ws.addEventListener('error', onerror);
++
++    simulateEvent(ws, 'websocketFailed');
++
++    expectOneCall(onclose);
++    expectOneCall(onerror);
++  });
++});

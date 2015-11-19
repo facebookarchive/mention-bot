@@ -1,0 +1,58 @@
+diff --git a/Libraries/Components/MapView/MapView.js b/Libraries/Components/MapView/MapView.js
+index ac715e8..7c2bb5f 100644
+--- a/Libraries/Components/MapView/MapView.js
++++ b/Libraries/Components/MapView/MapView.js
+@@ -71,7 +71,7 @@ var MapView = React.createClass({
+     style: View.propTypes.style,
+
+     /**
+-     * If `true` the app will ask for the user's location and focus on it.
++     * If `true` the app will ask for the user's location and display it.
+      * Default value is `false`.
+      *
+      * **NOTE**: You need to add NSLocationWhenInUseUsageDescription key in
+@@ -81,6 +81,14 @@ var MapView = React.createClass({
+     showsUserLocation: React.PropTypes.bool,
+
+     /**
++     * If `true` the app will and focus on the user's location
++     * Default value is `false`.
++     * **NOTE**: You need to set to `true` showsUserLocation
++     *
++     */
++    followUserLocation: React.PropTypes.bool,
++
++    /**
+      * If `false` the user won't be able to pinch/zoom the map.
+      * Default value is `true`.
+      */
+diff --git a/React/Views/RCTMap.m b/React/Views/RCTMap.m
+index 1620895..c25094e 100644
+--- a/React/Views/RCTMap.m
++++ b/React/Views/RCTMap.m
+@@ -87,9 +87,11 @@ - (void)setShowsUserLocation:(BOOL)showsUserLocation
+     }
+     super.showsUserLocation = showsUserLocation;
+
+-    // If it needs to show user location, force map view centered
++    // If it needs to follow user location, force map view centered
+     // on user's current location on user location updates
+-    _followUserLocation = showsUserLocation;
++    if(self.followUserLocation){
++        _followUserLocation = showsUserLocation;
++    }
+   }
+ }
+
+diff --git a/React/Views/RCTMapManager.m b/React/Views/RCTMapManager.m
+index f4ee06f..6566dc4 100644
+--- a/React/Views/RCTMapManager.m
++++ b/React/Views/RCTMapManager.m
+@@ -37,6 +37,7 @@ - (UIView *)view
+ }
+
+ RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
++RCT_EXPORT_VIEW_PROPERTY(followUserLocation, BOOL)
+ RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL)
+ RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
+ RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
