@@ -4,6 +4,7 @@ Do you have a GitHub project that is too big for people to subscribe to all the 
 
 <img width="769" src="https://cloud.githubusercontent.com/assets/197597/11023035/a2f8733e-8622-11e5-84df-49a3d9425938.png">
 
+Currently, this only works on public repositories.
 
 ## How To Use?
 
