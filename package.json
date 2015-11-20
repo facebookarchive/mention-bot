@@ -6,6 +6,7 @@
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest"
   },
+  "config": {},
   "dependencies": {
     "babel-core": "^6.0.0",
     "babel-jest": "^6.0.1",

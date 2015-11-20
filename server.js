@@ -13,6 +13,7 @@ var bl = require('bl');
 var express = require('express');
 var mentionBot = require('./mention-bot.js');
 var GitHubApi = require('github');
+var config = require('./package.json').config;
 
 if (!process.env.GITHUB_TOKEN) {
   console.error('The bot was started without a github account to post with.');
@@ -28,7 +29,12 @@ if (!process.env.GITHUB_TOKEN) {
   process.exit(1);
 }
 
-var github = new GitHubApi({version: '3.0.0'});
+var github = new GitHubApi({
+  version: '3.0.0',
+  host: config.gheHost,
+  pathPrefix: config.ghePathPrefix
+});
+
 github.authenticate({
   type: 'oauth',
   token: process.env.GITHUB_TOKEN
