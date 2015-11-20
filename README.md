@@ -75,5 +75,16 @@ Alternatively, click the button below:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
+## How to run the bot on GitHub Enterprise
+
+If you want to run the bot on your GitHub Enterprise instance, add the GHE host and path prefix to the config section of package.json
+
+```json
+"config": {
+  "gheHost": "github.my-GHE-enabled-company.com",
+  "ghePathPrefix": "/api/v3"
+}
+```
+
 ## License
 mention-bot is BSD-licensed. We also provide an additional patent grant.
