@@ -278,7 +278,10 @@ function guessOwners(
   return []
     .concat(deletedOwners)
     .concat(allOwners)
-    .filter(function(owner){
+    .filter(function(owner) {
+      return owner !== 'none';
+    })
+    .filter(function(owner) {
       return owner !== creator;
     })
     .slice(0, 3);

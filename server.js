@@ -74,6 +74,8 @@ app.post('/', function(req, res) {
       return res.end();
     }
 
+    console.log(data.pull_request.url);
+
     github.issues.createComment({
       user: data.repository.owner.login, // 'fbsamples'
       repo: data.repository.name, // 'bot-testing'
