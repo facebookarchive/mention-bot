@@ -27,7 +27,8 @@ describe('Github Mention', function() {
         i,
         mentionBot.guessOwnersForPullRequest(
           'https://github.com/facebook/react-native',
-          i
+          i,
+          'mention-bot'
         )
       );
     });
