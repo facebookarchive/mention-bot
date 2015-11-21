@@ -20,10 +20,14 @@ var jar = new CookieJar();
  * Scrape github login page
  */
 var githubLogin = function() {
-  var output = childProcess.execSync('curl -v -L https://github.com/login 2>&1', {encoding: 'utf8'}).split('<!DOCTYPE html>');
+    var output = childProcess.execSync(
+      'curl -v -L https://github.com/login 2>&1',
+      {encoding: 'utf8'}
+    ).toString().split('<!DOCTYPE html>');
+
   return {
     headers: output[0],
-    body: output[1]    
+    body: output[1]
   };
 };
 
@@ -35,17 +39,16 @@ var githubLogin = function() {
 var getAuthenticityToken = function() {
   var login = githubLogin();
   jar.parseHeaders(login.headers);
-  return encodeURIComponent(login.body.match(/name="authenticity_token".*value="([^"]+)"/)[1]);
+  return encodeURIComponent(
+    (login.body.match(/name="authenticity_token".*value="([^"]+)"/) || [''])[1]
+  );
 };
 
 /**
  * runs curl request to perform login action
  * returns github response headers
  */
-var getGithubLoginResponseHeaders = function() {
-  if (!USERNAME) {
-    return;
-  }
+var getGithubLoginResponseHeaders = function(): string {
   var authenticity_token = getAuthenticityToken();
   var commandArr = [
     `https://github.com/session`,
@@ -64,13 +67,20 @@ var getGithubLoginResponseHeaders = function() {
     `-H`, `Referer: https://github.com/`,
     `-H`, `Cookie: ${jar.get()}`,
     `-H`, `Connection: keep-alive`,
-    ];
-  return childProcess.spawnSync('curl',commandArr, {encoding: 'utf8'}).stderr;
+  ];
+
+  return childProcess.spawnSync(
+    'curl',
+    commandArr,
+    {encoding: 'utf8'}
+  ).stderr.toString();
 };
 
-var headers = getGithubLoginResponseHeaders();
-jar.parseHeaders(headers);
-
 if (USERNAME) {
+  var headers = getGithubLoginResponseHeaders();
+  jar.parseHeaders(headers);
+
   module.exports = jar.get();
+} else {
+  module.exports = null;
 }

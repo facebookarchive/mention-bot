@@ -12,8 +12,9 @@
 'use strict';
 
 var githubAuthCookies = require('./githubAuthCookies');
+var fs = require('fs');
 
-var downloadFileSync = function(url, cookies) {
+var downloadFileSync = function(url: string, cookies: ?string): string {
   var args = ['--verbose','-L', url];
 
   if (cookies) {
@@ -21,9 +22,8 @@ var downloadFileSync = function(url, cookies) {
   }
 
   return require('child_process')
-    .execFileSync('curl', args, {encoding: 'utf8'});
+    .execFileSync('curl', args, {encoding: 'utf8'}).toString();
 };
-var fs = require('fs');
 
 type FileInfo = {
   path: string,

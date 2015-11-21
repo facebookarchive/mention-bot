@@ -12,6 +12,8 @@
 'use strict';
 
 class CookieJar {
+  cookies: { [key: string]: string };
+
   constructor() {
     this.cookies = {};
   }
@@ -19,7 +21,7 @@ class CookieJar {
   /**
    * Serializes stored cookies into http header format
    */
-  get() {
+  get(): string {
     return Object.keys(this.cookies)
       .map(function(key) {
         let str = key;
@@ -28,7 +30,7 @@ class CookieJar {
         }
         return str;
       }, this)
-      .join('; '); 
+      .join('; ');
   }
 
   /**
@@ -59,7 +61,7 @@ class CookieJar {
         this.parseCookieHeader(line.split('Set-Cookie: ')[1].trim());
       }, this);
     return this.get();
-  }  
+  }
 }
 
 module.exports = CookieJar;
