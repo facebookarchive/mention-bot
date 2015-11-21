@@ -47,25 +47,25 @@ var getGithubLoginResponseHeaders = function() {
     return;
   }
   var authenticity_token = getAuthenticityToken();
-  console.log('TOKEN', authenticity_token)
-  return childProcess.execFileSync('curl',[
+  var commandArr = [
     `https://github.com/session`,
+    `--silent`,
     `-v`,
-    `-d`, `"utf8=%E2%9C%93&authenticity_token=${authenticity_token}&login=${USERNAME}&password=${PASSWORD}"`,
-    `-H`, `"Pragma: no-cache"`,
-    `-H`, `"Origin: https://github.com"`,
-    `-H`, `"Accept-Encoding: gzip, deflate"`,
-    `-H`, `"Accept-Language: en-US,en;q=0.8"`,
-    `-H`, `"Upgrade-Insecure-Requests: 1"`,
-    `-H`, `"User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36"`,
-    `-H`, `"Content-Type: application/x-www-form-urlencoded"`,
-    `-H`, `"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"`,
-    `-H`, `"Cache-Control: no-cache"`,
-    `-H`, `"Referer: https://github.com/"`,
-    `-H`, `"Cookie: ${jar.get()}"`,
-    `-H`, `"Connection: keep-alive"`//,
-    // `--trace-ascii`, `./out`
-    ], {encoding: 'utf8'});
+    `-d`, `utf8=%E2%9C%93&authenticity_token=${authenticity_token}&login=${USERNAME}&password=${PASSWORD}`,
+    `-H`, `Pragma: no-cache`,
+    `-H`, `Origin: https://github.com`,
+    `-H`, `Accept-Encoding: gzip, deflate`,
+    `-H`, `Accept-Language: en-US,en;q=0.8`,
+    `-H`, `Upgrade-Insecure-Requests: 1`,
+    `-H`, `User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36`,
+    `-H`, `Content-Type: application/x-www-form-urlencoded`,
+    `-H`, `Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8`,
+    `-H`, `Cache-Control: no-cache`,
+    `-H`, `Referer: https://github.com/`,
+    `-H`, `Cookie: ${jar.get()}`,
+    `-H`, `Connection: keep-alive`,
+    ];
+  return childProcess.spawnSync('curl',commandArr, {encoding: 'utf8'}).stderr;
 };
 
 var headers = getGithubLoginResponseHeaders();

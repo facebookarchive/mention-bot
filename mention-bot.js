@@ -15,12 +15,11 @@ var githubAuthCookies = require('./githubAuthCookies');
 
 var downloadFileSync = function(url, cookies) {
 
-  var args = ['--silent','-L', url];
+  var args = ['--verbose','-L', url];
 
   if (cookies) {
-    // command += ' -H ' + '"Cookie: ' + cookies + '"';
     args.push('-H');
-    args.push(cookies);
+    args.push(`Cookie: ${cookies}`);
   }
 
   return require('child_process')
