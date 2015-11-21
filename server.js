@@ -15,6 +15,11 @@ var mentionBot = require('./mention-bot.js');
 var GitHubApi = require('github');
 var config = require('./package.json').config;
 
+if (!process.env.GITHUB_USER) {
+  console.warn('There was no github user detected. This is fine, but mentionbot won\'t work with private repos.');
+  console.warn('To make mention-bot work with private repos, please expose GITHUB_USER and GITHUB_PASSWORD as environment variables. The user and password must have access to the private repo you want to use.');
+}
+
 if (!process.env.GITHUB_TOKEN) {
   console.error('The bot was started without a github account to post with.');
   console.error('To get started:');

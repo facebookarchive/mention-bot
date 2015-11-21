@@ -9,7 +9,20 @@
  * @flow
  */
 
-var downloadFileSync = require('download-file-sync');
+'use strict';
+
+var githubAuthCookies = require('./githubAuthCookies');
+
+var downloadFileSync = function(url, cookies) {
+  var args = ['--verbose','-L', url];
+
+  if (cookies) {
+    args.push('-H', `Cookie: ${cookies}`);
+  }
+
+  return require('child_process')
+    .execFileSync('curl', args, {encoding: 'utf8'});
+};
 var fs = require('fs');
 
 type FileInfo = {
@@ -216,7 +229,7 @@ function getSortedOwners(
  */
 function fetch(url: string): string {
   if (!module.exports.enableCachingForDebugging) {
-    return downloadFileSync(url);
+    return downloadFileSync(url, githubAuthCookies);
   }
 
   var cacheDir = __dirname + '/cache/';
@@ -226,7 +239,7 @@ function fetch(url: string): string {
   }
   var cache_key = cacheDir + url.replace(/[^a-zA-Z0-9-_\.]/g, '-');
   if (!fs.existsSync(cache_key)) {
-    var file = downloadFileSync(url);
+    var file = downloadFileSync(url, githubAuthCookies);
     fs.writeFileSync(cache_key, file);
   }
   return fs.readFileSync(cache_key, 'utf8');
