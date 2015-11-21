@@ -70,11 +70,11 @@ app.post('/', function(req, res) {
       data.pull_request.user.login // 'mention-bot'
     );
 
-    if (!reviewers) {
+    console.log(data.pull_request.html_url, reviewers);
+
+    if (reviewers.length === 0) {
       return res.end();
     }
-
-    console.log(data.pull_request.url);
 
     github.issues.createComment({
       user: data.repository.owner.login, // 'fbsamples'
