@@ -145,7 +145,7 @@ function parseBlame(blame: string): Array<string> {
   // The way the document is structured is that commits and lines are
   // interleaved. So everytime we see a commit we grab the author's name
   // and everytime we see a line we log the last seen author.
-  var re = /(rel="contributor">([a-z0-9]+)<\/a> authored|<tr class="blame-line">)/g;
+  var re = /(rel="(?:author|contributor)">([a-z0-9]+)<\/a> authored|<tr class="blame-line">)/g;
 
   var currentAuthor = 'none';
   var lines = [];
@@ -246,6 +246,20 @@ function fetch(url: string): string {
 }
 
 /**
+  * Returns a new list of owners, with inelligible owners removed.
+  * An eligible owner must:
+  *   - not be in the userBlacklist in the provided config
+  */
+function getEligibleOwners(
+  owners: Array<string>,
+  config: Object
+): Array<string> {
+  return owners.filter(function(owner) {
+    return config.userBlacklist.indexOf(owner) < 0;
+  });
+}
+
+/**
  * The problem at hand is to find a set of three best effort people that have
  * context on a pull request. It doesn't (and actually can't) be perfect.
  *
@@ -274,7 +288,8 @@ function fetch(url: string): string {
 function guessOwners(
   files: Array<FileInfo>,
   blames: { [key: string]: Array<string> },
-  creator: string
+  creator: string,
+  config: Object
 ): Array<string> {
   var deletedOwners = getDeletedOwners(files, blames);
   var allOwners = getAllOwners(files, blames);
@@ -288,7 +303,7 @@ function guessOwners(
     return !deletedOwnersSet.has(element);
   });
 
-  return []
+  var concatOwners = []
     .concat(deletedOwners)
     .concat(allOwners)
     .filter(function(owner) {
@@ -298,12 +313,17 @@ function guessOwners(
       return owner !== creator;
     })
     .slice(0, 3);
+
+  var eligibleOwners = getEligibleOwners(concatOwners, config);
+
+  return eligibleOwners.slice(0, 3);
 }
 
 function guessOwnersForPullRequest(
   repoURL: string,
   id: number,
-  creator: string
+  creator: string,
+  config: Object
 ): Array<string> {
   var diff = fetch(repoURL + '/pull/' + id + '.diff');
   var files = parseDiff(diff);
@@ -329,7 +349,7 @@ function guessOwnersForPullRequest(
 
   // This is the line that implements the actual algorithm, all the lines
   // before are there to fetch and extract the data needed.
-  return guessOwners(files, blames, creator);
+  return guessOwners(files, blames, creator, config);
 }
 
 module.exports = {

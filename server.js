@@ -20,6 +20,8 @@ if (!process.env.GITHUB_USER) {
   console.warn('To make mention-bot work with private repos, please expose GITHUB_USER and GITHUB_PASSWORD as environment variables. The user and password must have access to the private repo you want to use.');
 }
 
+var CONFIG_PATH = ".mention-bot";
+
 if (!process.env.GITHUB_TOKEN) {
   console.error('The bot was started without a github account to post with.');
   console.error('To get started:');
@@ -69,29 +71,49 @@ app.post('/', function(req, res) {
       return res.end();
     }
 
-    var reviewers = mentionBot.guessOwnersForPullRequest(
-      data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
-      data.pull_request.number, // 23
-      data.pull_request.user.login // 'mention-bot'
-    );
+    // request config from repo
+    github.repos.getContent({
+      user: data.repository.owner.login,
+      repo: data.repository.name,
+      path: CONFIG_PATH,
+      headers: {
+        Accept: "application/vnd.github.v3.raw"
+      }
+    }, function(err, configRes) {
+      // default config
+      var repoConfig = {
+        userBlacklist: []
+      };
 
-    console.log(data.pull_request.html_url, reviewers);
+      if (!err && configRes) {
+        try { repoConfig = JSON.parse(configRes); } catch (e) {}
+      }
 
-    if (reviewers.length === 0) {
+      var reviewers = mentionBot.guessOwnersForPullRequest(
+        data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
+        data.pull_request.number, // 23
+        data.pull_request.user.login, // 'mention-bot'
+        repoConfig
+      );
+
+      console.log(data.pull_request.html_url, reviewers);
+
+      if (reviewers.length === 0) {
+        return res.end();
+      }
+
+      github.issues.createComment({
+        user: data.repository.owner.login, // 'fbsamples'
+        repo: data.repository.name, // 'bot-testing'
+        number: data.pull_request.number, // 23
+        body: 'By analyzing the blame information on this pull request, we ' +
+          'identified ' + buildMentionSentence(reviewers) + ' to be' +
+          (reviewers.length > 1 ? '' : ' a') + ' potential ' +
+          'reviewer' + (reviewers.length > 1 ? 's' : '') + '.'
+      });
+
       return res.end();
-    }
-
-    github.issues.createComment({
-      user: data.repository.owner.login, // 'fbsamples'
-      repo: data.repository.name, // 'bot-testing'
-      number: data.pull_request.number, // 23
-      body: 'By analyzing the blame information on this pull request, we ' +
-        'identified ' + buildMentionSentence(reviewers) + ' to be' +
-        (reviewers.length > 1 ? '' : ' a') + ' potential ' +
-        'reviewer' + (reviewers.length > 1 ? 's' : '') + '.'
     });
-
-    return res.end();
   }));
 });
 
