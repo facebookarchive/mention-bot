@@ -93,7 +93,7 @@ function parseDiff(diff: string): Array<FileInfo> {
   var files = [];
   // The algorithm is designed to be best effort. If the http request failed
   // for some reason and we get an empty file, we should not crash.
-  if (!diff) {
+  if (!diff || !diff.match(/^diff/)) {
     return files;
   }
 
