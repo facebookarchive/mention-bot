@@ -8,6 +8,14 @@
     "GITHUB_TOKEN": {
       "description": "A token generated for the account which will comment on your pull requests.",
       "required": true
+    },
+    "GITHUB_USER": {
+      "description": "If you want mention-bot to work with private repos, you need to add your github login",
+      "required": false
+    },
+    "GITHUB_PASSWORD": {
+      "description": "Password for Github account.",
+      "required": false
     }
   }
 }
