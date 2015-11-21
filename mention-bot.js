@@ -293,6 +293,8 @@ function guessOwnersForPullRequest(
     console.log(repo);
   });
 
+  // diff
+
   // var diff = fetch(repoURL + '/pull/' + id + '.diff');
   // var files = parseDiff(diff);
 
