@@ -14,7 +14,6 @@
 var githubAuthCookies = require('./githubAuthCookies');
 
 var downloadFileSync = function(url, cookies) {
-
   var args = ['--verbose','-L', url];
 
   if (cookies) {
