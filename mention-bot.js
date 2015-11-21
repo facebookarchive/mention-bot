@@ -11,6 +11,7 @@
 
 var downloadFileSync = require('download-file-sync');
 var fs = require('fs');
+var git = require('git-tools');
 
 type FileInfo = {
   path: string,
@@ -283,32 +284,40 @@ function guessOwners(
 function guessOwnersForPullRequest(
   repoURL: string,
   id: number
-): Array<string> {
-  var diff = fetch(repoURL + '/pull/' + id + '.diff');
-  var files = parseDiff(diff);
+  ): Array<string> {
 
-  // There are going to be degenerated changes that end up modifying hundreds
-  // of files. In theory, it would be good to actually run the algorithm on
-  // all of them to get the best set of reviewers. In practice, we don't
-  // want to do hundreds of http requests. Using the top 5 files is enough
-  // to get us 3 people that may have context.
-  files.sort(function(a, b) {
-    var countA = a.deletedLines.length;
-    var countB = b.deletedLines.length;
-    return countA > countB ? -1 : (countA < countB ? 1 : 0);
-  });
-  files = files.slice(0, 5);
-
-  var blames = {};
-  files.forEach(function(file) {
-    var path = file.path;
-    var blame = fetch(repoURL + '/blame/master/' + path);
-    blames[path] = parseBlame(blame);
+  git.clone({
+    repo: repoURL,
+    dir: '/tmp/git'
+  }, (err, repo) => {
+    console.log(repo);
   });
 
-  // This is the line that implements the actual algorithm, all the lines
-  // before are there to fetch and extract the data needed.
-  return guessOwners(files, blames);
+  // var diff = fetch(repoURL + '/pull/' + id + '.diff');
+  // var files = parseDiff(diff);
+
+  // // There are going to be degenerated changes that end up modifying hundreds
+  // // of files. In theory, it would be good to actually run the algorithm on
+  // // all of them to get the best set of reviewers. In practice, we don't
+  // // want to do hundreds of http requests. Using the top 5 files is enough
+  // // to get us 3 people that may have context.
+  // files.sort(function(a, b) {
+    // var countA = a.deletedLines.length;
+    // var countB = b.deletedLines.length;
+    // return countA > countB ? -1 : (countA < countB ? 1 : 0);
+  // });
+  // files = files.slice(0, 5);
+
+  // var blames = {};
+  // files.forEach(function(file) {
+    // var path = file.path;
+    // var blame = fetch(repoURL + '/blame/master/' + path);
+    // blames[path] = parseBlame(blame);
+  // });
+
+  // // This is the line that implements the actual algorithm, all the lines
+  // // before are there to fetch and extract the data needed.
+  // return guessOwners(files, blames);
 }
 
 module.exports = {

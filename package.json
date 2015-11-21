@@ -14,6 +14,7 @@
     "bl": "^1.0.0",
     "download-file-sync": "^1.0.3",
     "express": "^4.13.3",
+    "git-tools": "^0.2.1",
     "github": "^0.2.4",
     "jest-cli": "^0.7.1"
   }
