@@ -261,6 +261,7 @@ function fetch(url: string): string {
 function guessOwners(
   files: Array<FileInfo>,
   blames: { [key: string]: Array<string> }
+  creator: string
 ): Array<string> {
   var deletedOwners = getDeletedOwners(files, blames);
   var allOwners = getAllOwners(files, blames);
@@ -277,12 +278,16 @@ function guessOwners(
   return []
     .concat(deletedOwners)
     .concat(allOwners)
+    .filter(function(owner){
+      return owner !== creator;
+    })
     .slice(0, 3);
 }
 
 function guessOwnersForPullRequest(
   repoURL: string,
-  id: number
+  id: number,
+  creator: string
 ): Array<string> {
   var diff = fetch(repoURL + '/pull/' + id + '.diff');
   var files = parseDiff(diff);
@@ -308,7 +313,7 @@ function guessOwnersForPullRequest(
 
   // This is the line that implements the actual algorithm, all the lines
   // before are there to fetch and extract the data needed.
-  return guessOwners(files, blames);
+  return guessOwners(files, blames, creator);
 }
 
 module.exports = {

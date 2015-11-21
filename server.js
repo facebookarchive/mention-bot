@@ -66,7 +66,8 @@ app.post('/', function(req, res) {
 
     var reviewers = mentionBot.guessOwnersForPullRequest(
       data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
-      data.pull_request.number // 23
+      data.pull_request.number, // 23
+      data.user.login, // 'mention-bot'
     );
 
     if (!reviewers) {
