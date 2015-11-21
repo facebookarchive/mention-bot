@@ -260,7 +260,7 @@ function fetch(url: string): string {
  */
 function guessOwners(
   files: Array<FileInfo>,
-  blames: { [key: string]: Array<string> }
+  blames: { [key: string]: Array<string> },
   creator: string
 ): Array<string> {
   var deletedOwners = getDeletedOwners(files, blames);
