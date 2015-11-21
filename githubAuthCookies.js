@@ -69,10 +69,8 @@ var getGithubLoginResponseHeaders = function() {
 };
 
 var headers = getGithubLoginResponseHeaders();
-console.log(headers)
 jar.parseHeaders(headers);
 
 if (USERNAME) {
   module.exports = jar.get();
-  console.log(module.exports)
 }
