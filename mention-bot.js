@@ -17,8 +17,7 @@ var downloadFileSync = function(url, cookies) {
   var args = ['--verbose','-L', url];
 
   if (cookies) {
-    args.push('-H');
-    args.push(`Cookie: ${cookies}`);
+    args.push('-H', `Cookie: ${cookies}`);
   }
 
   return require('child_process')
