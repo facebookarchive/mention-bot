@@ -9,16 +9,22 @@
  * @flow
  */
 
-var githubWebClient = require('./githubWebClient');
+'use strict';
+
+var githubAuthCookies = require('./githubAuthCookies');
 
 var downloadFileSync = function(url, cookies) {
-  var command = 'curl -L ' + url;
-  if(cookies) {
-    command += ' -H ' + '"Cookie: ' + cookies + '"';
+
+  var args = ['--silent','-L', url];
+
+  if (cookies) {
+    // command += ' -H ' + '"Cookie: ' + cookies + '"';
+    args.push('-H');
+    args.push(cookies);
   }
 
   return require('child_process')
-    .execSync(command).toString();
+    .execFileSync('curl', args, {encoding: 'utf8'});
 };
 var fs = require('fs');
 
@@ -226,7 +232,7 @@ function getSortedOwners(
  */
 function fetch(url: string): string {
   if (!module.exports.enableCachingForDebugging) {
-    return downloadFileSync(url, githubWebClient);
+    return downloadFileSync(url, githubAuthCookies);
   }
 
   var cacheDir = __dirname + '/cache/';
@@ -236,7 +242,7 @@ function fetch(url: string): string {
   }
   var cache_key = cacheDir + url.replace(/[^a-zA-Z0-9-_\.]/g, '-');
   if (!fs.existsSync(cache_key)) {
-    var file = downloadFileSync(url, githubWebClient);
+    var file = downloadFileSync(url, githubAuthCookies);
     fs.writeFileSync(cache_key, file);
   }
   return fs.readFileSync(cache_key, 'utf8');
