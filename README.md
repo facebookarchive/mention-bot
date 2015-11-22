@@ -13,6 +13,10 @@ Do you have a GitHub project that is too big for people to subscribe to all the 
 
 And you are done. Next time a pull request is opened, you should see the bot add a comment ;)
 
+## Configuration
+
+The bot can be configured by adding a `.mention-bot` file to the base directory of the repo. The [CONFIG.md](./CONFIG.md) file contains more info on available configuration options.
+
 ## How Does It Work?
 
 Every time there's a new pull request, GitHub wakes up the mention bot <img src="https://avatars0.githubusercontent.com/u/15710697?v=3&s=40" width="20" height="20" /> using Webhooks.
