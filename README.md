@@ -1,4 +1,4 @@
-# mention-bot [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Build status][appveyor-image]][appveyor-url] [![Dependency status][david-dm-image]][david-dm-url] [![Dev Dependency status][david-dm-dev-image]][david-dm-dev-url]
+# mention-bot [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] 
 
 Do you have a GitHub project that is too big for people to subscribe to all the notifications? The mention bot will automatically mention potential reviewers on pull requests. It helps getting faster turnaround on pull requests by involving the right people early on.
 
@@ -93,9 +93,3 @@ mention-bot is BSD-licensed. We also provide an additional patent grant.
 [npm-image]: http://img.shields.io/npm/v/mention-bot.svg
 [travis-url]: https://travis-ci.org/udnisap/mention-bot
 [travis-image]: http://img.shields.io/travis/udnisap/mention-bot.svg
-[appveyor-image]:https://ci.appveyor.com/api/projects/status/bsu9w9ar8pboc2nj?svg=true
-[appveyor-url]:https://ci.appveyor.com/project/udnisap/mention-bot
-[david-dm-url]:https://david-dm.org/udnisap/mention-bot
-[david-dm-image]:https://david-dm.org/udnisap/mention-bot.svg
-[david-dm-dev-url]:https://david-dm.org/udnisap/mention-bot#info=devDependencies
-[david-dm-dev-image]:https://david-dm.org/udnisap/mention-bot/dev-status.svg
