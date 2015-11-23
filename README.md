@@ -1,4 +1,4 @@
-# mention-bot [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] 
+# mention-bot [![Build Status](https://travis-ci.org/facebook/mention-bot.svg?branch=master)](https://travis-ci.org/facebook/mention-bot)
 
 Do you have a GitHub project that is too big for people to subscribe to all the notifications? The mention bot will automatically mention potential reviewers on pull requests. It helps getting faster turnaround on pull requests by involving the right people early on.
 
@@ -90,10 +90,3 @@ If you want to run the bot on your GitHub Enterprise instance, add the GHE host 
 
 ## License
 mention-bot is BSD-licensed. We also provide an additional patent grant.
-
-
-[npm-url]: https://npmjs.org/package/mention-bot
-[downloads-image]: http://img.shields.io/npm/dm/mention-bot.svg
-[npm-image]: http://img.shields.io/npm/v/mention-bot.svg
-[travis-url]: https://travis-ci.org/udnisap/mention-bot
-[travis-image]: http://img.shields.io/travis/udnisap/mention-bot.svg
