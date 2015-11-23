@@ -301,7 +301,7 @@ function guessOwners(
     .filter(function(owner) {
       return config.userBlacklist.indexOf(owner) === -1;
     })
-    .slice(0, 3);
+    .slice(0, config.maxReviewers);
 }
 
 function guessOwnersForPullRequest(
