@@ -323,6 +323,7 @@ function guessOwnersForPullRequest(
   repoURL: string,
   id: number,
   creator: string,
+  targetBranch: string,
   config: Object
 ): Array<string> {
   var diff = fetch(repoURL + '/pull/' + id + '.diff');
@@ -343,7 +344,7 @@ function guessOwnersForPullRequest(
   var blames = {};
   files.forEach(function(file) {
     var path = file.path;
-    var blame = fetch(repoURL + '/blame/master/' + path);
+    var blame = fetch(repoURL + '/blame/' + targetBranch + '/' + path);
     blames[path] = parseBlame(blame);
   });
 
@@ -356,5 +357,5 @@ module.exports = {
   enableCachingForDebugging: false,
   parseDiff: parseDiff,
   parseBlame: parseBlame,
-  guessOwnersForPullRequest: guessOwnersForPullRequest,
+  guessOwnersForPullRequest: guessOwnersForPullRequest
 };

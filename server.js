@@ -93,6 +93,7 @@ app.post('/', function(req, res) {
         data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
         data.pull_request.number, // 23
         data.pull_request.user.login, // 'mention-bot'
+        data.pull_request.base.ref,
         repoConfig
       );
 
