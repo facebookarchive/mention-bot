@@ -77,6 +77,18 @@ Alternatively, click the button below:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
+## Configuring a custom message
+
+If you find the default PR comment a bit dry, it is possible to configure an external message generator which will be called prior to invoking the PR comment. Put a file called message.js in the root of your running mention-bot instance, that looks something like this:
+
+```
+var util = require('util');
+
+module.exports = function(reviewerList, mentionSentenceBuilder) {
+	return util.format("Please review this %s", mentionSentenceBuilder(reviewerList));
+};
+```
+
 ## How to run the bot on GitHub Enterprise
 
 If you want to run the bot on your GitHub Enterprise instance, add the GHE host and path prefix to the config section of package.json
