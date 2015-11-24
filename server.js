@@ -117,8 +117,6 @@ app.post('/', function(req, res) {
         return res.end();
       }
 
-      var reviewerSentence = buildMentionSentence(reviewers);
-      var arguments = [reviewerSentence, (reviewers.length > 1 ? '' : ' a'), (reviewers.length > 1 ? 's' : '')];
       var body = messageGenerator(reviewers, buildMentionSentence);
 
       github.issues.createComment({
