@@ -39,7 +39,7 @@ The problem of finding who the best reviewers are is really hard and I don't thi
 
 We use two heuristics:
 - If a line was deleted or modified, the person that last touched that line is likely going to care about this pull request.
-- If a person last touched many lines in the file where the change was made, s/he will want to be notified.
+- If a person last touched many lines in the file where the change was made, they will want to be notified.
 
 **Initialization**
 
