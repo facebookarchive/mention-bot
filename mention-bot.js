@@ -357,5 +357,5 @@ module.exports = {
   enableCachingForDebugging: false,
   parseDiff: parseDiff,
   parseBlame: parseBlame,
-  guessOwnersForPullRequest: guessOwnersForPullRequest
+  guessOwnersForPullRequest: guessOwnersForPullRequest,
 };
