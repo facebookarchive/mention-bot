@@ -14,6 +14,16 @@ var express = require('express');
 var mentionBot = require('./mention-bot.js');
 var GitHubApi = require('github');
 var config = require('./package.json').config;
+var util = require('util');
+var fs = require('fs');
+var messageGenerator = require("./message.js");
+var defaultMessageGenerator = function(reviewers) {
+  return util.format('By analyzing the blame information on this pull request' + 
+                     ', we identified %s to be%s potential reviewer%s',
+                     buildMentionSentence(reviewers),
+                     reviewers.length > 1 ? '' : ' a', 
+                     reviewers.length > 1 ? 's' : '');
+};
 
 if (!process.env.GITHUB_USER) {
   console.warn('There was no github user detected. This is fine, but mentionbot won\'t work with private repos.');
@@ -104,14 +114,13 @@ app.post('/', function(req, res) {
         return res.end();
       }
 
+      var body = messageGenerator(reviewers, buildMentionSentence, defaultMessageGenerator);
+
       github.issues.createComment({
         user: data.repository.owner.login, // 'fbsamples'
         repo: data.repository.name, // 'bot-testing'
         number: data.pull_request.number, // 23
-        body: 'By analyzing the blame information on this pull request, we ' +
-          'identified ' + buildMentionSentence(reviewers) + ' to be' +
-          (reviewers.length > 1 ? '' : ' a') + ' potential ' +
-          'reviewer' + (reviewers.length > 1 ? 's' : '') + '.'
+        body: body
       });
 
       return res.end();
