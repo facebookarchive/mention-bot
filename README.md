@@ -79,15 +79,7 @@ Alternatively, click the button below:
 
 ## Configuring a custom message
 
-If you find the default PR comment a bit dry, it is possible to configure an external message generator which will be called prior to invoking the PR comment. Put a file called message.js in the root of your running mention-bot instance, that looks something like this:
-
-```javascript
-var util = require('util');
-
-module.exports = function(reviewerList, mentionSentenceBuilder) {
-  return util.format("Please review this %s", mentionSentenceBuilder(reviewerList));
-};
-```
+If you want to change the default message, you can write your custom logic in [message.js](https://github.com/facebook/mention-bot/blob/master/message.js).
 
 ## How to run the bot on GitHub Enterprise
 

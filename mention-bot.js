@@ -15,7 +15,7 @@ var githubAuthCookies = require('./githubAuthCookies');
 var fs = require('fs');
 
 var downloadFileSync = function(url: string, cookies: ?string): string {
-  var args = ['--verbose','-L', url];
+  var args = ['--silent', '-L', url];
 
   if (cookies) {
     args.push('-H', `Cookie: ${cookies}`);
@@ -145,7 +145,7 @@ function parseBlame(blame: string): Array<string> {
   // The way the document is structured is that commits and lines are
   // interleaved. So everytime we see a commit we grab the author's name
   // and everytime we see a line we log the last seen author.
-  var re = /(rel="(?:author|contributor)">([a-z0-9]+)<\/a> authored|<tr class="blame-line">)/g;
+  var re = /(rel="(?:author|contributor)">([^<]+)<\/a> authored|<tr class="blame-line">)/g;
 
   var currentAuthor = 'none';
   var lines = [];
@@ -246,20 +246,6 @@ function fetch(url: string): string {
 }
 
 /**
-  * Returns a new list of owners, with inelligible owners removed.
-  * An eligible owner must:
-  *   - not be in the userBlacklist in the provided config
-  */
-function getEligibleOwners(
-  owners: Array<string>,
-  config: Object
-): Array<string> {
-  return owners.filter(function(owner) {
-    return config.userBlacklist.indexOf(owner) < 0;
-  });
-}
-
-/**
  * The problem at hand is to find a set of three best effort people that have
  * context on a pull request. It doesn't (and actually can't) be perfect.
  *
@@ -303,7 +289,7 @@ function guessOwners(
     return !deletedOwnersSet.has(element);
   });
 
-  var concatOwners = []
+  return []
     .concat(deletedOwners)
     .concat(allOwners)
     .filter(function(owner) {
@@ -312,11 +298,10 @@ function guessOwners(
     .filter(function(owner) {
       return owner !== creator;
     })
+    .filter(function(owner) {
+      return config.userBlacklist.indexOf(owner) === -1;
+    })
     .slice(0, 3);
-
-  var eligibleOwners = getEligibleOwners(concatOwners, config);
-
-  return eligibleOwners.slice(0, 3);
 }
 
 function guessOwnersForPullRequest(
