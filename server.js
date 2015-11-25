@@ -9,7 +9,6 @@
 
 require('babel-core/register');
 
-var optional = require("optional");
 var bl = require('bl');
 var express = require('express');
 var mentionBot = require('./mention-bot.js');
