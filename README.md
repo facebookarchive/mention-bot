@@ -81,11 +81,11 @@ Alternatively, click the button below:
 
 If you find the default PR comment a bit dry, it is possible to configure an external message generator which will be called prior to invoking the PR comment. Put a file called message.js in the root of your running mention-bot instance, that looks something like this:
 
-```
+```javascript
 var util = require('util');
 
 module.exports = function(reviewerList, mentionSentenceBuilder) {
-	return util.format("Please review this %s", mentionSentenceBuilder(reviewerList));
+  return util.format("Please review this %s", mentionSentenceBuilder(reviewerList));
 };
 ```
 
