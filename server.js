@@ -68,6 +68,7 @@ app.post('/', function(req, res) {
     try { data = JSON.parse(body.toString()); } catch (e) {}
 
     if (data.action !== 'opened') {
+      console.log('Skipping because action is ' + data.action + '. We only care about opened.');
       return res.end();
     }
 
@@ -99,6 +100,7 @@ app.post('/', function(req, res) {
       console.log(data.pull_request.html_url, reviewers);
 
       if (reviewers.length === 0) {
+        console.log('Skipping because there are no reviewers found');
         return res.end();
       }
 
