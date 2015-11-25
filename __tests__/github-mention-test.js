@@ -30,7 +30,7 @@ describe('Github Mention', function() {
           i,
           'mention-bot',
           'master',
-          {}
+          {} //config
         )
       );
     });
@@ -56,16 +56,16 @@ describe('Github Mention', function() {
     expect(parsed).toEqual([
       {
         path: 'Libraries/Components/MapView/MapView.js',
-        deletedLines: [ 74 ]
+        deletedLines: [ 74 ],
       },
       {
         path: 'React/Views/RCTMap.m',
-        deletedLines: [ 90, 92 ]
+        deletedLines: [ 90, 92 ],
       },
       {
         path: 'React/Views/RCTMapManager.m',
-        deletedLines: [ ]
-      }
+        deletedLines: [ ],
+      },
     ]);
   });
 
@@ -77,35 +77,35 @@ describe('Github Mention', function() {
     expect(parsed).toEqual([
       {
         path: 'website/src/react-native/img/TutorialFinal.png',
-        deletedLines: [ ]
+        deletedLines: [ ],
       },
       {
         path: 'website/src/react-native/img/TutorialMock.png',
-        deletedLines: [ ]
+        deletedLines: [ ],
       },
       {
         path: 'website/src/react-native/img/TutorialSingleFetched.png',
-        deletedLines: [ ]
+        deletedLines: [ ],
       },
       {
         path: 'website/src/react-native/img/TutorialStyledMock.png',
-        deletedLines: [ ]
+        deletedLines: [ ],
       },
       {
         path: 'website/src/react-native/img/chrome_breakpoint.png',
-        deletedLines: [ ]
+        deletedLines: [ ],
       },
       {
         path: 'website/src/react-native/img/favicon.png',
-        deletedLines: [ ]
+        deletedLines: [ ],
       },
       {
         path: 'website/src/react-native/img/header_logo.png',
-        deletedLines: [ ]
+        deletedLines: [ ],
       },
       {
         path: 'website/src/react-native/img/opengraph.png',
-        deletedLines: [ ]
+        deletedLines: [ ],
       },
     ]);
   });
@@ -118,19 +118,19 @@ describe('Github Mention', function() {
     expect(parsed).toEqual([
       {
         path: 'Libraries/WebSocket/WebSocket.ios.js',
-        deletedLines: [ 19, 20, 21, 22, 23, 24, 25, 27, 28, 70, 74, 75, 77, 79, 83, 88, 89, 91, 95, 100, 101, 105, 109, 113, 114, 115, 116, 119 ]
+        deletedLines: [ 19, 20, 21, 22, 23, 24, 25, 27, 28, 70, 74, 75, 77, 79, 83, 88, 89, 91, 95, 100, 101, 105, 109, 113, 114, 115, 116, 119 ],
       },
       {
         path: 'Libraries/WebSocket/WebSocketBase.js',
-        deletedLines: [ 19, 25, 26, 27, 28, 29 ]
+        deletedLines: [ 19, 25, 26, 27, 28, 29 ],
       },
       {
         path: 'Libraries/WebSocket/__mocks__/event-target-shim.js',
-        deletedLines: [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+        deletedLines: [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
       },
       {
         path: 'Libraries/WebSocket/__tests__/Websocket-test.js',
-        deletedLines: [ ]
+        deletedLines: [ ],
       },
     ]);
   });
@@ -143,8 +143,8 @@ describe('Github Mention', function() {
     expect(parsed).toEqual([
       {
         path: 'README.md',
-        deletedLines: [  ]
-      }
+        deletedLines: [  ],
+      },
     ]);
   });
 
@@ -202,7 +202,7 @@ describe('Github Mention', function() {
       'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens',
       'nicklockwood', 'nicklockwood', 'nicklockwood',
       'sahrens',
-      'tadeuzagallo', 'tadeuzagallo'
+      'tadeuzagallo', 'tadeuzagallo',
     ]);
   });
 });
