@@ -45,7 +45,7 @@ class CookieJar {
   }
 
   /**
-   * Finds Set-Cookie header in resp headers and addes them to the jar
+   * Finds Set-Cookie header in resp headers and adds them to the jar
    * Returns all stored cookies where the new cookies overwrite previous cookies
    */
 

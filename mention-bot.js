@@ -111,7 +111,7 @@ function parseDiff(diff: string): Array<FileInfo> {
   }
 
   var lines = diff.trim().split('\n');
-  // Hack Array doesn't have shift/unshift to work from the beggining of the
+  // Hack Array doesn't have shift/unshift to work from the beginning of the
   // array, so we reverse the entire array in order to be able to use pop/add.
   lines.reverse();
 
@@ -143,8 +143,8 @@ function parseDiff(diff: string): Array<FileInfo> {
  */
 function parseBlame(blame: string): Array<string> {
   // The way the document is structured is that commits and lines are
-  // interleaved. So everytime we see a commit we grab the author's name
-  // and everytime we see a line we log the last seen author.
+  // interleaved. So every time we see a commit we grab the author's name
+  // and every time we see a line we log the last seen author.
   var re = /(rel="(?:author|contributor)">([^<]+)<\/a> authored|<tr class="blame-line">)/g;
 
   var currentAuthor = 'none';
