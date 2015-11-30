@@ -84,6 +84,20 @@ function defaultMessageGenerator(reviewers) {
   );
 };
 
+/**
+  * Merge object 2 with object 1.
+  * Any property that both object 1 and 2 have will be overwritten.
+  */
+function merge(o1, o2) {
+  if (typeof o1 === 'object' && typeof o2 === 'object') {
+    for (var prop in o2) {
+      if (o2.hasOwnProperty(prop)) {
+        o1[prop] = o2[prop];
+      }
+    }
+  }
+}
+
 app.post('/', function(req, res) {
   req.pipe(bl(function(err, body) {
     var data = {};
@@ -108,11 +122,15 @@ app.post('/', function(req, res) {
     }, function(err, configRes) {
       // default config
       var repoConfig = {
-        userBlacklist: []
+        userBlacklist: [],
+        maxReviewers: 3
       };
 
       if (!err && configRes) {
-        try { repoConfig = JSON.parse(configRes); } catch (e) {}
+        try {
+          merge(repoConfig, JSON.parse(configRes));
+        } catch (e) {}
+
       }
 
       var reviewers = mentionBot.guessOwnersForPullRequest(
