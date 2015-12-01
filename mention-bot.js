@@ -289,6 +289,10 @@ function guessOwners(
     return !deletedOwnersSet.has(element);
   });
 
+  console.log('files', files);
+  console.log('deletedOwners', deletedOwners);
+  console.log('allOwners', allOwners);
+
   return []
     .concat(deletedOwners)
     .concat(allOwners)
@@ -313,6 +317,7 @@ function guessOwnersForPullRequest(
 ): Array<string> {
   var diff = fetch(repoURL + '/pull/' + id + '.diff');
   var files = parseDiff(diff);
+  console.log('original files', files);
 
   // There are going to be degenerated changes that end up modifying hundreds
   // of files. In theory, it would be good to actually run the algorithm on
