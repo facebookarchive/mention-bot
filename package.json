@@ -20,6 +20,7 @@
     "express": "^4.13.3",
     "flow-bin": "^0.18.1",
     "github": "^0.2.4",
-    "jest-cli": "^0.7.1"
+    "jest-cli": "^0.7.1",
+    "minimatch": "^3.0.0"
   }
 }

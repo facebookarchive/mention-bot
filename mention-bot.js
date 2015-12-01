@@ -13,6 +13,7 @@
 
 var githubAuthCookies = require('./githubAuthCookies');
 var fs = require('fs');
+var minimatch = require('minimatch');
 
 var downloadFileSync = function(url: string, cookies: ?string): string {
   var args = ['--silent', '-L', url];
@@ -29,6 +30,11 @@ type FileInfo = {
   path: string,
   deletedLines: Array<number>,
 };
+
+type WhitelistUser = {
+  name: string,
+  files: string
+}
 
 function startsWith(str, start) {
   return str.substr(0, start.length) === start;
@@ -221,6 +227,23 @@ function getSortedOwners(
   return sorted_owners;
 }
 
+function getDefaultOwners(
+  files: Array<FileInfo>,
+  whitelist: Array<WhitelistUser>
+): Array<string> {
+  var owners = [];
+
+  whitelist.forEach(function(user) {
+    var userHasChangedFile = files.filter(minimatch.filter(user.files, {matchBase: true})).length > 0;
+
+    if (userHasChangedFile) {
+      owners.push(user.name);
+    }
+  });
+
+  return owners;
+}
+
 /**
  * While developing/debugging the algorithm itself, it's very important not to
  * make http requests to github. Not only it's going to make the reload cycle
@@ -275,6 +298,7 @@ function guessOwners(
   files: Array<FileInfo>,
   blames: { [key: string]: Array<string> },
   creator: string,
+  defaultOwners: Array<string>,
   config: Object
 ): Array<string> {
   var deletedOwners = getDeletedOwners(files, blames);
@@ -290,6 +314,7 @@ function guessOwners(
   });
 
   return []
+    .concat(defaultOwners)
     .concat(deletedOwners)
     .concat(allOwners)
     .filter(function(owner) {
@@ -301,7 +326,7 @@ function guessOwners(
     .filter(function(owner) {
       return config.userBlacklist.indexOf(owner) === -1;
     })
-    .slice(0, 3);
+    .slice(0, (config.maxUsersToPing || 3));
 }
 
 function guessOwnersForPullRequest(
@@ -313,6 +338,7 @@ function guessOwnersForPullRequest(
 ): Array<string> {
   var diff = fetch(repoURL + '/pull/' + id + '.diff');
   var files = parseDiff(diff);
+  var defaultOwners = getDefaultOwners(files, config.userWhitelist);
 
   // There are going to be degenerated changes that end up modifying hundreds
   // of files. In theory, it would be good to actually run the algorithm on
@@ -324,7 +350,7 @@ function guessOwnersForPullRequest(
     var countB = b.deletedLines.length;
     return countA > countB ? -1 : (countA < countB ? 1 : 0);
   });
-  files = files.slice(0, 5);
+  files = files.slice(0, (config.numFilesToCheck || 5));
 
   var blames = {};
   files.forEach(function(file) {
@@ -335,7 +361,7 @@ function guessOwnersForPullRequest(
 
   // This is the line that implements the actual algorithm, all the lines
   // before are there to fetch and extract the data needed.
-  return guessOwners(files, blames, creator, config);
+  return guessOwners(files, blames, creator, defaultOwners, config);
 }
 
 module.exports = {
