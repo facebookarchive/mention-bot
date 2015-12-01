@@ -20,8 +20,8 @@ describe('Github Mention', function() {
   // If you are working on the algorithm itself, it is useful to be able to run
   // the complete flow that downloads the diff and subsequent blames. Since
   // doing http requests is unreliable in tests, it is disabled by default.
-  describe('CompleteFlow', function() {
-    xit('Gets correct users with no config options', function() {
+  xdescribe('CompleteFlow', function() {
+    it('Gets correct users with no config options', function() {
       mentionBot.enableCachingForDebugging = true;
       var prs = [3238];
       prs.forEach(function(i) {
@@ -32,13 +32,15 @@ describe('Github Mention', function() {
             i,
             'mention-bot',
             'master',
-            {} //config
+            {
+              userBlacklist: []
+            } //config
           )
         );
       });
     });
 
-    xit('Messages 5 users from config option maxUsersToPing', function() {
+    it('Messages 5 users from config option maxUsersToPing', function() {
       mentionBot.enableCachingForDebugging = true;
       var owners = mentionBot.guessOwnersForPullRequest(
         'https://github.com/facebook/react-native',
@@ -46,13 +48,14 @@ describe('Github Mention', function() {
         'mention-bot',
         'master',
         {
-          maxUsersToPing: 5
+          maxReviewers: 5,
+          userBlacklist: []
         } //config
       );
       expect(owners.length).toEqual(5);
     });
 
-    xit('Should contain testname in owners from whitelist', function() {
+    it('Should contain testname in owners from whitelist', function() {
       mentionBot.enableCachingForDebugging = true;
       var owners = mentionBot.guessOwnersForPullRequest(
         'https://github.com/facebook/react-native',
@@ -60,6 +63,7 @@ describe('Github Mention', function() {
         'mention-bot',
         'master',
         {
+          userBlacklist: [],
           userWhitelist: [
             {
               name: 'ghuser',
@@ -68,7 +72,7 @@ describe('Github Mention', function() {
           ]
         } //config
       );
-      console.log(owners);
+
       expect(owners.indexOf('ghuser')).toBeGreaterThan(-1);
     });
   });

@@ -1,6 +1,6 @@
 ```js
 {
-  "maxUsersToPing": 5, // Maximum  number of people to ping in the PR message
+  "maxReviewers": 5, // Maximum  number of people to ping in the PR message
   "numFilesToCheck": 10, // Number of files to check against, deafault is 5
   "userWhitelist": [
     {

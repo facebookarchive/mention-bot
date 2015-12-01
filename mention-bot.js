@@ -326,9 +326,9 @@ function guessOwners(
       return owner !== creator;
     })
     .filter(function(owner) {
-      return (config.userBlacklist || []).indexOf(owner) === -1;
+      return config.userBlacklist.indexOf(owner) === -1;
     })
-    .slice(0, (config.maxUsersToPing || 3))
+    .slice(0, config.maxReviewers)
     .concat(defaultOwners);
 }
 
@@ -343,9 +343,6 @@ function guessOwnersForPullRequest(
   var files = parseDiff(diff);
   var defaultOwners = getDefaultOwners(files, config.userWhitelist);
 
-
-  console.log('HEEEELLLOOO', defaultOwners);
-
   // There are going to be degenerated changes that end up modifying hundreds
   // of files. In theory, it would be good to actually run the algorithm on
   // all of them to get the best set of reviewers. In practice, we don't
@@ -356,7 +353,7 @@ function guessOwnersForPullRequest(
     var countB = b.deletedLines.length;
     return countA > countB ? -1 : (countA < countB ? 1 : 0);
   });
-  files = files.slice(0, (config.numFilesToCheck || 5));
+  files = files.slice(0, config.numFilesToCheck);
 
   var blames = {};
   files.forEach(function(file) {
