@@ -34,7 +34,7 @@ describe('Github Mention', function() {
             'master',
             {
               userBlacklist: []
-            } //config
+            }
           )
         );
       });
@@ -50,7 +50,7 @@ describe('Github Mention', function() {
         {
           maxReviewers: 5,
           userBlacklist: []
-        } //config
+        }
       );
       expect(owners.length).toEqual(5);
     });
@@ -70,7 +70,7 @@ describe('Github Mention', function() {
               files: '**/*.js'
             }
           ]
-        } //config
+        }
       );
 
       expect(owners.indexOf('ghuser')).toBeGreaterThan(-1);
