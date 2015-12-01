@@ -232,11 +232,14 @@ function getDefaultOwners(
   whitelist: Array<WhitelistUser>
 ): Array<string> {
   var owners = [];
+  var users = whitelist || [];
 
-  whitelist.forEach(function(user) {
-    var userHasChangedFile = files.filter(minimatch.filter(user.files, {matchBase: true})).length > 0;
+  users.forEach(function(user) {
+    var userHasChangedFile = files.find(function(file) {
+      return minimatch(file.path, user.files);
+    });
 
-    if (userHasChangedFile) {
+    if (!!userHasChangedFile) {
       owners.push(user.name);
     }
   });
@@ -314,7 +317,6 @@ function guessOwners(
   });
 
   return []
-    .concat(defaultOwners)
     .concat(deletedOwners)
     .concat(allOwners)
     .filter(function(owner) {
@@ -324,9 +326,10 @@ function guessOwners(
       return owner !== creator;
     })
     .filter(function(owner) {
-      return config.userBlacklist.indexOf(owner) === -1;
+      return (config.userBlacklist || []).indexOf(owner) === -1;
     })
-    .slice(0, (config.maxUsersToPing || 3));
+    .slice(0, (config.maxUsersToPing || 3))
+    .concat(defaultOwners);
 }
 
 function guessOwnersForPullRequest(
@@ -339,6 +342,9 @@ function guessOwnersForPullRequest(
   var diff = fetch(repoURL + '/pull/' + id + '.diff');
   var files = parseDiff(diff);
   var defaultOwners = getDefaultOwners(files, config.userWhitelist);
+
+
+  console.log('HEEEELLLOOO', defaultOwners);
 
   // There are going to be degenerated changes that end up modifying hundreds
   // of files. In theory, it would be good to actually run the algorithm on
