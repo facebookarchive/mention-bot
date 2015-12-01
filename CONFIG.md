@@ -1,8 +1,8 @@
 ```js
 {
-  "maxReviewers": 5, // Maximum  number of people to ping in the PR message
-  "numFilesToCheck": 10, // Number of files to check against, deafault is 5
-  "userWhitelist": [
+  "maxReviewers": 5, // Maximum  number of people to ping in the PR message, default is 3
+  "numFilesToCheck": 10, // Number of files to check against, default is 5
+  "alwaysNotifyForPaths": [
     {
       "name": "ghuser", // The user's Github username
       "files": "src/js/**/*.js" // The file glob associated with the user

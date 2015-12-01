@@ -17,27 +17,35 @@ var mentionBot = require('../mention-bot.js');
 var fs = require('fs');
 
 describe('Github Mention', function() {
+
+  function getFile(filename) {
+    return fs.readFileSync(__dirname + '/data/' + filename, 'utf8');
+  }
+
   // If you are working on the algorithm itself, it is useful to be able to run
   // the complete flow that downloads the diff and subsequent blames. Since
   // doing http requests is unreliable in tests, it is disabled by default.
-  xdescribe('CompleteFlow', function() {
-    it('Gets correct users with no config options', function() {
-      mentionBot.enableCachingForDebugging = true;
-      var prs = [3238];
-      prs.forEach(function(i) {
-        console.log(
-          i,
-          mentionBot.guessOwnersForPullRequest(
-            'https://github.com/facebook/react-native',
-            i,
-            'mention-bot',
-            'master',
-            {
-              userBlacklist: []
-            }
-          )
-        );
+  describe('CompleteFlow', function() {
+
+    beforeEach(function() {
+      jest.setMock('download-file-sync', function(url) {
+        return getFile('3238.diff');
       });
+    });
+
+    it('Gets correct users with default config options', function() {
+      mentionBot.enableCachingForDebugging = true;
+      var owners = mentionBot.guessOwnersForPullRequest(
+        'https://github.com/facebook/react-native',
+        3238,
+        'mention-bot',
+        'master',
+        {
+          maxReviewers: 3,
+          userBlacklist: []
+        }
+      );
+      expect(owners).toEqual(['corbt', 'vjeux', 'sahrens']);
     });
 
     it('Messages 5 users from config option maxUsersToPing', function() {
@@ -63,8 +71,9 @@ describe('Github Mention', function() {
         'mention-bot',
         'master',
         {
+          maxReviewers: 3,
           userBlacklist: [],
-          userWhitelist: [
+          alwaysNotifyForPaths: [
             {
               name: 'ghuser',
               files: '**/*.js'
@@ -76,10 +85,6 @@ describe('Github Mention', function() {
       expect(owners.indexOf('ghuser')).toBeGreaterThan(-1);
     });
   });
-
-  function getFile(filename) {
-    return fs.readFileSync(__dirname + '/data/' + filename, 'utf8');
-  }
 
   it('ParseDiffEmpty', function() {
     expect(function() { mentionBot.parseDiff(''); }).not.toThrow();

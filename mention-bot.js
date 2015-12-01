@@ -232,13 +232,14 @@ function getDefaultOwners(
   whitelist: Array<WhitelistUser>
 ): Array<string> {
   var owners = [];
+  var users = whitelist || [];
 
-  whitelist.forEach(function(user) {
+  users.forEach(function(user) {
     var userHasChangedFile = files.find(function(file) {
       return minimatch(file.path, user.files);
     });
 
-    if (userHasChangedFile) {
+    if (userHasChangedFile && owners.indexOf(user.name) === -1) {
       owners.push(user.name);
     }
   });
@@ -328,7 +329,10 @@ function guessOwners(
       return config.userBlacklist.indexOf(owner) === -1;
     })
     .slice(0, config.maxReviewers)
-    .concat(defaultOwners);
+    .concat(defaultOwners)
+    .filter(function(owner, index, ownersFound) {
+      return ownersFound.indexOf(owner) === index;
+    });
 }
 
 function guessOwnersForPullRequest(
@@ -340,7 +344,7 @@ function guessOwnersForPullRequest(
 ): Array<string> {
   var diff = fetch(repoURL + '/pull/' + id + '.diff');
   var files = parseDiff(diff);
-  var defaultOwners = getDefaultOwners(files, config.userWhitelist);
+  var defaultOwners = getDefaultOwners(files, config.alwaysNotifyForPaths);
 
   // There are going to be degenerated changes that end up modifying hundreds
   // of files. In theory, it would be good to actually run the algorithm on
