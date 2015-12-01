@@ -289,6 +289,9 @@ function guessOwners(
     return !deletedOwnersSet.has(element);
   });
 
+  console.log('deletedOwners', deletedOwners);
+  console.log('allOwners', allOwners);
+
   return []
     .concat(deletedOwners)
     .concat(allOwners)
