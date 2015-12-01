@@ -108,11 +108,14 @@ app.post('/', function(req, res) {
     }, function(err, configRes) {
       // default config
       var repoConfig = {
-        userBlacklist: []
+        maxReviewers: 3,
+        numFilesToCheck: 5,
+        userBlacklist: [],
+        userWhitelist: [],
       };
 
       if (!err && configRes) {
-        try { repoConfig = JSON.parse(configRes); } catch (e) {}
+        try { repoConfig = {...repoConfig, ...JSON.parse(configRes)}; } catch (e) {}
       }
 
       var reviewers = mentionBot.guessOwnersForPullRequest(
