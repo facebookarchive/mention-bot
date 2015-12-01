@@ -289,6 +289,7 @@ function guessOwners(
     return !deletedOwnersSet.has(element);
   });
 
+  console.log('files', files);
   console.log('deletedOwners', deletedOwners);
   console.log('allOwners', allOwners);
 
