@@ -1,3 +1,4 @@
 {
-  "presets": ["react"]
+  "presets": ["react"],
+  "plugins": ["babel-plugin-transform-object-rest-spread"]
 }
