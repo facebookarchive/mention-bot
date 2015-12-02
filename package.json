@@ -5,7 +5,7 @@
   "repository": "facebook/mention-bot",
   "scripts": {
     "test": "flow && jest",
-    "start": "babel server.js --out-file server-compiled.js && node server-compiled.js"
+    "start": "node run-server.js"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest"
