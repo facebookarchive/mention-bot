@@ -7,8 +7,6 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-require('babel-core/register');
-
 var bl = require('bl');
 var config = require('./package.json').config;
 var express = require('express');
