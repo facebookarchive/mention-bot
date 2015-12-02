@@ -94,5 +94,16 @@ If you want to run the bot on your GitHub Enterprise instance, add the GHE host 
 }
 ```
 
+If you use `http` protocol, the config section like this:
+
+```json
+"config": {
+  "gheHost": "github.my-GHE-enabled-company.com",
+  "ghePathPrefix": "/api/v3",
+  "gheProtocol": "http",
+  "ghePort": 80
+}
+```
+
 ## License
 mention-bot is BSD-licensed. We also provide an additional patent grant.

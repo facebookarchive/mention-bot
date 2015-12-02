@@ -49,7 +49,9 @@ if (!process.env.GITHUB_USER) {
 var github = new GitHubApi({
   version: '3.0.0',
   host: config.gheHost,
-  pathPrefix: config.ghePathPrefix
+  pathPrefix: config.ghePathPrefix,
+  protocol: config.gheProtocol || 'https',
+  port: config.ghePort || '443'
 });
 
 github.authenticate({
