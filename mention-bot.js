@@ -33,7 +33,7 @@ type FileInfo = {
 
 type WhitelistUser = {
   name: string,
-  files: string
+  files: Array<string>
 };
 
 function startsWith(str, start) {
@@ -235,8 +235,14 @@ function getDefaultOwners(
   var users = whitelist || [];
 
   users.forEach(function(user) {
-    var userHasChangedFile = files.find(function(file) {
-      return minimatch(file.path, user.files);
+    let userHasChangedFile = false;
+
+    user.files.forEach(function(pattern) {
+      if (!userHasChangedFile) {
+        userHasChangedFile = files.find(function(file) {
+          return minimatch(file.path, pattern);
+        });
+      }
     });
 
     if (userHasChangedFile && owners.indexOf(user.name) === -1) {

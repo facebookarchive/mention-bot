@@ -5,7 +5,7 @@
   "alwaysNotifyForPaths": [
     {
       "name": "ghuser", // The user's Github username
-      "files": "src/js/**/*.js" // The file glob associated with the user
+      "files": ["src/js/**/*.js"] // The array of file globs associated with the user
     }
   ], // users will always be mentioned based on file glob
   "userBlacklist": [] // users in this list will never be mentioned by mention-bot

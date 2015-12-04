@@ -94,7 +94,7 @@ describe('Github Mention', function() {
           alwaysNotifyForPaths: [
             {
               name: 'ghuser',
-              files: '**/*.js'
+              files: ['package.json', '**/*.js', 'README.md']
             }
           ]
         }
