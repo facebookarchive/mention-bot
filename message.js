@@ -9,22 +9,37 @@
  * @flow
  */
 
+/*
+  This now takes a `documentToAttach` argument, that is a string. If one is present, it attaches it
+  to the message to post. If one is not present, it just returns the default reveiwer message.
+*/
+
 'use strict';
 
 module.exports = function(
-  reviewers: Array<string>,
-  mentionSentenceBuilder: (reviewers: Array<string>) => string,
-  defaultMessageGenerator: (reviewers: Array<string>) => string
+  personsToMention: Array<string>,
+  mentionSentenceBuilder: (personsToMention: Array<string>) => string,
+  defaultMessageGenerator: (personsToMention: Array<string>) => string,
+  documentToAttach
 ): string {
 
   // This file is a place where you can change the way the message the bot
   // uses to comment. For example:
   //
-  //   return 'Please review this ' + mentionSentenceBuilder(reviewers);
+  //   return 'Please review this ' + mentionSentenceBuilder(personsToMention);
   //
   // will print
   //
   //   Please review this @georgecodes and @vjeux
 
-	return defaultMessageGenerator(reviewers);
+  if(documentToAttach) {
+      return (
+`Attention: ${mentionSentenceBuilder(personsToMention)}
+
+${documentToAttach})`
+      )
+    }
+  else {
+    return defaultMessageGenerator(personsToMention);
+  }
 };
