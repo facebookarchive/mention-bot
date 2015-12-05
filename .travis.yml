@@ -3,7 +3,7 @@ language: node_js
 cache:
     directories:
         - node_modules
-        - .nvm
+        - $NVM_DIR
 
 node_js:
   - v5
