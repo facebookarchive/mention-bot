@@ -82,71 +82,95 @@ function defaultMessageGenerator(reviewers) {
      reviewers.length > 1 ? '' : ' a',
      reviewers.length > 1 ? 's' : ''
   );
+}
+
+function getRepoConfig(request): Promise<Object> {
+  return new Promise(function(resolve, reject) {
+    github.repos.getContent(request, function(err, result) {
+      if(err) {
+        console.log("ERROR GETTING CONFIG");
+        reject(err);
+      }
+      console.log("RESOLVING CONFIG");
+      resolve(result);
+    });
+  });
+}
+
+async function work(body) {
+  console.log("WORKING");
+  var data = {};
+  try { data = JSON.parse(body.toString()); } catch (e) {}
+
+  if (data.action !== 'opened') {
+    console.log(
+      'Skipping because action is ' + data.action + '.',
+      'We only care about opened.'
+    );
+    return;
+  }
+
+  // default config
+  var repoConfig = {
+    maxReviewers: 3,
+    numFilesToCheck: 5,
+    userBlacklist: [],
+    userWhitelist: [],
+  };
+
+  // request config from repo
+  console.log("GETTING REPO CONFIG");
+  var configRes = await getRepoConfig({
+    user: data.repository.owner.login,
+    repo: data.repository.name,
+    path: CONFIG_PATH,
+    headers: {
+      Accept: 'application/vnd.github.v3.raw'
+    }
+  });
+  console.log("GOT REPO CONFIG", configRes);
+
+  if (configRes) {
+    try { repoConfig = {...repoConfig, ...JSON.parse(configRes)}; } catch (e) {}
+  }
+
+  console.log("GETTING OWNERS");
+  var reviewers = mentionBot.guessOwnersForPullRequest(
+    data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
+    data.pull_request.number, // 23
+    data.pull_request.user.login, // 'mention-bot'
+    data.pull_request.base.ref, // 'master'
+    repoConfig
+  );
+  console.log("GOT OWNERS");
+
+  console.log(data.pull_request.html_url, reviewers);
+
+  if (reviewers.length === 0) {
+    console.log('Skipping because there are no reviewers found.');
+    return;
+  }
+
+  console.log("COMMENTING");
+  github.issues.createComment({
+    user: data.repository.owner.login, // 'fbsamples'
+    repo: data.repository.name, // 'bot-testing'
+    number: data.pull_request.number, // 23
+    body: messageGenerator(
+      reviewers,
+      buildMentionSentence,
+      defaultMessageGenerator
+    )
+  });
+  console.log("COMMENTED");
+
+  return;
 };
 
 app.post('/', function(req, res) {
   req.pipe(bl(function(err, body) {
-    var data = {};
-    try { data = JSON.parse(body.toString()); } catch (e) {}
-
-    if (data.action !== 'opened') {
-      console.log(
-        'Skipping because action is ' + data.action + '.',
-        'We only care about opened.'
-      );
-      return res.end();
-    }
-
-    // request config from repo
-    github.repos.getContent({
-      user: data.repository.owner.login,
-      repo: data.repository.name,
-      path: CONFIG_PATH,
-      headers: {
-        Accept: 'application/vnd.github.v3.raw'
-      }
-    }, function(err, configRes) {
-      // default config
-      var repoConfig = {
-        maxReviewers: 3,
-        numFilesToCheck: 5,
-        userBlacklist: [],
-        userWhitelist: [],
-      };
-
-      if (!err && configRes) {
-        try { repoConfig = {...repoConfig, ...JSON.parse(configRes)}; } catch (e) {}
-      }
-
-      var reviewers = mentionBot.guessOwnersForPullRequest(
-        data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
-        data.pull_request.number, // 23
-        data.pull_request.user.login, // 'mention-bot'
-        data.pull_request.base.ref, // 'master'
-        repoConfig
-      );
-
-      console.log(data.pull_request.html_url, reviewers);
-
-      if (reviewers.length === 0) {
-        console.log('Skipping because there are no reviewers found.');
-        return res.end();
-      }
-
-      github.issues.createComment({
-        user: data.repository.owner.login, // 'fbsamples'
-        repo: data.repository.name, // 'bot-testing'
-        number: data.pull_request.number, // 23
-        body: messageGenerator(
-          reviewers,
-          buildMentionSentence,
-          defaultMessageGenerator
-        )
-      });
-
-      return res.end();
-    });
-  }));
+    work(body).then(function() { res.end(); });
+ }));
 });
 
 app.get('/', function(req, res) {
