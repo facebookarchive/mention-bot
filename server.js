@@ -88,17 +88,14 @@ function getRepoConfig(request): Promise<Object> {
   return new Promise(function(resolve, reject) {
     github.repos.getContent(request, function(err, result) {
       if(err) {
-        console.log("ERROR GETTING CONFIG");
         reject(err);
       }
-      console.log("RESOLVING CONFIG");
       resolve(result);
     });
   });
 }
 
 async function work(body) {
-  console.log("WORKING");
   var data = {};
   try { data = JSON.parse(body.toString()); } catch (e) {}
 
@@ -119,7 +116,6 @@ async function work(body) {
   };
 
   // request config from repo
-  console.log("GETTING REPO CONFIG");
   var configRes = await getRepoConfig({
     user: data.repository.owner.login,
     repo: data.repository.name,
@@ -128,21 +124,18 @@ async function work(body) {
       Accept: 'application/vnd.github.v3.raw'
     }
   });
-  console.log("GOT REPO CONFIG", configRes);
 
   if (configRes) {
     try { repoConfig = {...repoConfig, ...JSON.parse(configRes)}; } catch (e) {}
   }
 
-  console.log("GETTING OWNERS");
-  var reviewers = mentionBot.guessOwnersForPullRequest(
+  var reviewers = await mentionBot.guessOwnersForPullRequest(
     data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
     data.pull_request.number, // 23
     data.pull_request.user.login, // 'mention-bot'
     data.pull_request.base.ref, // 'master'
     repoConfig
   );
-  console.log("GOT OWNERS");
 
   console.log(data.pull_request.html_url, reviewers);
 
@@ -151,7 +144,6 @@ async function work(body) {
     return;
   }
 
-  console.log("COMMENTING");
   github.issues.createComment({
     user: data.repository.owner.login, // 'fbsamples'
     repo: data.repository.name, // 'bot-testing'
@@ -162,7 +154,6 @@ async function work(body) {
       defaultMessageGenerator
     )
   });
-  console.log("COMMENTED");
 
   return;
 };
