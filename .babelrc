@@ -1,7 +1,8 @@
 {
   "presets": ["react"],
-  "plugins": ["babel-plugin-transform-object-rest-spread",
-              "syntax-async-functions",
-              "transform-regenerator"
-             ]
+  "plugins": [
+    "babel-plugin-transform-object-rest-spread",
+    "syntax-async-functions",
+    "transform-regenerator"
+  ]
 }

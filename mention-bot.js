@@ -15,7 +15,7 @@ var githubAuthCookies = require('./githubAuthCookies');
 var fs = require('fs');
 var minimatch = require('minimatch');
 
-function downloadFileAsync(url: string, cookies: ?string): Promise<string> {
+async function downloadFileAsync(url: string, cookies: ?string): Promise<string> {
   return new Promise(function(resolve, reject) {
     var args = ['--silent', '-L', url];
 
@@ -25,19 +25,19 @@ function downloadFileAsync(url: string, cookies: ?string): Promise<string> {
 
     require('child_process')
       .execFile('curl', args, {encoding: 'utf8'}, function(error, stdout, stderr) {
-        if(error) {
+        if (error) {
           reject(error);
         } else {
-          resolve(stdout);
+          resolve(stdout.toString());
         }
       });
   });
 }
 
-function readFileAsync(name: string, encoding: string): Promise<string> {
+async function readFileAsync(name: string, encoding: string): Promise<string> {
   return new Promise(function(resolve, reject) {
     fs.readFile(name, encoding, function(err, data) {
-      if(err) {
+      if (err) {
         reject(err);
       } else {
         resolve(data);

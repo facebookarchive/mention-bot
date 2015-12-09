@@ -84,7 +84,7 @@ function defaultMessageGenerator(reviewers) {
   );
 }
 
-function getRepoConfig(request): Promise<Object> {
+async function getRepoConfig(request): Promise<Object> {
   return new Promise(function(resolve, reject) {
     github.repos.getContent(request, function(err, result) {
       if(err) {
