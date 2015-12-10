@@ -15,16 +15,36 @@ var githubAuthCookies = require('./githubAuthCookies');
 var fs = require('fs');
 var minimatch = require('minimatch');
 
-var downloadFileSync = function(url: string, cookies: ?string): string {
-  var args = ['--silent', '-L', url];
+async function downloadFileAsync(url: string, cookies: ?string): Promise<string> {
+  return new Promise(function(resolve, reject) {
+    var args = ['--silent', '-L', url];
 
-  if (cookies) {
-    args.push('-H', `Cookie: ${cookies}`);
-  }
+    if (cookies) {
+      args.push('-H', `Cookie: ${cookies}`);
+    }
 
-  return require('child_process')
-    .execFileSync('curl', args, {encoding: 'utf8'}).toString();
-};
+    require('child_process')
+      .execFile('curl', args, {encoding: 'utf8'}, function(error, stdout, stderr) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(stdout.toString());
+        }
+      });
+  });
+}
+
+async function readFileAsync(name: string, encoding: string): Promise<string> {
+  return new Promise(function(resolve, reject) {
+    fs.readFile(name, encoding, function(err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
 
 type FileInfo = {
   path: string,
@@ -259,9 +279,9 @@ function getDefaultOwners(
  * much slower, it's also going to temporary/permanently ban your ip and
  * you won't be able to get anymore work done when it happens :(
  */
-function fetch(url: string): string {
+async function fetch(url: string): Promise<string> {
   if (!module.exports.enableCachingForDebugging) {
-    return downloadFileSync(url, githubAuthCookies);
+    return downloadFileAsync(url, githubAuthCookies);
   }
 
   var cacheDir = __dirname + '/cache/';
@@ -271,10 +291,10 @@ function fetch(url: string): string {
   }
   var cache_key = cacheDir + url.replace(/[^a-zA-Z0-9-_\.]/g, '-');
   if (!fs.existsSync(cache_key)) {
-    var file = downloadFileSync(url, githubAuthCookies);
+    var file = await downloadFileAsync(url, githubAuthCookies);
     fs.writeFileSync(cache_key, file);
   }
-  return fs.readFileSync(cache_key, 'utf8');
+  return readFileAsync(cache_key, 'utf8');
 }
 
 /**
@@ -341,14 +361,14 @@ function guessOwners(
     });
 }
 
-function guessOwnersForPullRequest(
+async function guessOwnersForPullRequest(
   repoURL: string,
   id: number,
   creator: string,
   targetBranch: string,
   config: Object
-): Array<string> {
-  var diff = fetch(repoURL + '/pull/' + id + '.diff');
+): Promise<Array<string>> {
+  var diff = await fetch(repoURL + '/pull/' + id + '.diff');
   var files = parseDiff(diff);
   var defaultOwners = getDefaultOwners(files, config.alwaysNotifyForPaths);
 
@@ -365,10 +385,15 @@ function guessOwnersForPullRequest(
   files = files.slice(0, config.numFilesToCheck);
 
   var blames = {};
-  files.forEach(function(file) {
-    var path = file.path;
-    var blame = fetch(repoURL + '/blame/' + targetBranch + '/' + path);
-    blames[path] = parseBlame(blame);
+  // create blame promises (allows concurrent loading)
+  var promises = files.map(function(file) {
+    return fetch(repoURL + '/blame/' + targetBranch + '/' + file.path);
+  });
+
+  // wait for all promises to resolve
+  var results = await Promise.all(promises);
+  results.forEach(function(result, index) {
+    blames[files[index].path] = parseBlame(result);
   });
 
   // This is the line that implements the actual algorithm, all the lines

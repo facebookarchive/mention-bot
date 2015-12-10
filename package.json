@@ -8,7 +8,8 @@
     "start": "node run-server.js"
   },
   "jest": {
-    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest"
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "unmockedModulePathPatterns": ["core-js/.*"]
   },
   "config": {},
   "dependencies": {
@@ -16,6 +17,9 @@
     "babel-jest": "^6.0.1",
     "babel-plugin-transform-object-rest-spread": "^6.1.18",
     "babel-preset-react": "^6.1.2",
+    "babel-plugin-syntax-async-functions": "^6.1.4",
+    "babel-plugin-transform-regenerator": "^6.1.4",
+    "babel-polyfill": "^6.1.4",
     "bl": "^1.0.0",
     "download-file-sync": "^1.0.3",
     "express": "^4.13.3",
