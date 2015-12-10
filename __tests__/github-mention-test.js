@@ -13,6 +13,7 @@ jest
   .dontMock('fs')
   .dontMock('minimatch');
 
+require.requireActual('babel-polyfill');
 var mentionBot = require('../mention-bot.js');
 var fs = require('fs');
 
@@ -29,17 +30,17 @@ describe('Github Mention', function() {
     xit('CompleteFlow', function() {
       mentionBot.enableCachingForDebugging = true;
       var prs = [3238];
-      prs.forEach(function(i) {
-        console.log(
-          i,
-          mentionBot.guessOwnersForPullRequest(
-            'https://github.com/facebook/react-native',
-            i,
-            'mention-bot',
-            'master',
-            {} //config
-          )
-        );
+
+      var owners = mentionBot.guessOwnersForPullRequest(
+        'https://github.com/facebook/react-native',
+        i,
+        'mention-bot',
+        'master',
+        {} //config
+      ).then(function() {
+        prs.forEach(function(i) {
+          console.log(i, owners);
+        });
       });
     });
   });
@@ -63,7 +64,9 @@ describe('Github Mention', function() {
           userBlacklist: []
         }
       );
-      expect(owners).toEqual(['corbt', 'vjeux', 'sahrens']);
+      owners.then(function(owners) {
+        expect(owners).toEqual(['corbt', 'vjeux', 'sahrens']);
+      });
     });
 
     it('Messages 5 users from config option maxUsersToPing', function() {
@@ -78,7 +81,10 @@ describe('Github Mention', function() {
           userBlacklist: []
         }
       );
-      expect(owners.length).toEqual(5);
+
+      owners.then(function(owners) {
+        expect(owners.length).toEqual(5);
+      });
     });
 
     it('Should contain testname in owners from whitelist', function() {
@@ -100,7 +106,9 @@ describe('Github Mention', function() {
         }
       );
 
-      expect(owners.indexOf('ghuser')).toBeGreaterThan(-1);
+      owners.then(function(owners) {
+        expect(owners.indexOf('ghuser')).toBeGreaterThan(-1);
+      });
     });
   });
 
