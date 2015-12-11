@@ -297,6 +297,43 @@ async function fetch(url: string): Promise<string> {
   return readFileAsync(cache_key, 'utf8');
 }
 
+async function getOwnerOrgs(
+  owner: string,
+  github: Object
+): Promise<Array<string>> {
+  return new Promise(function(resolve, reject) {
+    github.orgs.getFromUser({ user: owner }, function(err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(
+          result.map(function (obj){
+            return obj.login;
+          })
+        );
+      }
+    });
+  });
+}
+
+async function filterRequiredOrgs(
+  owners: Array<string>,
+  config: Object,
+  github: Object
+): Promise<Array<string>> {
+  var promises = owners.map(function(owner) {
+    return getOwnerOrgs(owner, github);
+  });
+
+  var userOrgs = await Promise.all(promises);
+  return owners.filter(function(owner, index) {
+    // user passes if he is in any of the required organizations
+    return config.requiredOrgs.some(function(reqOrg) {
+      return userOrgs[index].indexOf(reqOrg) >= 0;
+    });
+  });
+}
+
 /**
  * The problem at hand is to find a set of three best effort people that have
  * context on a pull request. It doesn't (and actually can't) be perfect.
@@ -323,13 +360,14 @@ async function fetch(url: string): Promise<string> {
  *  Once you've got those two pools, sort them by number of points, dedupe
  *  them, concat them and finally take the first 3 names.
  */
-function guessOwners(
+async function guessOwners(
   files: Array<FileInfo>,
   blames: { [key: string]: Array<string> },
   creator: string,
   defaultOwners: Array<string>,
-  config: Object
-): Array<string> {
+  config: Object,
+  github: Object
+): Promise<Array<string>> {
   var deletedOwners = getDeletedOwners(files, blames);
   var allOwners = getAllOwners(files, blames);
 
@@ -342,7 +380,7 @@ function guessOwners(
     return !deletedOwnersSet.has(element);
   });
 
-  return []
+  var owners = []
     .concat(deletedOwners)
     .concat(allOwners)
     .filter(function(owner) {
@@ -353,7 +391,13 @@ function guessOwners(
     })
     .filter(function(owner) {
       return config.userBlacklist.indexOf(owner) === -1;
-    })
+    });
+
+  if (config.requiredOrgs.length > 0) {
+    owners = await filterRequiredOrgs(owners, config, github);
+  }
+
+  return owners
     .slice(0, config.maxReviewers)
     .concat(defaultOwners)
     .filter(function(owner, index, ownersFound) {
@@ -366,7 +410,8 @@ async function guessOwnersForPullRequest(
   id: number,
   creator: string,
   targetBranch: string,
-  config: Object
+  config: Object,
+  github: Object
 ): Promise<Array<string>> {
   var diff = await fetch(repoURL + '/pull/' + id + '.diff');
   var files = parseDiff(diff);
@@ -398,7 +443,7 @@ async function guessOwnersForPullRequest(
 
   // This is the line that implements the actual algorithm, all the lines
   // before are there to fetch and extract the data needed.
-  return guessOwners(files, blames, creator, defaultOwners, config);
+  return guessOwners(files, blames, creator, defaultOwners, config, github);
 }
 
 module.exports = {
