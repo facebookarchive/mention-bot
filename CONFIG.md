@@ -8,6 +8,7 @@
       "files": ["src/js/**/*.js"] // The array of file globs associated with the user
     }
   ], // users will always be mentioned based on file glob
-  "userBlacklist": [] // users in this list will never be mentioned by mention-bot
+  "userBlacklist": [], // users in this list will never be mentioned by mention-bot
+  "requiredOrgs": [] // mention-bot will only mention user who are a member of one of these organizations
 }
 ```

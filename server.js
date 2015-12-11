@@ -113,6 +113,7 @@ async function work(body) {
     numFilesToCheck: 5,
     userBlacklist: [],
     userWhitelist: [],
+    requiredOrgs: [],
   };
 
   // request config from repo
@@ -134,7 +135,8 @@ async function work(body) {
     data.pull_request.number, // 23
     data.pull_request.user.login, // 'mention-bot'
     data.pull_request.base.ref, // 'master'
-    repoConfig
+    repoConfig,
+    github
   );
 
   console.log(data.pull_request.html_url, reviewers);
