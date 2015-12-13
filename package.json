@@ -7,6 +7,9 @@
     "test": "flow && jest",
     "start": "node run-server.js"
   },
+  "engines": {
+     "node": ">=4"
+  },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
     "unmockedModulePathPatterns": ["core-js/.*"]
