@@ -60,7 +60,7 @@ var getGithubLoginResponseHeaders = function(): string {
     `-v`,
     `-d`, `utf8=%E2%9C%93&authenticity_token=${authenticity_token}&login=${USERNAME}&password=${PASSWORD}`,
     `-H`, `Pragma: no-cache`,
-    `-H`, `Origin: ${ghProtocol}://${ghHost}.com`,
+    `-H`, `Origin: ${ghProtocol}://${ghHost}`,
     `-H`, `Accept-Encoding: gzip, deflate`,
     `-H`, `Accept-Language: en-US,en;q=0.8`,
     `-H`, `Upgrade-Insecure-Requests: 1`,
