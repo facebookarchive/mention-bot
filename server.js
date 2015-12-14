@@ -5,6 +5,8 @@
  * This source code is licensed under the BSD-style license found in the
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @flow
  */
 
 var bl = require('bl');
@@ -84,7 +86,7 @@ function defaultMessageGenerator(reviewers) {
   );
 }
 
-async function getRepoConfig(request): Promise<Object> {
+function getRepoConfig(request) {
   return new Promise(function(resolve, reject) {
     github.repos.getContent(request, function(err, result) {
       if(err) {
@@ -127,7 +129,9 @@ async function work(body) {
   });
 
   if (configRes) {
-    try { repoConfig = {...repoConfig, ...JSON.parse(configRes)}; } catch (e) {}
+    try {
+      repoConfig = {...repoConfig, ...JSON.parse(configRes)};
+    } catch (e) {}
   }
 
   var reviewers = await mentionBot.guessOwnersForPullRequest(
