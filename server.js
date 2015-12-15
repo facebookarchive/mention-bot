@@ -118,21 +118,19 @@ async function work(body) {
     requiredOrgs: [],
   };
 
-  // request config from repo
-  var configRes = await getRepoConfig({
-    user: data.repository.owner.login,
-    repo: data.repository.name,
-    path: CONFIG_PATH,
-    headers: {
-      Accept: 'application/vnd.github.v3.raw'
-    }
-  });
+  try {
+    // request config from repo
+    var configRes = await getRepoConfig({
+      user: data.repository.owner.login,
+      repo: data.repository.name,
+      path: CONFIG_PATH,
+      headers: {
+        Accept: 'application/vnd.github.v3.raw'
+      }
+    });
 
-  if (configRes) {
-    try {
-      repoConfig = {...repoConfig, ...JSON.parse(configRes)};
-    } catch (e) {}
-  }
+    repoConfig = {...repoConfig, ...JSON.parse(configRes)};
+  } catch (e) {}
 
   var reviewers = await mentionBot.guessOwnersForPullRequest(
     data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
