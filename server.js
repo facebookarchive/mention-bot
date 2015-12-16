@@ -99,7 +99,11 @@ function getRepoConfig(request) {
 
 async function work(body) {
   var data = {};
-  try { data = JSON.parse(body.toString()); } catch (e) {}
+  try {
+    data = JSON.parse(body.toString());
+  } catch (e) {
+    console.error(e);
+  }
 
   if (data.action !== 'opened') {
     console.log(
@@ -130,7 +134,9 @@ async function work(body) {
     });
 
     repoConfig = {...repoConfig, ...JSON.parse(configRes)};
-  } catch (e) {}
+  } catch (e) {
+    console.error(e);
+  }
 
   var reviewers = await mentionBot.guessOwnersForPullRequest(
     data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
