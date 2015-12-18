@@ -83,6 +83,9 @@ var getGithubLoginResponseHeaders = function(): string {
 if (USERNAME) {
   var headers = getGithubLoginResponseHeaders();
   jar.parseHeaders(headers);
+  if (jar.cookies['logged_in'] === 'no') {
+    console.error(`Login to ${USERNAME} failed`);
+  }
 
   module.exports = jar.get();
 } else {
