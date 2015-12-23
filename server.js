@@ -119,6 +119,7 @@ async function work(body) {
     numFilesToCheck: 5,
     userBlacklist: [],
     userWhitelist: [],
+    fileBlacklist: [],
     requiredOrgs: [],
   };
 

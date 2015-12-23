@@ -427,6 +427,12 @@ async function guessOwnersForPullRequest(
     var countB = b.deletedLines.length;
     return countA > countB ? -1 : (countA < countB ? 1 : 0);
   });
+  // remove files that match any of the globs in the file blacklist config
+  config.fileBlacklist.forEach(function(glob) {
+    files = files.filter(function(file) {
+      return !minimatch(file.path, glob);
+    });
+  });
   files = files.slice(0, config.numFilesToCheck);
 
   var blames = {};
