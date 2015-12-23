@@ -17,7 +17,24 @@ And you are done. Next time a pull request is opened, you should see the bot add
 
 ## Configuration
 
-The bot can be configured by adding a `.mention-bot` file to the base directory of the repo. The [CONFIG.md](./CONFIG.md) file contains more info on available configuration options.
+The bot can be configured by adding a `.mention-bot` file to the base directory of the repo. Here's a list of the possible options:
+
+```js
+{
+  "maxReviewers": 5, // Maximum  number of people to ping in the PR message, default is 3
+  "numFilesToCheck": 10, // Number of files to check against, default is 5
+  "alwaysNotifyForPaths": [
+    {
+      "name": "ghuser", // The user's Github username
+      "files": ["src/js/**/*.js"] // The array of file globs associated with the user
+    }
+  ], // users will always be mentioned based on file glob
+  "fileBlacklist": ["*.md"], // mention-bot will ignore any files that match these file globs
+  "userBlacklist": [], // users in this list will never be mentioned by mention-bot
+  "requiredOrgs": [] // mention-bot will only mention user who are a member of one of these organizations
+}
+```
+
 
 ## How Does It Work?
 
