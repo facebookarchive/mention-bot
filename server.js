@@ -118,6 +118,7 @@ async function work(body) {
     maxReviewers: 3,
     numFilesToCheck: 5,
     userBlacklist: [],
+    userBlacklistForPR: [],
     userWhitelist: [],
     fileBlacklist: [],
     requiredOrgs: [],
@@ -137,6 +138,11 @@ async function work(body) {
     repoConfig = {...repoConfig, ...JSON.parse(configRes)};
   } catch (e) {
     console.error(e);
+  }
+
+  if (repoConfig.userBlacklistForPR.indexOf(data.pull_request.user.login) >= 0) {
+    console.log('Skipping because blacklisted user created Pull Request.');
+    return;
   }
 
   var reviewers = await mentionBot.guessOwnersForPullRequest(
