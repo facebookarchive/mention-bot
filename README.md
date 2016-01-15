@@ -99,6 +99,13 @@ Alternatively, click the button below:
 
 If you would like the mention-bot to function on private repositories, set the `GITHUB_USER` and `GITHUB_PASSWORD` environment variables. You must disable two-factor authentication or you will receive a console log like this: `Login to ${USERNAME} failed`.
 
+You can also build deploy it as a Docker image:
+
+```bash
+docker build -t mention-bot .
+docker run -e GITHUB_USER="a" -p 5000:5000  mention-bot
+```
+
 ## Configuring a custom message
 
 If you want to change the default message, you can write your custom logic in [message.js](https://github.com/facebook/mention-bot/blob/master/message.js).
