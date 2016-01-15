@@ -11,16 +11,16 @@
 
 'use strict';
 
-var githubAuthCookies = require('./githubAuthCookies');
 var fs = require('fs');
 var minimatch = require('minimatch');
 
-async function downloadFileAsync(url: string, cookies: ?string): Promise<string> {
+async function downloadFileAsync(url: string, type: string): Promise<string> {
   return new Promise(function(resolve, reject) {
     var args = ['--silent', '-L', url];
 
     if (cookies) {
-      args.push('-H', `Cookie: ${cookies}`);
+      args.push('-H', `Authorization: token ${process.env.GITHUB_TOKEN}`);
+      args.push('-H', `Accept: application/vnd.github.v3.${type}`);
     }
 
     require('child_process')
@@ -279,9 +279,9 @@ function getDefaultOwners(
  * much slower, it's also going to temporary/permanently ban your ip and
  * you won't be able to get anymore work done when it happens :(
  */
-async function fetch(url: string): Promise<string> {
+async function fetch(url: string, type: string): Promise<string> {
   if (!module.exports.enableCachingForDebugging) {
-    return downloadFileAsync(url, githubAuthCookies);
+    return downloadFileAsync(url, type);
   }
 
   var cacheDir = __dirname + '/cache/';
@@ -291,7 +291,7 @@ async function fetch(url: string): Promise<string> {
   }
   var cache_key = cacheDir + url.replace(/[^a-zA-Z0-9-_\.]/g, '-');
   if (!fs.existsSync(cache_key)) {
-    var file = await downloadFileAsync(url, githubAuthCookies);
+    var file = await downloadFileAsync(url, type);
     fs.writeFileSync(cache_key, file);
   }
   return readFileAsync(cache_key, 'utf8');
@@ -407,13 +407,14 @@ async function guessOwners(
 
 async function guessOwnersForPullRequest(
   repoURL: string,
+  pullURL: string,
   id: number,
   creator: string,
   targetBranch: string,
   config: Object,
   github: Object
 ): Promise<Array<string>> {
-  var diff = await fetch(repoURL + '/pull/' + id + '.diff');
+  var diff = await fetch(pullURL, 'diff');
   var files = parseDiff(diff);
   var defaultOwners = getDefaultOwners(files, config.alwaysNotifyForPaths);
 
@@ -438,7 +439,7 @@ async function guessOwnersForPullRequest(
   var blames = {};
   // create blame promises (allows concurrent loading)
   var promises = files.map(function(file) {
-    return fetch(repoURL + '/blame/' + targetBranch + '/' + file.path);
+    return fetch(`${repoURL}/contents/${file.path}?ref=targetBranch`, 'raw');
   });
 
   // wait for all promises to resolve

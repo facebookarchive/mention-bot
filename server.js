@@ -35,19 +35,6 @@ if (!process.env.GITHUB_TOKEN) {
   process.exit(1);
 }
 
-if (!process.env.GITHUB_USER) {
-  console.warn(
-    'There was no github user detected.',
-    'This is fine, but mention-bot won\'t work with private repos.'
-  );
-  console.warn(
-    'To make mention-bot work with private repos, please expose',
-    'GITHUB_USER and GITHUB_PASSWORD as environment variables.',
-    'The user and password must have access to the private repo',
-    'you want to use.'
-  );
-}
-
 var github = new GitHubApi({
   version: '3.0.0',
   host: config.gheHost,
@@ -146,7 +133,8 @@ async function work(body) {
   }
 
   var reviewers = await mentionBot.guessOwnersForPullRequest(
-    data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
+    data.repository.url, // 'https://api.github.com/repos/fbsamples/bot-testing'
+    data.pull_request.url, // 'https://api.github.com/repos/fbsamples/bot-testing/pulls/23'
     data.pull_request.number, // 23
     data.pull_request.user.login, // 'mention-bot'
     data.pull_request.base.ref, // 'master'
