@@ -140,6 +140,10 @@ async function work(body) {
     console.error(e);
   }
 
+  if (process.env.REQUIRED_ORG) {
+    repoConfig.requiredOrgs.push(process.env.REQUIRED_ORG);
+  }
+
   if (repoConfig.userBlacklistForPR.indexOf(data.pull_request.user.login) >= 0) {
     console.log('Skipping because blacklisted user created Pull Request.');
     return;
