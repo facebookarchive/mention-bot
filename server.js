@@ -122,6 +122,7 @@ async function work(body) {
     userWhitelist: [],
     fileBlacklist: [],
     requiredOrgs: [],
+    findPotentialReviewers: true,
   };
 
   try {

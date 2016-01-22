@@ -69,6 +69,26 @@ describe('Github Mention', function() {
       });
     });
 
+    it('Gets correct users if `findPotentialReviewers` option is disabled', function() {
+        mentionBot.enableCachingForDebugging = true;
+        var owners = mentionBot.guessOwnersForPullRequest(
+          'https://github.com/facebook/react-native',
+          3238,
+          'mention-bot',
+          'master',
+          {
+            alwaysNotifyForPaths: [{
+              name: 'jcsmorais',
+              files: ['website/server']
+            }],
+            findPotentialReviewers: false
+          }
+        );
+        owners.then(function(owners) {
+            expect(owners).toEqual(['jcsmorais']);
+        });
+      });
+
     it('Messages 5 users from config option maxUsersToPing', function() {
       mentionBot.enableCachingForDebugging = true;
       var owners = mentionBot.guessOwnersForPullRequest(

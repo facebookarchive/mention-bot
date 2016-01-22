@@ -417,6 +417,10 @@ async function guessOwnersForPullRequest(
   var files = parseDiff(diff);
   var defaultOwners = getDefaultOwners(files, config.alwaysNotifyForPaths);
 
+  if (!config.findPotentialReviewers) {
+      return defaultOwners;
+  }
+
   // There are going to be degenerated changes that end up modifying hundreds
   // of files. In theory, it would be good to actually run the algorithm on
   // all of them to get the best set of reviewers. In practice, we don't
