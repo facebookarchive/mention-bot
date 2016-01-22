@@ -105,14 +105,6 @@ async function work(body) {
     console.error(e);
   }
 
-  if (data.action !== 'opened') {
-    console.log(
-      'Skipping because action is ' + data.action + '.',
-      'We only care about opened.'
-    );
-    return;
-  }
-
   // default config
   var repoConfig = {
     maxReviewers: 3,
@@ -123,6 +115,7 @@ async function work(body) {
     fileBlacklist: [],
     requiredOrgs: [],
     findPotentialReviewers: true,
+    actions: ['opened'],
   };
 
   try {
@@ -139,6 +132,14 @@ async function work(body) {
     repoConfig = {...repoConfig, ...JSON.parse(configRes)};
   } catch (e) {
     console.error(e);
+  }
+
+  if (repoConfig.actions.indexOf(data.action) === -1) {
+    console.log(
+      'Skipping because action is ' + data.action + '.',
+      'We only care about: "' + repoConfig.actions.join("', '") + '"'
+    );
+    return;
   }
 
   if (process.env.REQUIRED_ORG) {
