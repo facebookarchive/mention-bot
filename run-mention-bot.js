@@ -9,4 +9,4 @@
 
 require('babel-core/register');
 require('babel-polyfill');
-module.exports = require('./mention-bot');
+module.exports = require('./mention-bot.js');
