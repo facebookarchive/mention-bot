@@ -136,5 +136,41 @@ If you use `http` protocol, the config section like this:
 }
 ```
 
+## Programmatic API
+
+When you require `mention-bot` you will get all the functions exposed by `mention-bot.js` module. You are expected to manage your own server and also connection to the github repository.
+API can be used like this: 
+
+```js
+var api = require("mention-bot");
+// default config
+var repoConfig = {
+  maxReviewers: 3,
+  numFilesToCheck: 5,
+  userBlacklist: [],
+  userBlacklistForPR: [],
+  userWhitelist: [],
+  fileBlacklist: [],
+  requiredOrgs: [],
+  findPotentialReviewers: true,
+  actions: ['opened']
+};
+
+api.guessOwnersForPullRequest(
+  "<repo url>", // 'https://github.com/fbsamples/bot-testing'
+  <pull request number>, // 59
+  "<user>", // mention-bot
+  "<branch ref>", // master
+  repoConfig,
+  <github connection object>
+).then(function(users){
+  console.log(users); // array with user names which should be included in review
+})
+.catch(function(err){
+  console.error(err);
+});
+
+```
+
 ## License
 mention-bot is BSD-licensed. We also provide an additional patent grant.
