@@ -1,0 +1,7 @@
+diff --git a/hello-world.js b/hello-world.js
+new file mode 100644
+index 0000000..a420803
+--- /dev/null
++++ b/hello-world.js
+@@ -0,0 +1 @@
++console.log('Hello World!');

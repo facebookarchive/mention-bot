@@ -126,8 +126,49 @@ describe('Github Mention', function() {
         }
       );
 
-      owners.then(function(owners) {
+    pit('Should contain testname in owners from fallback', function() {
+      mentionBot.enableCachingForDebugging = true;
+      return mentionBot.guessOwnersForPullRequest(
+        'https://github.com/fbsamples/bot-testing',
+        95,
+        'mention-bot',
+        'master',
+        {
+          maxReviewers: 3,
+          userBlacklist: [],
+          fileBlacklist: [],
+          requiredOrgs: [],
+          numFilesToCheck: 5,
+          findPotentialReviewers: true,
+          fallbackNotifyForPaths: [
+            {
+              name: 'ghuser',
+              files: ['*.js']
+            }
+          ]
+        }
+      ).then(function(owners) {
         expect(owners.indexOf('ghuser')).toBeGreaterThan(-1);
+      });
+    });
+
+    pit('Should not contain testname in owners from fallback when fallback is missing', function() {
+      mentionBot.enableCachingForDebugging = true;
+      return mentionBot.guessOwnersForPullRequest(
+        'https://github.com/fbsamples/bot-testing',
+        95,
+        'mention-bot',
+        'master',
+        {
+          maxReviewers: 3,
+          userBlacklist: [],
+          fileBlacklist: [],
+          requiredOrgs: [],
+          numFilesToCheck: 5,
+          findPotentialReviewers: true
+        }
+      ).then(function (owners) {
+        expect(owners.indexOf('ghuser')).toEqual(-1);
       });
     });
   });
