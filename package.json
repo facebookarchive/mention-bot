@@ -9,7 +9,7 @@
   },
   "main": "./run-mention-bot.js",
   "engines": {
-     "node": ">=4"
+    "node": ">=4"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
