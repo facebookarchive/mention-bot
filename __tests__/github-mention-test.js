@@ -46,70 +46,10 @@ describe('Github Mention', function() {
   });
 
   describe('CompleteFlow', function() {
-    beforeEach(function() {
-      jest.setMock('download-file-sync', function(url) {
-        return getFile('3238.diff');
-      });
-    });
 
-    it('Gets correct users with default config options', function() {
+    pit('Gets correct users with default config options', function() {
       mentionBot.enableCachingForDebugging = true;
-      var owners = mentionBot.guessOwnersForPullRequest(
-        'https://github.com/facebook/react-native',
-        3238,
-        'mention-bot',
-        'master',
-        {
-          maxReviewers: 3,
-          userBlacklist: []
-        }
-      );
-      owners.then(function(owners) {
-        expect(owners).toEqual(['corbt', 'vjeux', 'sahrens']);
-      });
-    });
-
-    it('Gets correct users if `findPotentialReviewers` option is disabled', function() {
-        mentionBot.enableCachingForDebugging = true;
-        var owners = mentionBot.guessOwnersForPullRequest(
-          'https://github.com/facebook/react-native',
-          3238,
-          'mention-bot',
-          'master',
-          {
-            alwaysNotifyForPaths: [{
-              name: 'jcsmorais',
-              files: ['website/server']
-            }],
-            findPotentialReviewers: false
-          }
-        );
-        owners.then(function(owners) {
-            expect(owners).toEqual(['jcsmorais']);
-        });
-      });
-
-    it('Messages 5 users from config option maxUsersToPing', function() {
-      mentionBot.enableCachingForDebugging = true;
-      var owners = mentionBot.guessOwnersForPullRequest(
-        'https://github.com/facebook/react-native',
-        3238,
-        'mention-bot',
-        'master',
-        {
-          maxReviewers: 5,
-          userBlacklist: []
-        }
-      );
-
-      owners.then(function(owners) {
-        expect(owners.length).toEqual(5);
-      });
-    });
-
-    it('Should contain testname in owners from whitelist', function() {
-      mentionBot.enableCachingForDebugging = true;
-      var owners = mentionBot.guessOwnersForPullRequest(
+      return mentionBot.guessOwnersForPullRequest(
         'https://github.com/facebook/react-native',
         3238,
         'mention-bot',
@@ -117,6 +57,74 @@ describe('Github Mention', function() {
         {
           maxReviewers: 3,
           userBlacklist: [],
+          fileBlacklist: [],
+          requiredOrgs: [],
+          numFilesToCheck: 5,
+          findPotentialReviewers: true,
+        }
+      ).then(function(owners) {
+        expect(owners).toEqual(['corbt', 'vjeux', 'sahrens']);
+      });
+    });
+
+    pit('Gets correct users if `findPotentialReviewers` option is disabled', function() {
+        mentionBot.enableCachingForDebugging = true;
+        return mentionBot.guessOwnersForPullRequest(
+          'https://github.com/facebook/react-native',
+          3238,
+          'mention-bot',
+          'master',
+          {
+            maxReviewers: 3,
+            userBlacklist: [],
+            fileBlacklist: [],
+            requiredOrgs: [],
+            numFilesToCheck: 5,
+            findPotentialReviewers: false,
+            alwaysNotifyForPaths: [{
+              name: 'jcsmorais',
+              files: ['website/server/*']
+            }]
+          }
+        ).then(function(owners) {
+          expect(owners).toEqual(['jcsmorais']);
+        });
+      });
+
+    pit('Messages 5 users from config option maxUsersToPing', function() {
+      mentionBot.enableCachingForDebugging = true;
+      return mentionBot.guessOwnersForPullRequest(
+        'https://github.com/facebook/react-native',
+        3238,
+        'mention-bot',
+        'master',
+        {
+          maxReviewers: 5,
+          userBlacklist: [],
+          fileBlacklist: [],
+          requiredOrgs: [],
+          numFilesToCheck: 5,
+          findPotentialReviewers: true,
+        }
+      ).then(function(owners) {
+        expect(owners.length).toEqual(5);
+      });
+    });
+
+    pit('Should contain testname in owners from whitelist', function() {
+      mentionBot.enableCachingForDebugging = true;
+      return mentionBot.guessOwnersForPullRequest(
+        'https://github.com/facebook/react-native',
+        3238,
+        'mention-bot',
+        'master',
+        {
+          maxReviewers: 3,
+          userBlacklist: [],
+          fileBlacklist: [],
+          requiredOrgs: [],
+          numFilesToCheck: 5,
+          findPotentialReviewers: true,
           alwaysNotifyForPaths: [
             {
               name: 'ghuser',
@@ -124,10 +132,54 @@ describe('Github Mention', function() {
             }
           ]
         }
-      );
-
-      owners.then(function(owners) {
+      ).then(function(owners) {
         expect(owners.indexOf('ghuser')).toBeGreaterThan(-1);
+      });
+    });
+
+    pit('Should contain testname in owners from fallback', function() {
+      mentionBot.enableCachingForDebugging = true;
+      return mentionBot.guessOwnersForPullRequest(
+        'https://github.com/fbsamples/bot-testing',
+        95,
+        'mention-bot',
+        'master',
+        {
+          maxReviewers: 3,
+          userBlacklist: [],
+          fileBlacklist: [],
+          requiredOrgs: [],
+          numFilesToCheck: 5,
+          findPotentialReviewers: true,
+          fallbackNotifyForPaths: [
+            {
+              name: 'ghuser',
+              files: ['*.js']
+            }
+          ]
+        }
+      ).then(function(owners) {
+        expect(owners.indexOf('ghuser')).toBeGreaterThan(-1);
+      });
+    });
+
+    pit('Should not contain testname in owners from fallback when fallback is missing', function() {
+      mentionBot.enableCachingForDebugging = true;
+      return mentionBot.guessOwnersForPullRequest(
+        'https://github.com/fbsamples/bot-testing',
+        95,
+        'mention-bot',
+        'master',
+        {
+          maxReviewers: 3,
+          userBlacklist: [],
+          fileBlacklist: [],
+          requiredOrgs: [],
+          numFilesToCheck: 5,
+          findPotentialReviewers: true
+        }
+      ).then(function (owners) {
+        expect(owners.indexOf('ghuser')).toEqual(-1);
       });
     });
   });

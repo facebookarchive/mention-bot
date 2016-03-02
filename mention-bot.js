@@ -247,7 +247,7 @@ function getSortedOwners(
   return sorted_owners;
 }
 
-function getDefaultOwners(
+function getMatchingOwners(
   files: Array<FileInfo>,
   whitelist: Array<WhitelistUser>
 ): Array<string> {
@@ -365,6 +365,7 @@ async function guessOwners(
   blames: { [key: string]: Array<string> },
   creator: string,
   defaultOwners: Array<string>,
+  fallbackOwners: Array<string>,
   config: Object,
   github: Object
 ): Promise<Array<string>> {
@@ -397,6 +398,10 @@ async function guessOwners(
     owners = await filterRequiredOrgs(owners, config, github);
   }
 
+  if (owners.length === 0) {
+    defaultOwners = defaultOwners.concat(fallbackOwners);
+  }
+
   return owners
     .slice(0, config.maxReviewers)
     .concat(defaultOwners)
@@ -415,8 +420,8 @@ async function guessOwnersForPullRequest(
 ): Promise<Array<string>> {
   var diff = await fetch(repoURL + '/pull/' + id + '.diff');
   var files = parseDiff(diff);
-  var defaultOwners = getDefaultOwners(files, config.alwaysNotifyForPaths);
-
+  var defaultOwners = getMatchingOwners(files, config.alwaysNotifyForPaths);
+  var fallbackOwners = getMatchingOwners(files, config.fallbackNotifyForPaths);
   if (!config.findPotentialReviewers) {
       return defaultOwners;
   }
@@ -453,7 +458,7 @@ async function guessOwnersForPullRequest(
 
   // This is the line that implements the actual algorithm, all the lines
   // before are there to fetch and extract the data needed.
-  return guessOwners(files, blames, creator, defaultOwners, config, github);
+  return guessOwners(files, blames, creator, defaultOwners, fallbackOwners, config, github);
 }
 
 module.exports = {

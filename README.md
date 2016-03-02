@@ -29,6 +29,12 @@ The bot can be configured by adding a `.mention-bot` file to the base directory 
       "files": ["src/js/**/*.js"] // The array of file globs associated with the user
     }
   ], // users will always be mentioned based on file glob
+  "fallbackNotifyForPaths": [
+    {
+      "name": "ghuser", // The user's Github username
+      "files": ["src/js/**/*.js"] // The array of file globs associated with the user
+    }
+  ], // users will be mentioned based on file glob if no other user was found
   "findPotentialReviewers": true, // mention-bot will try to find potential reviewers based on files history, if disabled, `alwaysNotifyForPaths` is used instead
   "fileBlacklist": ["*.md"], // mention-bot will ignore any files that match these file globs
   "userBlacklist": [], // users in this list will never be mentioned by mention-bot
