@@ -17,7 +17,7 @@ var childProcess = require('child_process');
 var CookieJar = require('./cookieJar');
 var jar = new CookieJar();
 
-var ghHost = config.gheHost || 'github.com';
+var ghHost = process.env.GITHUB_HOST || config.gheHost || 'github.com';
 var ghProtocol = config.gheProtocol || 'https';
 
 /**
