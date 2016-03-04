@@ -50,8 +50,8 @@ if (!process.env.GITHUB_USER) {
 
 var github = new GitHubApi({
   version: '3.0.0',
-  host: config.gheHost,
-  pathPrefix: config.ghePathPrefix,
+  host: process.env.GITHUB_HOST || config.gheHost,
+  pathPrefix: process.env.GITHUB_API_PREFIX || config.ghePathPrefix,
   protocol: config.gheProtocol || 'https',
   port: config.ghePort || '443'
 });
