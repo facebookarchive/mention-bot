@@ -3,7 +3,7 @@ var exports = module.exports = {};
 var packageConfig = require('./package.json').config;
 var configJson = require('./config.json');
 
-mergedConfig = Object.assign(packageConfig, configJson);
+var mergedConfig = Object.assign(packageConfig, configJson);
 
 exports.github = {
     host: mergedConfig.gheHost || 'github.com',
