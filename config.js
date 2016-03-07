@@ -1,11 +1,13 @@
 var exports = module.exports = {};
 
 var packageConfig = require('./package.json').config;
+var configJson = require('./config.json');
+
+mergedConfig = Object.assign(packageConfig, configJson);
 
 exports.github = {
-    host: packageConfig.gheHost || 'github.com',
-    protocol: packageConfig.gheProtocol || 'https',
-    pathPrefix: packageConfig.ghePathPrefix,
-    port: packageConfig.ghePort || 443
+    host: mergedConfig.gheHost || 'github.com',
+    protocol: mergedConfig.gheProtocol || 'https',
+    pathPrefix: mergedConfig.ghePathPrefix,
+    port: mergedConfig.ghePort || 443
 };
-
