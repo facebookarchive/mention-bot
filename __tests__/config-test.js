@@ -6,6 +6,7 @@ describe('config uses defaults from package.json', function() {
 	var config = require('../config.js');
 	expect(config.gh).toBe({
 	    host: 'github.com',
+	    apiHost: 'api.github.com',
 	    port: 443,
 	    pathPrefix: null,
 	    protocol: 'https'
@@ -24,6 +25,7 @@ describe('config uses defaults from package.json', function() {
 	var config = require('../config.js');
 	expect(config.github).toEqual({
 	    host: 'foo.github.com',
+	    apiHost: 'foo.github.com',
 	    port: 80,
 	    pathPrefix: 'api/v3',
 	    protocol: 'http'
@@ -41,6 +43,7 @@ describe('config.json can override defaults', function() {
     var config = require('../config.js');
     expect(config.github).toEqual({
 	host: 'bar.github.com',
+	apiHost: 'bar.github.com',
 	port: 8080,
 	pathPrefix: 'api/v4',
 	protocol: 'http2'
