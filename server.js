@@ -10,7 +10,7 @@
  */
 
 var bl = require('bl');
-var config = require('./package.json').config;
+var config = require('./config');
 var express = require('express');
 var fs = require('fs');
 var mentionBot = require('./mention-bot.js');
@@ -50,10 +50,10 @@ if (!process.env.GITHUB_USER) {
 
 var github = new GitHubApi({
   version: '3.0.0',
-  host: config.gheHost,
-  pathPrefix: config.ghePathPrefix,
-  protocol: config.gheProtocol || 'https',
-  port: config.ghePort || '443'
+  host: config.github.apiHost,
+  pathPrefix: config.github.pathPrefix,
+  protocol: config.github.protocol,
+  port: config.github.port
 });
 
 github.authenticate({
