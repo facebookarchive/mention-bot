@@ -10,11 +10,11 @@
       "required": true
     },
     "GITHUB_USER": {
-      "description": "If you want mention-bot to work with private repos, you need to add your github login",
+      "description": "If you want mention-bot to work with private repos, you need to add your GitHub login",
       "required": false
     },
     "GITHUB_PASSWORD": {
-      "description": "Password for Github account.",
+      "description": "Password for GitHub account.",
       "required": false
     }
   }
