@@ -183,4 +183,4 @@ mentionBot
 
 ## License
 
-mention-bot is BSD-licensed. We also provide an additional patent grant.
+mention-bot is BSD-licensed. We also provide an [additional patent grant](https://github.com/facebook/mention-bot/blob/master/PATENTS).
