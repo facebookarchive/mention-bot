@@ -9,7 +9,7 @@ Do you have a GitHub project that is too big for people to subscribe to all the 
 - Go to
  - your project on GitHub > Settings > Webhooks & services > Add Webhook or
  - your organization on GitHub > Settings > Webhooks > Add Webhook
-- Payload URL: `https://mention-bot.herokuapp.com/`
+- Payload URL: (https://mention-bot.herokuapp.com/)
 - Let me select individual events > Check `Pull Request`
 - Add Webhook
 
