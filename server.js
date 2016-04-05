@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015-present, Facebook, Inc.
+ * Copyright (c) 2016-present, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -31,7 +31,7 @@ if (!process.env.GITHUB_TOKEN) {
   console.error('GITHUB_TOKEN=insert_token_here npm start');
   console.error('5) Run the following command in another tab:');
   console.error('curl -X POST -d @__tests__/data/23.webhook http://localhost:5000/');
-  console.error('6) Check that it commented here: https://github.com/fbsamples/bot-testing/pull/23');
+  console.error('6) Check if it has commented here: https://github.com/fbsamples/bot-testing/pull/23');
   process.exit(1);
 }
 
@@ -42,8 +42,8 @@ if (!process.env.GITHUB_USER) {
   );
   console.warn(
     'To make mention-bot work with private repos, please expose',
-    'GITHUB_USER and GITHUB_PASSWORD as environment variables.',
-    'The user and password must have access to the private repo',
+    'GITHUB_USERNAME and GITHUB_PASSWORD as environment variables.',
+    'The username and password must have access to the private repo',
     'you want to use.'
   );
 }
