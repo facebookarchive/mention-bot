@@ -13,21 +13,47 @@
 
 var githubAuthCookies = require('./githubAuthCookies');
 var fs = require('fs');
+var minimatch = require('minimatch');
 
-var downloadFileSync = function(url: string, cookies: ?string): string {
-  var args = ['--verbose','-L', url];
+async function downloadFileAsync(url: string, cookies: ?string): Promise<string> {
+  return new Promise(function(resolve, reject) {
+    var args = ['--silent', '-L', url];
 
-  if (cookies) {
-    args.push('-H', `Cookie: ${cookies}`);
-  }
+    if (cookies) {
+      args.push('-H', `Cookie: ${cookies}`);
+    }
 
-  return require('child_process')
-    .execFileSync('curl', args, {encoding: 'utf8'}).toString();
-};
+    require('child_process')
+      .execFile('curl', args, {encoding: 'utf8', maxBuffer: 1000 * 1024}, function(error, stdout, stderr) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(stdout.toString());
+        }
+      });
+  });
+}
+
+async function readFileAsync(name: string, encoding: string): Promise<string> {
+  return new Promise(function(resolve, reject) {
+    fs.readFile(name, encoding, function(err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
 
 type FileInfo = {
   path: string,
   deletedLines: Array<number>,
+};
+
+type WhitelistUser = {
+  name: string,
+  files: Array<string>
 };
 
 function startsWith(str, start) {
@@ -111,7 +137,7 @@ function parseDiff(diff: string): Array<FileInfo> {
   }
 
   var lines = diff.trim().split('\n');
-  // Hack Array doesn't have shift/unshift to work from the beggining of the
+  // Hack Array doesn't have shift/unshift to work from the beginning of the
   // array, so we reverse the entire array in order to be able to use pop/add.
   lines.reverse();
 
@@ -143,9 +169,9 @@ function parseDiff(diff: string): Array<FileInfo> {
  */
 function parseBlame(blame: string): Array<string> {
   // The way the document is structured is that commits and lines are
-  // interleaved. So everytime we see a commit we grab the author's name
-  // and everytime we see a line we log the last seen author.
-  var re = /(rel="contributor">([a-z0-9]+)<\/a> authored|<tr class="blame-line">)/g;
+  // interleaved. So every time we see a commit we grab the author's name
+  // and every time we see a line we log the last seen author.
+  var re = /(rel="(?:author|contributor)">([^<]+)<\/a> authored|<tr class="blame-line">)/g;
 
   var currentAuthor = 'none';
   var lines = [];
@@ -221,15 +247,41 @@ function getSortedOwners(
   return sorted_owners;
 }
 
+function getMatchingOwners(
+  files: Array<FileInfo>,
+  whitelist: Array<WhitelistUser>
+): Array<string> {
+  var owners = [];
+  var users = whitelist || [];
+
+  users.forEach(function(user) {
+    let userHasChangedFile = false;
+
+    user.files.forEach(function(pattern) {
+      if (!userHasChangedFile) {
+        userHasChangedFile = files.find(function(file) {
+          return minimatch(file.path, pattern);
+        });
+      }
+    });
+
+    if (userHasChangedFile && owners.indexOf(user.name) === -1) {
+      owners.push(user.name);
+    }
+  });
+
+  return owners;
+}
+
 /**
  * While developing/debugging the algorithm itself, it's very important not to
  * make http requests to github. Not only it's going to make the reload cycle
  * much slower, it's also going to temporary/permanently ban your ip and
  * you won't be able to get anymore work done when it happens :(
  */
-function fetch(url: string): string {
+async function fetch(url: string): Promise<string> {
   if (!module.exports.enableCachingForDebugging) {
-    return downloadFileSync(url, githubAuthCookies);
+    return downloadFileAsync(url, githubAuthCookies);
   }
 
   var cacheDir = __dirname + '/cache/';
@@ -239,10 +291,47 @@ function fetch(url: string): string {
   }
   var cache_key = cacheDir + url.replace(/[^a-zA-Z0-9-_\.]/g, '-');
   if (!fs.existsSync(cache_key)) {
-    var file = downloadFileSync(url, githubAuthCookies);
+    var file = await downloadFileAsync(url, githubAuthCookies);
     fs.writeFileSync(cache_key, file);
   }
-  return fs.readFileSync(cache_key, 'utf8');
+  return readFileAsync(cache_key, 'utf8');
+}
+
+async function getOwnerOrgs(
+  owner: string,
+  github: Object
+): Promise<Array<string>> {
+  return new Promise(function(resolve, reject) {
+    github.orgs.getFromUser({ user: owner }, function(err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(
+          result.map(function (obj){
+            return obj.login;
+          })
+        );
+      }
+    });
+  });
+}
+
+async function filterRequiredOrgs(
+  owners: Array<string>,
+  config: Object,
+  github: Object
+): Promise<Array<string>> {
+  var promises = owners.map(function(owner) {
+    return getOwnerOrgs(owner, github);
+  });
+
+  var userOrgs = await Promise.all(promises);
+  return owners.filter(function(owner, index) {
+    // user passes if he is in any of the required organizations
+    return config.requiredOrgs.some(function(reqOrg) {
+      return userOrgs[index].indexOf(reqOrg) >= 0;
+    });
+  });
 }
 
 /**
@@ -271,11 +360,15 @@ function fetch(url: string): string {
  *  Once you've got those two pools, sort them by number of points, dedupe
  *  them, concat them and finally take the first 3 names.
  */
-function guessOwners(
+async function guessOwners(
   files: Array<FileInfo>,
   blames: { [key: string]: Array<string> },
-  creator: string
-): Array<string> {
+  creator: string,
+  defaultOwners: Array<string>,
+  fallbackOwners: Array<string>,
+  config: Object,
+  github: Object
+): Promise<Array<string>> {
   var deletedOwners = getDeletedOwners(files, blames);
   var allOwners = getAllOwners(files, blames);
 
@@ -288,7 +381,7 @@ function guessOwners(
     return !deletedOwnersSet.has(element);
   });
 
-  return []
+  var owners = []
     .concat(deletedOwners)
     .concat(allOwners)
     .filter(function(owner) {
@@ -297,16 +390,41 @@ function guessOwners(
     .filter(function(owner) {
       return owner !== creator;
     })
-    .slice(0, 3);
+    .filter(function(owner) {
+      return config.userBlacklist.indexOf(owner) === -1;
+    });
+
+  if (config.requiredOrgs.length > 0) {
+    owners = await filterRequiredOrgs(owners, config, github);
+  }
+
+  if (owners.length === 0) {
+    defaultOwners = defaultOwners.concat(fallbackOwners);
+  }
+
+  return owners
+    .slice(0, config.maxReviewers)
+    .concat(defaultOwners)
+    .filter(function(owner, index, ownersFound) {
+      return ownersFound.indexOf(owner) === index;
+    });
 }
 
-function guessOwnersForPullRequest(
+async function guessOwnersForPullRequest(
   repoURL: string,
   id: number,
-  creator: string
-): Array<string> {
-  var diff = fetch(repoURL + '/pull/' + id + '.diff');
+  creator: string,
+  targetBranch: string,
+  config: Object,
+  github: Object
+): Promise<Array<string>> {
+  var diff = await fetch(repoURL + '/pull/' + id + '.diff');
   var files = parseDiff(diff);
+  var defaultOwners = getMatchingOwners(files, config.alwaysNotifyForPaths);
+  var fallbackOwners = getMatchingOwners(files, config.fallbackNotifyForPaths);
+  if (!config.findPotentialReviewers) {
+      return defaultOwners;
+  }
 
   // There are going to be degenerated changes that end up modifying hundreds
   // of files. In theory, it would be good to actually run the algorithm on
@@ -318,18 +436,29 @@ function guessOwnersForPullRequest(
     var countB = b.deletedLines.length;
     return countA > countB ? -1 : (countA < countB ? 1 : 0);
   });
-  files = files.slice(0, 5);
+  // remove files that match any of the globs in the file blacklist config
+  config.fileBlacklist.forEach(function(glob) {
+    files = files.filter(function(file) {
+      return !minimatch(file.path, glob);
+    });
+  });
+  files = files.slice(0, config.numFilesToCheck);
 
   var blames = {};
-  files.forEach(function(file) {
-    var path = file.path;
-    var blame = fetch(repoURL + '/blame/master/' + path);
-    blames[path] = parseBlame(blame);
+  // create blame promises (allows concurrent loading)
+  var promises = files.map(function(file) {
+    return fetch(repoURL + '/blame/' + targetBranch + '/' + file.path);
+  });
+
+  // wait for all promises to resolve
+  var results = await Promise.all(promises);
+  results.forEach(function(result, index) {
+    blames[files[index].path] = parseBlame(result);
   });
 
   // This is the line that implements the actual algorithm, all the lines
   // before are there to fetch and extract the data needed.
-  return guessOwners(files, blames, creator);
+  return guessOwners(files, blames, creator, defaultOwners, fallbackOwners, config, github);
 }
 
 module.exports = {
