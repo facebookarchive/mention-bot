@@ -151,13 +151,19 @@ async function work(body) {
     return;
   }
 
+  var org = null;
+
+  if(data.organization) {
+    org = data.organization.login;
+  }
+
   var reviewers = await mentionBot.guessOwnersForPullRequest(
     data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
     data.pull_request.number, // 23
     data.pull_request.user.login, // 'mention-bot'
     data.pull_request.base.ref, // 'master'
     data.repository.private, //true or false
-    data.organization.login, //the owner of the repo
+    org, //the org name of the repo
     repoConfig,
     github
   );

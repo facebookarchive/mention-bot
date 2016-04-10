@@ -110,7 +110,7 @@ describe('Github Mention', function() {
       });
     });
 
-    pit('Handles pagination', function() {
+    pit('Handles pagination when getting the org members', function() {
       mentionBot.enableCachingForDebugging = true;
       var onCall = 0;
 
@@ -167,6 +167,36 @@ describe('Github Mention', function() {
           page: 1,
           per_page: 100
         });
+        expect(owners).toEqual(['corbt', 'vjeux', 'sahrens']);
+      });
+    });
+
+    pit('Does not get the org members if there is no org', function() {
+      mentionBot.enableCachingForDebugging = true;
+      var githubMock = {
+        orgs: {
+          getMembers: jest.genMockFunction()
+        }
+      };
+
+      return mentionBot.guessOwnersForPullRequest(
+        'https://github.com/facebook/react-native',
+        3238,
+        'mention-bot',
+        'master',
+        true,
+        undefined,
+        {
+          maxReviewers: 3,
+          userBlacklist: [],
+          fileBlacklist: [],
+          requiredOrgs: [],
+          numFilesToCheck: 5,
+          findPotentialReviewers: true,
+        },
+        githubMock
+      ).then(function(owners) {
+        expect(githubMock.orgs.getMembers.mock.calls.length).toBe(0);
         expect(owners).toEqual(['corbt', 'vjeux', 'sahrens']);
       });
     });

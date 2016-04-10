@@ -374,10 +374,10 @@ async function filterRequiredOrgs(
 
 async function filterPrivateRepo(
   owners: Array<string>,
-  ownerOrg: string,
+  org: string,
   github: Object
 ): Promise<Array<string>> {
-  var currentMembers = await getMembersOfOrg(ownerOrg, github, 0);
+  var currentMembers = await getMembersOfOrg(org, github, 0);
 
   return owners.filter(function(owner, index) {
     // user passes if they are still in the org
@@ -420,7 +420,7 @@ async function guessOwners(
   defaultOwners: Array<string>,
   fallbackOwners: Array<string>,
   privateRepo: boolean,
-  ownerOrg: string,
+  org: ?string,
   config: Object,
   github: Object
 ): Promise<Array<string>> {
@@ -453,8 +453,8 @@ async function guessOwners(
     owners = await filterRequiredOrgs(owners, config, github);
   }
 
-  if (privateRepo) {
-    owners = await filterPrivateRepo(owners, ownerOrg, github);
+  if (privateRepo && org != null) {
+    owners = await filterPrivateRepo(owners, org, github);
   }
 
   if (owners.length === 0) {
@@ -475,7 +475,7 @@ async function guessOwnersForPullRequest(
   creator: string,
   targetBranch: string,
   privateRepo: boolean,
-  ownerOrg: string,
+  org: ?string,
   config: Object,
   github: Object
 ): Promise<Array<string>> {
@@ -519,7 +519,7 @@ async function guessOwnersForPullRequest(
 
   // This is the line that implements the actual algorithm, all the lines
   // before are there to fetch and extract the data needed.
-  return guessOwners(files, blames, creator, defaultOwners, fallbackOwners, privateRepo, ownerOrg, config, github);
+  return guessOwners(files, blames, creator, defaultOwners, fallbackOwners, privateRepo, org, config, github);
 }
 
 module.exports = {
