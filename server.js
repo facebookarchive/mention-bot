@@ -156,6 +156,8 @@ async function work(body) {
     data.pull_request.number, // 23
     data.pull_request.user.login, // 'mention-bot'
     data.pull_request.base.ref, // 'master'
+    data.repository.private, //true or false
+    data.organization.login, //the owner of the repo
     repoConfig,
     github
   );

@@ -316,6 +316,37 @@ async function getOwnerOrgs(
   });
 }
 
+async function getMembersOfOrg(
+  org: string,
+  github: Object,
+  page: number
+): Promise<Array<string>> {
+  const perPage = 100;
+  return new Promise(function(resolve, reject) {
+    github.orgs.getMembers({
+      org: org,
+      page: page,
+      per_page: perPage
+    }, function(err, members) {
+      if (err) {
+        reject(err);
+      } else {
+        var logins = members.map(function (obj){
+          return obj.login;
+        })
+        if(logins.length === perPage) {
+          getMembersOfOrg(org, github, ++page).then(function(results) {
+            resolve(logins.concat(results));
+          })
+          .catch(reject);
+        } else {
+          resolve(logins);
+        }
+      }
+    });
+  });
+}
+
 async function filterRequiredOrgs(
   owners: Array<string>,
   config: Object,
@@ -330,6 +361,28 @@ async function filterRequiredOrgs(
     // user passes if he is in any of the required organizations
     return config.requiredOrgs.some(function(reqOrg) {
       return userOrgs[index].indexOf(reqOrg) >= 0;
+    });
+  });
+}
+
+/**
+ * If the repo is private than we should only mention users that are still part
+ * of that org.
+ * Otherwise we could end up with a situation where all the people mentioned have
+ * left the org and none of the current staff get notified
+**/
+
+async function filterPrivateRepo(
+  owners: Array<string>,
+  ownerOrg: string,
+  github: Object
+): Promise<Array<string>> {
+  var currentMembers = await getMembersOfOrg(ownerOrg, github, 0);
+
+  return owners.filter(function(owner, index) {
+    // user passes if they are still in the org
+    return currentMembers.some(function(member) {
+      return member === owner;
     });
   });
 }
@@ -366,6 +419,8 @@ async function guessOwners(
   creator: string,
   defaultOwners: Array<string>,
   fallbackOwners: Array<string>,
+  privateRepo: boolean,
+  ownerOrg: string,
   config: Object,
   github: Object
 ): Promise<Array<string>> {
@@ -398,6 +453,10 @@ async function guessOwners(
     owners = await filterRequiredOrgs(owners, config, github);
   }
 
+  if (privateRepo) {
+    owners = await filterPrivateRepo(owners, ownerOrg, github);
+  }
+
   if (owners.length === 0) {
     defaultOwners = defaultOwners.concat(fallbackOwners);
   }
@@ -415,6 +474,8 @@ async function guessOwnersForPullRequest(
   id: number,
   creator: string,
   targetBranch: string,
+  privateRepo: boolean,
+  ownerOrg: string,
   config: Object,
   github: Object
 ): Promise<Array<string>> {
@@ -458,7 +519,7 @@ async function guessOwnersForPullRequest(
 
   // This is the line that implements the actual algorithm, all the lines
   // before are there to fetch and extract the data needed.
-  return guessOwners(files, blames, creator, defaultOwners, fallbackOwners, config, github);
+  return guessOwners(files, blames, creator, defaultOwners, fallbackOwners, privateRepo, ownerOrg, config, github);
 }
 
 module.exports = {

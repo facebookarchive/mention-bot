@@ -54,6 +54,8 @@ describe('Github Mention', function() {
         3238,
         'mention-bot',
         'master',
+        false,
+        'facebook',
         {
           maxReviewers: 3,
           userBlacklist: [],
@@ -67,6 +69,108 @@ describe('Github Mention', function() {
       });
     });
 
+    pit('Filters out users that are not in the org if the repo is private', function() {
+      mentionBot.enableCachingForDebugging = true;
+      var githubMock = {
+        orgs: {
+          getMembers: jest.genMockFunction().mockImplementation(function(params, cb) {
+            cb(null, [
+              {login: 'sahrens'},
+              {login: 'not-vjeux'},
+              {login: 'corbt'}
+            ]);
+          })
+        }
+      };
+
+      return mentionBot.guessOwnersForPullRequest(
+        'https://github.com/facebook/react-native',
+        3238,
+        'mention-bot',
+        'master',
+        true,
+        'facebook',
+        {
+          maxReviewers: 3,
+          userBlacklist: [],
+          fileBlacklist: [],
+          requiredOrgs: [],
+          numFilesToCheck: 5,
+          findPotentialReviewers: true,
+        },
+        githubMock
+      ).then(function(owners) {
+        expect(githubMock.orgs.getMembers.mock.calls.length).toBe(1);
+        expect(githubMock.orgs.getMembers.mock.calls[0][0]).toEqual({
+          org: 'facebook',
+          page: 0,
+          per_page: 100
+        });
+        expect(owners).toEqual(['corbt', 'sahrens']);
+      });
+    });
+
+    pit('Handles pagination', function() {
+      mentionBot.enableCachingForDebugging = true;
+      var onCall = 0;
+
+      //First call to the github api returns 100 results
+      var onCall1 = [{login: 'sahrens'}];
+      var i = 0;
+      for(i; i < 99; i++) {
+        onCall1.push({login: 'someone-else'});
+      }
+
+      //Second call to the github api returns 2 results
+      var onCall2 = [
+        {login: 'vjeux'},
+        {login: 'corbt'}
+      ];
+
+      var githubMock = {
+        orgs: {
+          getMembers: jest.genMockFunction().mockImplementation(function(params, cb) {
+            if(++onCall === 1) {
+              cb(null, onCall1);
+            } else {
+              cb(null, onCall2);
+            }
+          })
+        }
+      };
+
+      return mentionBot.guessOwnersForPullRequest(
+        'https://github.com/facebook/react-native',
+        3238,
+        'mention-bot',
+        'master',
+        true,
+        'facebook',
+        {
+          maxReviewers: 3,
+          userBlacklist: [],
+          fileBlacklist: [],
+          requiredOrgs: [],
+          numFilesToCheck: 5,
+          findPotentialReviewers: true,
+        },
+        githubMock
+      ).then(function(owners) {
+        expect(githubMock.orgs.getMembers.mock.calls.length).toBe(2);
+        expect(githubMock.orgs.getMembers.mock.calls[0][0]).toEqual({
+          org: 'facebook',
+          page: 0,
+          per_page: 100
+        });
+        expect(githubMock.orgs.getMembers.mock.calls[1][0]).toEqual({
+          org: 'facebook',
+          page: 1,
+          per_page: 100
+        });
+        expect(owners).toEqual(['corbt', 'vjeux', 'sahrens']);
+      });
+    });
+
     pit('Gets correct users if `findPotentialReviewers` option is disabled', function() {
         mentionBot.enableCachingForDebugging = true;
         return mentionBot.guessOwnersForPullRequest(
@@ -74,6 +178,8 @@ describe('Github Mention', function() {
           3238,
           'mention-bot',
           'master',
+          false,
+          'facebook',
           {
             maxReviewers: 3,
             userBlacklist: [],
@@ -98,6 +204,8 @@ describe('Github Mention', function() {
         3238,
         'mention-bot',
         'master',
+        false,
+        'facebook',
         {
           maxReviewers: 5,
           userBlacklist: [],
@@ -118,6 +226,8 @@ describe('Github Mention', function() {
         3238,
         'mention-bot',
         'master',
+        false,
+        'facebook',
         {
           maxReviewers: 3,
           userBlacklist: [],
@@ -144,6 +254,8 @@ describe('Github Mention', function() {
         95,
         'mention-bot',
         'master',
+        false,
+        'facebook',
         {
           maxReviewers: 3,
           userBlacklist: [],
@@ -170,6 +282,8 @@ describe('Github Mention', function() {
         95,
         'mention-bot',
         'master',
+        false,
+        'facebook',
         {
           maxReviewers: 3,
           userBlacklist: [],
