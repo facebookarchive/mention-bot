@@ -153,7 +153,7 @@ async function work(body) {
 
   var org = null;
 
-  if(data.organization) {
+  if (data.organization) {
     org = data.organization.login;
   }
 

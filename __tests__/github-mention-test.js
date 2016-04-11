@@ -47,15 +47,24 @@ describe('Github Mention', function() {
 
   describe('CompleteFlow', function() {
 
+    const reactNativePR = {
+      repoName: 'https://github.com/facebook/react-native',
+      prNumber: 3238,
+      prUser: 'mention-bot',
+      prBaseBranch: 'master',
+      privateRepo: false,
+      org: 'facebook'
+    }
+
     pit('Gets correct users with default config options', function() {
       mentionBot.enableCachingForDebugging = true;
       return mentionBot.guessOwnersForPullRequest(
-        'https://github.com/facebook/react-native',
-        3238,
-        'mention-bot',
-        'master',
-        false,
-        'facebook',
+        reactNativePR.repoName,
+        reactNativePR.prNumber,
+        reactNativePR.prUser,
+        reactNativePR.prBaseBranch,
+        reactNativePR.privateRepo,
+        reactNativePR.org,
         {
           maxReviewers: 3,
           userBlacklist: [],
@@ -84,12 +93,12 @@ describe('Github Mention', function() {
       };
 
       return mentionBot.guessOwnersForPullRequest(
-        'https://github.com/facebook/react-native',
-        3238,
-        'mention-bot',
-        'master',
-        true,
-        'facebook',
+        reactNativePR.repoName,
+        reactNativePR.prNumber,
+        reactNativePR.prUser,
+        reactNativePR.prBaseBranch,
+        true, //Set privateRepo to true
+        reactNativePR.org,
         {
           maxReviewers: 3,
           userBlacklist: [],
@@ -117,7 +126,7 @@ describe('Github Mention', function() {
       //First call to the github api returns 100 results
       var onCall1 = [{login: 'sahrens'}];
       var i = 0;
-      for(i; i < 99; i++) {
+      for (i; i < 99; i++) {
         onCall1.push({login: 'someone-else'});
       }
 
@@ -140,12 +149,12 @@ describe('Github Mention', function() {
       };
 
       return mentionBot.guessOwnersForPullRequest(
-        'https://github.com/facebook/react-native',
-        3238,
-        'mention-bot',
-        'master',
-        true,
-        'facebook',
+        reactNativePR.repoName,
+        reactNativePR.prNumber,
+        reactNativePR.prUser,
+        reactNativePR.prBaseBranch,
+        true, //Set privateRepo to true
+        reactNativePR.org,
         {
           maxReviewers: 3,
           userBlacklist: [],
@@ -180,11 +189,11 @@ describe('Github Mention', function() {
       };
 
       return mentionBot.guessOwnersForPullRequest(
-        'https://github.com/facebook/react-native',
-        3238,
-        'mention-bot',
-        'master',
-        true,
+        reactNativePR.repoName,
+        reactNativePR.prNumber,
+        reactNativePR.prUser,
+        reactNativePR.prBaseBranch,
+        true, //Set privateRepo to true
         undefined,
         {
           maxReviewers: 3,
@@ -204,12 +213,12 @@ describe('Github Mention', function() {
     pit('Gets correct users if `findPotentialReviewers` option is disabled', function() {
         mentionBot.enableCachingForDebugging = true;
         return mentionBot.guessOwnersForPullRequest(
-          'https://github.com/facebook/react-native',
-          3238,
-          'mention-bot',
-          'master',
-          false,
-          'facebook',
+          reactNativePR.repoName,
+          reactNativePR.prNumber,
+          reactNativePR.prUser,
+          reactNativePR.prBaseBranch,
+          true, //Set private repo to true
+          reactNativePR.org,
           {
             maxReviewers: 3,
             userBlacklist: [],
@@ -230,12 +239,12 @@ describe('Github Mention', function() {
     pit('Messages 5 users from config option maxUsersToPing', function() {
       mentionBot.enableCachingForDebugging = true;
       return mentionBot.guessOwnersForPullRequest(
-        'https://github.com/facebook/react-native',
-        3238,
-        'mention-bot',
-        'master',
-        false,
-        'facebook',
+        reactNativePR.repoName,
+        reactNativePR.prNumber,
+        reactNativePR.prUser,
+        reactNativePR.prBaseBranch,
+        reactNativePR.privateRepo,
+        reactNativePR.org,
         {
           maxReviewers: 5,
           userBlacklist: [],
@@ -252,12 +261,12 @@ describe('Github Mention', function() {
     pit('Should contain testname in owners from whitelist', function() {
       mentionBot.enableCachingForDebugging = true;
       return mentionBot.guessOwnersForPullRequest(
-        'https://github.com/facebook/react-native',
-        3238,
-        'mention-bot',
-        'master',
-        false,
-        'facebook',
+        reactNativePR.repoName,
+        reactNativePR.prNumber,
+        reactNativePR.prUser,
+        reactNativePR.prBaseBranch,
+        reactNativePR.privateRepo,
+        reactNativePR.org,
         {
           maxReviewers: 3,
           userBlacklist: [],
@@ -277,15 +286,24 @@ describe('Github Mention', function() {
       });
     });
 
+    const botTestingPR = {
+      repoName: 'https://github.com/fbsamples/bot-testing',
+      prNumber: 95,
+      prUser: 'mention-bot',
+      prBaseBranch: 'master',
+      privateRepo: false,
+      org: 'facebook'
+    }
+
     pit('Should contain testname in owners from fallback', function() {
       mentionBot.enableCachingForDebugging = true;
       return mentionBot.guessOwnersForPullRequest(
-        'https://github.com/fbsamples/bot-testing',
-        95,
-        'mention-bot',
-        'master',
-        false,
-        'facebook',
+        botTestingPR.repoName,
+        botTestingPR.prNumber,
+        botTestingPR.prUser,
+        botTestingPR.prBaseBranch,
+        botTestingPR.privateRepo,
+        botTestingPR.org,
         {
           maxReviewers: 3,
           userBlacklist: [],
@@ -308,12 +326,12 @@ describe('Github Mention', function() {
     pit('Should not contain testname in owners from fallback when fallback is missing', function() {
       mentionBot.enableCachingForDebugging = true;
       return mentionBot.guessOwnersForPullRequest(
-        'https://github.com/fbsamples/bot-testing',
-        95,
-        'mention-bot',
-        'master',
-        false,
-        'facebook',
+        botTestingPR.repoName,
+        botTestingPR.prNumber,
+        botTestingPR.prUser,
+        botTestingPR.prBaseBranch,
+        botTestingPR.privateRepo,
+        botTestingPR.org,
         {
           maxReviewers: 3,
           userBlacklist: [],
