@@ -76,10 +76,12 @@ function buildMentionSentence(reviewers) {
   );
 }
 
-function defaultMessageGenerator(reviewers) {
+function defaultMessageGenerator(pull_requester, reviewers) {
   return util.format(
+    '@%s, thanks for your PR! ' +
     'By analyzing the blame information on this pull request' +
      ', we identified %s to be%s potential reviewer%s',
+     pull_requester,
      buildMentionSentence(reviewers),
      reviewers.length > 1 ? '' : ' a',
      reviewers.length > 1 ? 's' : ''
@@ -180,6 +182,7 @@ async function work(body) {
     repo: data.repository.name, // 'bot-testing'
     number: data.pull_request.number, // 23
     body: messageGenerator(
+      data.pull_request.user.login, // pull-requester
       reviewers,
       buildMentionSentence,
       defaultMessageGenerator

@@ -12,19 +12,21 @@
 'use strict';
 
 module.exports = function(
+  pull_requester: string,
   reviewers: Array<string>,
   mentionSentenceBuilder: (reviewers: Array<string>) => string,
-  defaultMessageGenerator: (reviewers: Array<string>) => string
+  defaultMessageGenerator: (pull_requester: string, reviewers: Array<string>) => string
 ): string {
 
   // This file is a place where you can change the way the message the bot
   // uses to comment. For example:
   //
-  //   return 'Please review this ' + mentionSentenceBuilder(reviewers);
+  //   return pull_requester + ', thanks!' + mentionSentenceBuilder(reviewers) + 
+  //          ', please review this';
   //
   // will print
   //
-  //   Please review this @georgecodes and @vjeux
+  //   @hunkim, thanks! @georgecodes and @vjeux, please review this.
 
-	return defaultMessageGenerator(reviewers);
+	return defaultMessageGenerator(pull_requester, reviewers);
 };
