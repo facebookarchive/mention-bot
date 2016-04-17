@@ -186,7 +186,7 @@ async function work(body) {
 
   var message = null;
   if (repoConfig.message) {
-    // generate message using repoConfig.message
+    // generate message using repoConfig.message if it is set
     message = configMessageGenerator(
       repoConfig.message,
       reviewers,
