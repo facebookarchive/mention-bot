@@ -79,7 +79,7 @@ function messageGenerator(message, reviewers, pullRequester) {
   // replace all @reviwers. message may have more than one '@reviwers'.
   var withReviwers = message.split('@reviwers').join(buildMentionSentence(reviewers));
   // replace all @pullRequester, and return
-  return withReviwers.split('@pullRequester').join(buildMentionSentence(pullRequester));
+  return withReviwers.split('@pullRequester').join(pullRequester);
 }
 
 function getRepoConfig(request) {
@@ -175,8 +175,8 @@ async function work(body) {
   // generate message using repoConfig.message
   var message = messageGenerator (repoConfig.message,
                 reviewers, '@' + data.pull_request.user.login);
+  console.log('msg' + message);
 
-  console.log(message);
   github.issues.createComment({
     user: data.repository.owner.login, // 'fbsamples'
     repo: data.repository.name, // 'bot-testing'
