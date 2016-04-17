@@ -176,6 +176,7 @@ async function work(body) {
   var message = messageGenerator (repoConfig.message,
                 reviewers, '@' + data.pull_request.user.login);
 
+  console.log(message);
   github.issues.createComment({
     user: data.repository.owner.login, // 'fbsamples'
     repo: data.repository.name, // 'bot-testing'
