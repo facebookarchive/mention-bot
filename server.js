@@ -90,7 +90,7 @@ function defaultMessageGenerator(reviewers, pullRequester) {
 
 function configMessageGenerator(message, reviewers, pullRequester) {
   // replace all @reviwers. message may have more than one '@reviwers'.
-  var withReviewers = message.replace(/@reviwers/g, buildMentionSentence(reviewers));
+  var withReviewers = message.replace(/@reviewers/g, buildMentionSentence(reviewers));
   // replace all @pullRequester, and return
   return withReviewers.replace(/@pullRequester/g, pullRequester);
 }
