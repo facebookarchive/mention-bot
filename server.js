@@ -88,6 +88,13 @@ function defaultMessageGenerator(reviewers, pullRequester) {
   );
 }
 
+function configMessageGenerator(message, reviewers, pullRequester) {
+  // replace all @reviwers. message may have more than one '@reviwers'.
+  var withReviewers = message.replace(/@reviwers/g, buildMentionSentence(reviewers));
+  // replace all @pullRequester, and return
+  return withReviewers.replace(/@pullRequester/g, pullRequester);
+}
+
 function getRepoConfig(request) {
   return new Promise(function(resolve, reject) {
     github.repos.getContent(request, function(err, result) {
@@ -177,16 +184,28 @@ async function work(body) {
     return;
   }
 
-  github.issues.createComment({
-    user: data.repository.owner.login, // 'fbsamples'
-    repo: data.repository.name, // 'bot-testing'
-    number: data.pull_request.number, // 23
-    body: messageGenerator(
+  var message = null;
+  if (repoConfig.message) {
+    // generate message using repoConfig.message
+    message = configMessageGenerator(
+      repoConfig.message,
+      reviewers,
+      '@' + data.pull_request.user.login
+    );
+  } else {
+    message = messageGenerator(
       reviewers,
       '@' + data.pull_request.user.login, // pull-requester
       buildMentionSentence,
       defaultMessageGenerator
-    )
+    );
+  }
+
+  github.issues.createComment({
+    user: data.repository.owner.login, // 'fbsamples'
+    repo: data.repository.name, // 'bot-testing'
+    number: data.pull_request.number, // 23
+    body: message
   });
 
   return;
