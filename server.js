@@ -14,7 +14,6 @@ var config = require('./config');
 var express = require('express');
 var fs = require('fs');
 var mentionBot = require('./mention-bot.js');
-var messageGenerator = require('./message.js');
 var util = require('util');
 
 var GitHubApi = require('github');
@@ -76,16 +75,11 @@ function buildMentionSentence(reviewers) {
   );
 }
 
-function defaultMessageGenerator(reviewers, pullRequester) {
-  return util.format(
-    '%s, thanks for your PR! ' +
-    'By analyzing the blame information on this pull request' +
-     ', we identified %s to be%s potential reviewer%s',
-     pullRequester,
-     buildMentionSentence(reviewers),
-     reviewers.length > 1 ? '' : ' a',
-     reviewers.length > 1 ? 's' : ''
-  );
+function messageGenerator(message, reviewers, pullRequester) {
+  // replace all @reviwers. message may have more than one '@reviwers'.
+  var withReviwers = message.split('@reviwers').join(buildMentionSentence(reviewers));
+  // replace all @pullRequester, and return
+  return withReviwers.split('@pullRequester').join(buildMentionSentence(pullRequester));
 }
 
 function getRepoConfig(request) {
@@ -111,6 +105,7 @@ async function work(body) {
   var repoConfig = {
     maxReviewers: 3,
     numFilesToCheck: 5,
+    message: '@pullRequester, thanks! @reviwers, please review this.', // TODO: better phrase?
     userBlacklist: [],
     userBlacklistForPR: [],
     userWhitelist: [],
@@ -177,16 +172,15 @@ async function work(body) {
     return;
   }
 
+  // generate message
+  var message = messageGenerator (repoConfig.message,
+                reviewers, '@' + data.pull_request.user.login);
+
   github.issues.createComment({
     user: data.repository.owner.login, // 'fbsamples'
     repo: data.repository.name, // 'bot-testing'
     number: data.pull_request.number, // 23
-    body: messageGenerator(
-      reviewers,
-      '@' + data.pull_request.user.login, // pull-requester
-      buildMentionSentence,
-      defaultMessageGenerator
-    )
+    body: message
   });
 
   return;
