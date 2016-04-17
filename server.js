@@ -182,7 +182,7 @@ async function work(body) {
     repo: data.repository.name, // 'bot-testing'
     number: data.pull_request.number, // 23
     body: messageGenerator(
-      '@'+data.pull_request.user.login, // pull-requester
+      '@' + data.pull_request.user.login, // pull-requester
       reviewers,
       buildMentionSentence,
       defaultMessageGenerator
