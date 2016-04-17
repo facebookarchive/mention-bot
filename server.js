@@ -172,7 +172,7 @@ async function work(body) {
     return;
   }
 
-  // generate message
+  // generate message using repoConfig.message
   var message = messageGenerator (repoConfig.message,
                 reviewers, '@' + data.pull_request.user.login);
 
