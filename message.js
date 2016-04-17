@@ -12,10 +12,10 @@
 'use strict';
 
 module.exports = function(
-  pull_requester: string,
   reviewers: Array<string>,
+  pullRequester: string,
   mentionSentenceBuilder: (reviewers: Array<string>) => string,
-  defaultMessageGenerator: (pull_requester: string, reviewers: Array<string>) => string
+  defaultMessageGenerator: (reviewers: Array<string>, pullRequester: string) => string
 ): string {
 
   // This file is a place where you can change the way the message the bot
@@ -28,5 +28,5 @@ module.exports = function(
   //
   //   @hunkim, thanks! @georgecodes and @vjeux, please review this.
 
-	return defaultMessageGenerator(pull_requester, reviewers);
+	return defaultMessageGenerator(reviewers, pullRequester);
 };
