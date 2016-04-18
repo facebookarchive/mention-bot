@@ -89,9 +89,7 @@ function defaultMessageGenerator(reviewers, pullRequester) {
 }
 
 function configMessageGenerator(message, reviewers, pullRequester) {
-  // replace all @reviewers. message may have more than one '@reviewers'.
   var withReviewers = message.replace(/@reviewers/g, buildMentionSentence(reviewers));
-  // replace all @pullRequester, and return
   return withReviewers.replace(/@pullRequester/g, pullRequester);
 }
 
@@ -186,7 +184,6 @@ async function work(body) {
 
   var message = null;
   if (repoConfig.message) {
-    // generate message using repoConfig.message if it is set
     message = configMessageGenerator(
       repoConfig.message,
       reviewers,
