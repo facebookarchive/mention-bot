@@ -120,7 +120,7 @@ docker run -e GITHUB_USER="a" -p 5000:5000  mention-bot
 
 ## Configuring a custom message
 
-If you want to change the default message, you can write your custom logic in [message.js](https://github.com/facebook/mention-bot/blob/master/message.js).
+If you want to change the default message, you can write your custom logic in [message.js](https://github.com/facebook/mention-bot/blob/master/message.js), or add 'message' in the [.mention-bot configuration](#configuration) file. 
 
 ## How to run the bot on GitHub Enterprise
 
