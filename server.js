@@ -42,7 +42,7 @@ if (!process.env.GITHUB_USER) {
   );
   console.warn(
     'To make mention-bot work with private repos, please expose',
-    'GITHUB_USERNAME and GITHUB_PASSWORD as environment variables.',
+    'GITHUB_USER and GITHUB_PASSWORD as environment variables.',
     'The username and password must have access to the private repo',
     'you want to use.'
   );
