@@ -24,10 +24,10 @@ var ghProtocol = config.github.protocol
  * Scrape github login page
  */
 var githubLogin = function() {
-    var output = childProcess.execSync(
-      `curl -v -L ${ghProtocol}://${ghHost}/login 2>&1`,
-      {encoding: 'utf8'}
-    ).toString().split('<!DOCTYPE html>');
+  var output = childProcess.execSync(
+    `curl -v -L ${ghProtocol}://${ghHost}/login 2>&1`,
+    {encoding: 'utf8'}
+  ).toString().split('<!DOCTYPE html>');
 
   return {
     headers: output[0],

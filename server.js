@@ -42,7 +42,7 @@ if (!process.env.GITHUB_USER) {
   );
   console.warn(
     'To make mention-bot work with private repos, please expose',
-    'GITHUB_USERNAME and GITHUB_PASSWORD as environment variables.',
+    'GITHUB_USER and GITHUB_PASSWORD as environment variables.',
     'The username and password must have access to the private repo',
     'you want to use.'
   );
@@ -76,14 +76,21 @@ function buildMentionSentence(reviewers) {
   );
 }
 
-function defaultMessageGenerator(reviewers) {
+function defaultMessageGenerator(reviewers, pullRequester) {
   return util.format(
+    '%s, thanks for your PR! ' +
     'By analyzing the blame information on this pull request' +
      ', we identified %s to be%s potential reviewer%s',
+     pullRequester,
      buildMentionSentence(reviewers),
      reviewers.length > 1 ? '' : ' a',
      reviewers.length > 1 ? 's' : ''
   );
+}
+
+function configMessageGenerator(message, reviewers, pullRequester) {
+  var withReviewers = message.replace(/@reviewers/g, buildMentionSentence(reviewers));
+  return withReviewers.replace(/@pullRequester/g, pullRequester);
 }
 
 function getRepoConfig(request) {
@@ -151,11 +158,19 @@ async function work(body) {
     return;
   }
 
+  var org = null;
+
+  if (data.organization) {
+    org = data.organization.login;
+  }
+
   var reviewers = await mentionBot.guessOwnersForPullRequest(
     data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
     data.pull_request.number, // 23
     data.pull_request.user.login, // 'mention-bot'
     data.pull_request.base.ref, // 'master'
+    data.repository.private, //true or false
+    org, //the org name of the repo
     repoConfig,
     github
   );
@@ -167,15 +182,27 @@ async function work(body) {
     return;
   }
 
+  var message = null;
+  if (repoConfig.message) {
+    message = configMessageGenerator(
+      repoConfig.message,
+      reviewers,
+      '@' + data.pull_request.user.login
+    );
+  } else {
+    message = messageGenerator(
+      reviewers,
+      '@' + data.pull_request.user.login, // pull-requester
+      buildMentionSentence,
+      defaultMessageGenerator
+    );
+  }
+
   github.issues.createComment({
     user: data.repository.owner.login, // 'fbsamples'
     repo: data.repository.name, // 'bot-testing'
     number: data.pull_request.number, // 23
-    body: messageGenerator(
-      reviewers,
-      buildMentionSentence,
-      defaultMessageGenerator
-    )
+    body: message
   });
 
   return;

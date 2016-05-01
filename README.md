@@ -23,6 +23,8 @@ The bot can be configured by adding a `.mention-bot` file to the base directory 
 {
   "maxReviewers": 5, // Maximum  number of people to ping in the PR message, default is 3
   "numFilesToCheck": 10, // Number of files to check against, default is 5
+  "message": "@pullRequester, thanks! @reviewers, please review this.",
+             // custom message using @pullRequester and @reviewers
   "alwaysNotifyForPaths": [
     {
       "name": "ghuser", // The user's Github username
