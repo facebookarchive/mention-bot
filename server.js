@@ -123,7 +123,7 @@ async function work(body) {
     requiredOrgs: [],
     findPotentialReviewers: true,
     actions: ['opened'],
-    skipAlreadyAssignedPR: false
+    skipAlreadyAssignedPR: false,
   };
 
   try {
