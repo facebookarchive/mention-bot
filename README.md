@@ -42,7 +42,8 @@ The bot can be configured by adding a `.mention-bot` file to the base directory 
   "userBlacklist": [], // users in this list will never be mentioned by mention-bot
   "userBlacklistForPR": [], // PR made by users in this list will be ignored
   "requiredOrgs": [], // mention-bot will only mention user who are a member of one of these organizations
-  "actions": ["opened"] // List of PR actions that mention-bot will listen to, default is "opened"
+  "actions": ["opened"], // List of PR actions that mention-bot will listen to, default is "opened"
+  "skipAlreadyAssignedPR": false // mention-bot will ignore already assigned PR's
 }
 ```
 

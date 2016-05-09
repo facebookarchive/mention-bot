@@ -123,6 +123,7 @@ async function work(body) {
     requiredOrgs: [],
     findPotentialReviewers: true,
     actions: ['opened'],
+    skipAlreadyAssignedPR: false,
   };
 
   try {
@@ -146,6 +147,13 @@ async function work(body) {
       'Skipping because action is ' + data.action + '.',
       'We only care about: "' + repoConfig.actions.join("', '") + '"'
     );
+    return;
+  }
+
+  if (repoConfig.skipAlreadyAssignedPR &&
+      data.pull_request.assignee &&
+      data.pull_request.assignee.login) {
+    console.log('Skipping because pull request is already assigned.');
     return;
   }
 
