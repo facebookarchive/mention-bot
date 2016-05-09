@@ -150,11 +150,9 @@ async function work(body) {
     return;
   }
 
-  if (
-    repoConfig.skipAlreadyAssignedPR
-    && data.pull_request.assignee
-    && data.pull_request.assignee.login
-  ) {
+  if (repoConfig.skipAlreadyAssignedPR &&
+      data.pull_request.assignee &&
+      data.pull_request.assignee.login) {
     console.log('Skipping because pull request is already assigned.');
     return;
   }
