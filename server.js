@@ -155,7 +155,7 @@ async function work(body) {
     && data.pull_request.assignee
     && data.pull_request.assignee.login
   ) {
-    console.log('Skipping because Pull request is already assigned.');
+    console.log('Skipping because pull request is already assigned.');
     return;
   }
 
