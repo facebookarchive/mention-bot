@@ -124,6 +124,7 @@ async function work(body) {
     findPotentialReviewers: true,
     actions: ['opened'],
     skipAlreadyAssignedPR: false,
+    skipTitle: "WIP",
   };
 
   try {
@@ -147,6 +148,12 @@ async function work(body) {
       'Skipping because action is ' + data.action + '.',
       'We only care about: "' + repoConfig.actions.join("', '") + '"'
     );
+    return;
+  }
+
+  if(skipTitle == "WIP"){
+    console.log(
+      'Skipping because the title contains WIP');
     return;
   }
 
