@@ -124,7 +124,7 @@ async function work(body) {
     findPotentialReviewers: true,
     actions: ['opened'],
     skipAlreadyAssignedPR: false,
-    reviewerAssignment: null,
+    assignToReviewer: false,
   };
 
   try {
@@ -214,22 +214,12 @@ async function work(body) {
     body: message
   });
 
-  if (repoConfig.reviewerAssignment) {
-    var assignee = null;
-    if (repoConfig.reviewerAssignment == 'top') {
-      assignee = reviewers[0];
-    } else if (repoConfig.reviewerAssignment == 'random') {
-      assignee = reviewers[Math.floor(Math.random() * reviewers.length)];
-    } else {
-      console.log('Skipping because unsupported reviewerAssignment value: ' +
-                  repoConfig.reviewerAssignment);
-      return;
-    }
+  if (repoConfig.assignToReviewer) {
     github.issues.edit({
       user: data.repository.owner.login, // 'fbsamples'
       repo: data.repository.name, // 'bot-testing'
       number: data.pull_request.number, // 23
-      assignee: assignee
+      assignee: reviewers[0]
     });
   }
 
