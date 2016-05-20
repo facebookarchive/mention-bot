@@ -124,6 +124,7 @@ async function work(body) {
     findPotentialReviewers: true,
     actions: ['opened'],
     skipAlreadyAssignedPR: false,
+    assignToReviewer: false,
   };
 
   try {
@@ -212,6 +213,15 @@ async function work(body) {
     number: data.pull_request.number, // 23
     body: message
   });
+
+  if (repoConfig.assignToReviewer) {
+    github.issues.edit({
+      user: data.repository.owner.login, // 'fbsamples'
+      repo: data.repository.name, // 'bot-testing'
+      number: data.pull_request.number, // 23
+      assignee: reviewers[0],
+    });
+  }
 
   return;
 };
