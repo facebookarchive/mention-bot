@@ -125,6 +125,7 @@ async function work(body) {
     actions: ['opened'],
     skipAlreadyAssignedPR: false,
     assignToReviewer: false,
+    skipTitle: "",
   };
 
   try {
@@ -148,6 +149,12 @@ async function work(body) {
       'Skipping because action is ' + data.action + '.',
       'We only care about: "' + repoConfig.actions.join("', '") + '"'
     );
+    return;
+  }
+
+  if (repoConfig.skipTitle &&
+      data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
+    console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle)
     return;
   }
 

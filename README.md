@@ -44,7 +44,8 @@ The bot can be configured by adding a `.mention-bot` file to the base directory 
   "requiredOrgs": [], // mention-bot will only mention user who are a member of one of these organizations
   "actions": ["opened"], // List of PR actions that mention-bot will listen to, default is "opened"
   "skipAlreadyAssignedPR": false, // mention-bot will ignore already assigned PR's
-  "assignToReviewer": false  // mention-bot assigns the most appropriate reviewer for PR
+  "assignToReviewer": false, // mention-bot assigns the most appropriate reviewer for PR
+  "skipTitle": "" // mention-bot will ignore PR that includes text in the title
 }
 ```
 
@@ -122,7 +123,7 @@ docker run -e GITHUB_USER="a" -p 5000:5000  mention-bot
 
 ## Configuring a custom message
 
-If you want to change the default message, you can write your custom logic in [message.js](https://github.com/facebook/mention-bot/blob/master/message.js), or add 'message' in the [.mention-bot configuration](#configuration) file. 
+If you want to change the default message, you can write your custom logic in [message.js](https://github.com/facebook/mention-bot/blob/master/message.js), or add 'message' in the [.mention-bot configuration](#configuration) file.
 
 ## How to run the bot on GitHub Enterprise
 
