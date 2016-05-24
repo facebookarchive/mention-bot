@@ -21,7 +21,7 @@ module.exports = function(
   // This file is a place where you can change the way the message the bot
   // uses to comment. For example:
   //
-  //   return pull_requester + ', thanks!' + mentionSentenceBuilder(reviewers) + 
+  //   return pullRequester + ', thanks!' + mentionSentenceBuilder(reviewers) + 
   //          ', please review this';
   //
   // will print
