@@ -22,7 +22,7 @@ var GitHubApi = require('github');
 var CONFIG_PATH = '.mention-bot';
 
 if (!process.env.GITHUB_TOKEN) {
-  console.error('The bot was started without a github account to post with.');
+  console.error('The bot was started without a GitHub account to post with.');
   console.error('To get started:');
   console.error('1) Create a new account for the bot');
   console.error('2) Settings > Personal access tokens > Generate new token');
@@ -37,7 +37,7 @@ if (!process.env.GITHUB_TOKEN) {
 
 if (!process.env.GITHUB_USER) {
   console.warn(
-    'There was no github user detected.',
+    'There was no GitHub user detected.',
     'This is fine, but mention-bot won\'t work with private repos.'
   );
   console.warn(
