@@ -150,7 +150,7 @@ If you use `http` protocol, the config section like this:
 
 ## Programmatic API
 
-When you require `mention-bot` you will get all the functions exposed by `mention-bot.js` module. You are expected to manage your own server and also connection to the github repository.
+When you require `mention-bot` you will get all the functions exposed by [`mention-bot.js`](https://github.com/facebook/mention-bot/blob/master/mention-bot.js) module. You are expected to manage your own server and also connection to the github repository.
 
 ```
 npm install mention-bot github
