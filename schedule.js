@@ -14,10 +14,11 @@
 var minimatch = require('minimatch');
 var nodeSchedule = require('node-schedule');
 
-module.exports = {
+
+var schedule: { jobs: Array<any>, work: Function, performAt: Function, parse: Function} = {
   jobs: [],
 
-  work: function(time: Date, callback){
+  work: function(time: Date, callback: Function){
     var promise: Promise = new Promise(function(resolve, reject: (error: any) => void){
       callback(resolve, reject);
     });
@@ -28,7 +29,7 @@ module.exports = {
     return promise;
   },
 
-  performAt: async function(time: Date, callback) {
+  performAt: async function(time: Date, callback: Function) {
     try {
       await this.work(time, callback);
     } catch(e) {
@@ -86,3 +87,5 @@ module.exports = {
     return new Date(year, month, day, hours, minutes, curTime.getSeconds(), 0);
   }
 };
+
+module.exports = schedule;
