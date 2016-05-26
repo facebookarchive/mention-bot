@@ -30,6 +30,7 @@
     "flow-bin": "^0.18.1",
     "github": "^0.2.4",
     "jest-cli": "^0.7.1",
-    "minimatch": "^3.0.0"
+    "minimatch": "^3.0.0",
+    "node-schedule": "^1.0.0"
   }
 }
