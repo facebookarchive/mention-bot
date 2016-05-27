@@ -15,7 +15,7 @@ var minimatch = require('minimatch');
 var nodeSchedule = require('node-schedule');
 
 
-var schedule: { jobs: Array<any>, work: Function, performAt: Function, parse: Function} = {
+var schedule: { jobs: Array<any>, work: Function, performAt: Function, parse: Function } = {
   jobs: [],
 
   work: function(time: Date, callback: Function){
@@ -38,31 +38,28 @@ var schedule: { jobs: Array<any>, work: Function, performAt: Function, parse: Fu
   },
 
   parse: function(delayTime: string): Date {
-    var
-      moment: Array<string> = [
+    var moment: Array<string> = [
         'm', 'min', 'mins', 'minute', 'minutes',
         'h', 'hour', 'hours',
         'd', 'day', 'days'
       ];
     var invalidTimeMsg: string = 'Invalid delay time setting, it should in following format:\n' +
-      '3m, 3 m, of 3 min\naccepted moments are: ' + moment.join(', ') + '\n instead got ' + delayTime + '\n';
+      '3m, 3 m, or 3 min\naccepted moments are: ' + moment.join(', ') + '\n instead got ' + delayTime + '\n';
 
-    if(!minimatch(delayTime, "*+(" + moment.join('|') + ")")) {
+    if(!minimatch(delayTime, '*+(' + moment.join('|') + ')')) {
       throw new Error(invalidTimeMsg);
     }
 
-    var
-      curTime: Date = new Date(),
-      minutes: number = curTime.getMinutes(),
-      hours: number = curTime.getHours(),
-      day: number = curTime.getDate(),
-      month: number = curTime.getMonth(),
-      year: number = curTime.getFullYear();
-
+    var curTime: Date = new Date();
+    var minutes: number = curTime.getMinutes();
+    var hours: number = curTime.getHours();
+    var day: number = curTime.getDate();
+    var month: number = curTime.getMonth();
+    var year: number = curTime.getFullYear();
     var parsedTime: ?Array<string> = delayTime.match(/(\d+)\s?(\w*)/);
-    var time: boolean | number = false;
+    var time: number | false = false;
 
-    if(parsedTime && parsedTime[1] !== 'undefined') {
+    if(parsedTime) {
       time = parseInt(parsedTime[1]);
     }
 

@@ -97,7 +97,7 @@ function configMessageGenerator(message, reviewers, pullRequester) {
 function getRepoConfig(request) {
   return new Promise(function(resolve, reject) {
     github.repos.getContent(request, function(err, result) {
-      if(err) {
+      if (err) {
         reject(err);
       }
       resolve(result);
@@ -126,9 +126,9 @@ async function work(body) {
     actions: ['opened'],
     skipAlreadyAssignedPR: false,
     delayed: false,
-    delayedUntil: "3d",
+    delayedUntil: '3d',
     assignToReviewer: false,
-    skipTitle: ""
+    skipTitle: '',
   };
 
   try {
@@ -170,7 +170,7 @@ async function work(body) {
     }
 
     if (process.env.REQUIRED_ORG) {
-      if(repoConfig.requiredOrgs.indexOf(process.env.REQUIRED_ORG) === -1) {
+      if (repoConfig.requiredOrgs.indexOf(process.env.REQUIRED_ORG) === -1) {
         repoConfig.requiredOrgs.push(process.env.REQUIRED_ORG);
       }
     }
@@ -182,14 +182,14 @@ async function work(body) {
 
     if (repoConfig.skipTitle &&
         data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
-      console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle)
+      console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle);
       return;
     }
 
-    return true
+    return true;
   }
 
-  if(!isValid(repoConfig, data)) {
+  if (!isValid(repoConfig, data)) {
     return;
   }
 
@@ -233,35 +233,41 @@ async function work(body) {
     );
   }
 
-  function createComment(data, message, resolve, reject) {
+  function createComment(data, message, reject) {
     github.issues.createComment({
       user: data.repository.owner.login, // 'fbsamples'
       repo: data.repository.name, // 'bot-testing'
       number: data.pull_request.number, // 23
       body: message
-    }, function(err, result) {
-      if(err){
-        if(typeof reject === 'function') return reject(err)
+    }, function(err) {
+      if (err) {
+        if (typeof reject === 'function') {
+          return reject(err);
+        }
       }
     })
   }
 
-  function assignReviewer(data, reviewers, resolve, reject) {
-    if (repoConfig.assignToReviewer) {
-      github.issues.edit({
-        user: data.repository.owner.login, // 'fbsamples'
-        repo: data.repository.name, // 'bot-testing'
-        number: data.pull_request.number, // 23
-        assignee: reviewers[0]
-      }, function(err, result) {
-        if(err){
-          if(typeof reject === 'function') return reject(err)
-        }
-      });
+  function assignReviewer(data, reviewers, reject) {
+    if (!repoConfig.assignToReviewer) {
+      return;
     }
+
+    github.issues.edit({
+      user: data.repository.owner.login, // 'fbsamples'
+      repo: data.repository.name, // 'bot-testing'
+      number: data.pull_request.number, // 23
+      assignee: reviewers[0]
+    }, function(err) {
+      if (err) {
+        if (typeof reject === 'function') {
+          return reject(err);
+        }
+      }
+    });
   }
 
-  if(repoConfig.hasOwnProperty('delayed') && repoConfig.delayed) {
+  if (repoConfig.delayed) {
     schedule.performAt(schedule.parse(repoConfig.delayedUntil), function(resolve, reject) {
       github.pullRequests.get({
         user: data.repository.owner.login,
@@ -273,15 +279,15 @@ async function work(body) {
           return;
         }
 
-        if(!isValid(repoConfig, currentData)) {
+        if (!isValid(repoConfig, currentData)) {
           return;
         }
 
-        createComment(currentData, message, resolve, reject);
-        assignReviewer(currentData, reviewers, resolve, reject);
+        createComment(currentData, message, reject);
+        assignReviewer(currentData, reviewers, reject);
       });
     });
-  }else{
+  } else {
     createComment(data, message);
     assignReviewer(data, reviewers);
   }
