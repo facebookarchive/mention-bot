@@ -47,7 +47,8 @@ The bot can be configured by adding a `.mention-bot` file to the base directory 
   "assignToReviewer": false, // mention-bot assigns the most appropriate reviewer for PR
   "skipTitle": "", // mention-bot will ignore PR that includes text in the title,
   "delayed": false, // mention-bot will wait to comment until specified time in `delayedUntil` value
-  "delayedUntil": "3d" // Used if delayed is equal true, permitted values are: minutes, hours, or days, e.g.: '3 days', '40 minutes', '1 hour', '3d', '1h', '10m'
+  "delayedUntil": "3d", // Used if delayed is equal true, permitted values are: minutes, hours, or days, e.g.: '3 days', '40 minutes', '1 hour', '3d', '1h', '10m'
+  "skipCollaboratorPR": false, // mention-bot will ignore if PR is made by collaborator
 }
 ```
 
