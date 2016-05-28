@@ -129,6 +129,7 @@ async function work(body) {
     delayedUntil: '3d',
     assignToReviewer: false,
     skipTitle: '',
+    skipCollaboratorPR: false,
   };
 
   try {
@@ -162,6 +163,19 @@ async function work(body) {
       return false;
     }
 
+    if (repoConfig.skipCollaboratorPR) {
+      github.repos.getCollaborator({
+        user: data.repository.owner.login, // 'fbsamples'
+        repo: data.repository.name, // 'bot-testing'
+        collabuser: data.pull_request.user.login
+      }, function(err, res){
+        if (res && res.meta.status === '204 No Content') {
+          console.log('Skipping because pull request is made by collaborator.');
+          return false;
+        }
+      });
+    }
+
     if (repoConfig.skipAlreadyAssignedPR &&
         data.pull_request.assignee &&
         data.pull_request.assignee.login) {
@@ -183,7 +197,7 @@ async function work(body) {
     if (repoConfig.skipTitle &&
         data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
       console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle);
-      return;
+      return false;
     }
 
     return true;
