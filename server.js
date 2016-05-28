@@ -183,7 +183,7 @@ async function work(body) {
     if (repoConfig.skipTitle &&
         data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
       console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle);
-      return;
+      return false;
     }
 
     return true;
