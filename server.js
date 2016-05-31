@@ -16,6 +16,7 @@ var fs = require('fs');
 var mentionBot = require('./mention-bot.js');
 var messageGenerator = require('./message.js');
 var util = require('util');
+var schedule = require('./schedule.js');
 
 var GitHubApi = require('github');
 
@@ -80,11 +81,11 @@ function defaultMessageGenerator(reviewers, pullRequester) {
   return util.format(
     '%s, thanks for your PR! ' +
     'By analyzing the blame information on this pull request' +
-     ', we identified %s to be%s potential reviewer%s',
-     pullRequester,
-     buildMentionSentence(reviewers),
-     reviewers.length > 1 ? '' : ' a',
-     reviewers.length > 1 ? 's' : ''
+    ', we identified %s to be%s potential reviewer%s',
+    pullRequester,
+    buildMentionSentence(reviewers),
+    reviewers.length > 1 ? '' : ' a',
+    reviewers.length > 1 ? 's' : ''
   );
 }
 
@@ -96,7 +97,7 @@ function configMessageGenerator(message, reviewers, pullRequester) {
 function getRepoConfig(request) {
   return new Promise(function(resolve, reject) {
     github.repos.getContent(request, function(err, result) {
-      if(err) {
+      if (err) {
         reject(err);
       }
       resolve(result);
@@ -124,8 +125,11 @@ async function work(body) {
     findPotentialReviewers: true,
     actions: ['opened'],
     skipAlreadyAssignedPR: false,
+    delayed: false,
+    delayedUntil: '3d',
     assignToReviewer: false,
-    skipTitle: "",
+    skipTitle: '',
+    skipCollaboratorPR: false,
   };
 
   try {
@@ -144,33 +148,62 @@ async function work(body) {
     console.error(e);
   }
 
-  if (repoConfig.actions.indexOf(data.action) === -1) {
-    console.log(
-      'Skipping because action is ' + data.action + '.',
-      'We only care about: "' + repoConfig.actions.join("', '") + '"'
-    );
-    return;
+  function isValid(repoConfig, data) {
+    if (repoConfig.actions.indexOf(data.action) === -1) {
+      console.log(
+        'Skipping because action is ' + data.action + '.',
+        'We only care about: "' + repoConfig.actions.join("', '") + '"'
+      );
+      return false;
+    }
+
+    if (repoConfig.skipTitle &&
+        data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
+      console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle);
+      return false;
+    }
+
+    if (repoConfig.skipCollaboratorPR) {
+      github.repos.getCollaborator({
+        user: data.repository.owner.login, // 'fbsamples'
+        repo: data.repository.name, // 'bot-testing'
+        collabuser: data.pull_request.user.login
+      }, function(err, res){
+        if (res && res.meta.status === '204 No Content') {
+          console.log('Skipping because pull request is made by collaborator.');
+          return false;
+        }
+      });
+    }
+
+    if (repoConfig.skipAlreadyAssignedPR &&
+        data.pull_request.assignee &&
+        data.pull_request.assignee.login) {
+      console.log('Skipping because pull request is already assigned.');
+      return false;
+    }
+
+    if (process.env.REQUIRED_ORG) {
+      if (repoConfig.requiredOrgs.indexOf(process.env.REQUIRED_ORG) === -1) {
+        repoConfig.requiredOrgs.push(process.env.REQUIRED_ORG);
+      }
+    }
+
+    if (repoConfig.userBlacklistForPR.indexOf(data.pull_request.user.login) >= 0) {
+      console.log('Skipping because blacklisted user created Pull Request.');
+      return false;
+    }
+
+    if (repoConfig.skipTitle &&
+        data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
+      console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle);
+      return false;
+    }
+
+    return true;
   }
 
-  if (repoConfig.skipTitle &&
-      data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
-    console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle)
-    return;
-  }
-
-  if (repoConfig.skipAlreadyAssignedPR &&
-      data.pull_request.assignee &&
-      data.pull_request.assignee.login) {
-    console.log('Skipping because pull request is already assigned.');
-    return;
-  }
-
-  if (process.env.REQUIRED_ORG) {
-    repoConfig.requiredOrgs.push(process.env.REQUIRED_ORG);
-  }
-
-  if (repoConfig.userBlacklistForPR.indexOf(data.pull_request.user.login) >= 0) {
-    console.log('Skipping because blacklisted user created Pull Request.');
+  if (!isValid(repoConfig, data)) {
     return;
   }
 
@@ -214,20 +247,63 @@ async function work(body) {
     );
   }
 
-  github.issues.createComment({
-    user: data.repository.owner.login, // 'fbsamples'
-    repo: data.repository.name, // 'bot-testing'
-    number: data.pull_request.number, // 23
-    body: message
-  });
+  function createComment(data, message, reject) {
+    github.issues.createComment({
+      user: data.repository.owner.login, // 'fbsamples'
+      repo: data.repository.name, // 'bot-testing'
+      number: data.pull_request.number, // 23
+      body: message
+    }, function(err) {
+      if (err) {
+        if (typeof reject === 'function') {
+          return reject(err);
+        }
+      }
+    })
+  }
 
-  if (repoConfig.assignToReviewer) {
+  function assignReviewer(data, reviewers, reject) {
+    if (!repoConfig.assignToReviewer) {
+      return;
+    }
+
     github.issues.edit({
       user: data.repository.owner.login, // 'fbsamples'
       repo: data.repository.name, // 'bot-testing'
       number: data.pull_request.number, // 23
-      assignee: reviewers[0],
+      assignee: reviewers[0]
+    }, function(err) {
+      if (err) {
+        if (typeof reject === 'function') {
+          return reject(err);
+        }
+      }
     });
+  }
+
+  if (repoConfig.delayed) {
+    schedule.performAt(schedule.parse(repoConfig.delayedUntil), function(resolve, reject) {
+      github.pullRequests.get({
+        user: data.repository.owner.login,
+        repo: data.repository.name,
+        number: data.pull_request.number
+      }, function(err, currentData) {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        if (!isValid(repoConfig, currentData)) {
+          return;
+        }
+
+        createComment(currentData, message, reject);
+        assignReviewer(currentData, reviewers, reject);
+      });
+    });
+  } else {
+    createComment(data, message);
+    assignReviewer(data, reviewers);
   }
 
   return;
@@ -236,7 +312,7 @@ async function work(body) {
 app.post('/', function(req, res) {
   req.pipe(bl(function(err, body) {
     work(body).then(function() { res.end(); });
- }));
+  }));
 });
 
 app.get('/', function(req, res) {
