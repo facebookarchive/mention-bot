@@ -273,6 +273,11 @@ function getMatchingOwners(
   return owners;
 }
 
+function getGatekeeper(gatekeepers: Array<string>): {
+  var randomGatekeeper = gatekeepers[Math.floor(Math.random()*gatekeepers.length)];
+  return randomGatekeeper;
+}
+
 /**
  * While developing/debugging the algorithm itself, it's very important not to
  * make http requests to github. Not only it's going to make the reload cycle
@@ -419,6 +424,7 @@ async function guessOwners(
   creator: string,
   defaultOwners: Array<string>,
   fallbackOwners: Array<string>,
+  gatekeepers: Array<string>,
   privateRepo: boolean,
   org: ?string,
   config: Object,
@@ -435,6 +441,11 @@ async function guessOwners(
   var allOwners = allOwners.filter(function(element) {
     return !deletedOwnersSet.has(element);
   });
+
+  gatekeepers = gatekeepers.filter(function(gatekeeper) {
+    return gatekeeper !== creator;
+  })
+  var gatekeeper = getGatekeeper(gatekeepers);
 
   var owners = []
     .concat(deletedOwners)
@@ -461,9 +472,16 @@ async function guessOwners(
     defaultOwners = defaultOwners.concat(fallbackOwners);
   }
 
+  if (gatekeepers) {
+    owners.filter( function( el ) {
+      return gatekeepers.indexOf( el ) < 0;
+    });
+  }
+
   return owners
     .slice(0, config.maxReviewers)
     .concat(defaultOwners)
+    .concat(gatekeeper)
     .filter(function(owner, index, ownersFound) {
       return ownersFound.indexOf(owner) === index;
     });
@@ -483,6 +501,7 @@ async function guessOwnersForPullRequest(
   var files = parseDiff(diff);
   var defaultOwners = getMatchingOwners(files, config.alwaysNotifyForPaths);
   var fallbackOwners = getMatchingOwners(files, config.fallbackNotifyForPaths);
+  var gatekeepers = config.gatekeepers;
   if (!config.findPotentialReviewers) {
       return defaultOwners;
   }
@@ -519,7 +538,7 @@ async function guessOwnersForPullRequest(
 
   // This is the line that implements the actual algorithm, all the lines
   // before are there to fetch and extract the data needed.
-  return guessOwners(files, blames, creator, defaultOwners, fallbackOwners, privateRepo, org, config, github);
+  return guessOwners(files, blames, creator, defaultOwners, fallbackOwners, gatekeepers, privateRepo, org, config, github);
 }
 
 module.exports = {
