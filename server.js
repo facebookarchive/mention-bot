@@ -129,6 +129,7 @@ async function work(body) {
     delayedUntil: '3d',
     assignToReviewer: false,
     skipTitle: '',
+    withLabel: '',
     skipCollaboratorPR: false,
   };
 
@@ -155,6 +156,12 @@ async function work(body) {
         'Skipping because action is ' + data.action + '.',
         'We only care about: "' + repoConfig.actions.join("', '") + '"'
       );
+      return false;
+    }
+
+    if (repoConfig.withLabel && data.label &&
+        data.label.name != repoConfig.withLabel) {
+      console.log('Skipping because pull request does not have label: ' + repoConfig.withLabel);
       return false;
     }
 
