@@ -78,7 +78,9 @@ function parseDiffFile(lines: Array<string>): FileInfo {
   }
 
   line = lines.pop();
-  if (startsWith(line, 'diff --git')) {
+  if (!line) {
+    // If the diff ends in an empty file with 0 additions or deletions, line will be null
+  } else if (startsWith(line, 'diff --git')) {
     lines.push(line);
   } else if (startsWith(line, 'Binary files')) {
     // We just ignore binary files (mostly images). If we want to improve the
