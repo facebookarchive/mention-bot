@@ -125,6 +125,7 @@ async function work(body) {
     findPotentialReviewers: true,
     actions: ['opened'],
     skipAlreadyAssignedPR: false,
+    skipAlreadyMentionedPR: false,
     delayed: false,
     delayedUntil: '3d',
     assignToReviewer: false,
@@ -287,6 +288,38 @@ async function work(body) {
         }
       }
     });
+  }
+
+  function getComments(data, page) {
+    return new Promise(function(resolve, reject) {
+      github.issues.getComments({
+        user: data.repository.owner.login, // 'fbsamples'
+        repo: data.repository.name, // 'bot-testing'
+        number: data.pull_request.number, // 23
+        page: page, // 1
+        per_page: 100 // maximum supported
+      }, function(err, result) {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      });
+    });
+  }
+
+  if (repoConfig.skipAlreadyMentionedPR) {
+    var page;
+    var comments = [[]];
+
+    for (page = 1; comments.length != 0; ++page) {
+      comments = await getComments(data, page);
+      if (comments.find(function(comment) {
+        return comment.body == message;
+      })) {
+        console.log('Skipping because there is already existing an exact mention.');
+        return;
+      }
+    }
   }
 
   if (repoConfig.delayed) {
