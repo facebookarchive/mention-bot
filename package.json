@@ -1,6 +1,6 @@
 {
   "name": "mention-bot",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "license": "BSD-3-Clause",
   "repository": "facebook/mention-bot",
   "scripts": {
@@ -13,7 +13,9 @@
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
-    "unmockedModulePathPatterns": ["core-js/.*"]
+    "unmockedModulePathPatterns": [
+      "core-js/.*"
+    ]
   },
   "config": {},
   "dependencies": {
