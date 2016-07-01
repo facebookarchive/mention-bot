@@ -109,6 +109,7 @@ async function work(body) {
   var data = {};
   try {
     data = JSON.parse(body.toString());
+    console.log(data.pull_request.html_url);
   } catch (e) {
     console.error(e);
   }
@@ -233,7 +234,7 @@ async function work(body) {
     github
   );
 
-  console.log(data.pull_request.html_url, reviewers);
+  console.log('Reviewers:', reviewers);
 
   if (reviewers.length === 0) {
     console.log('Skipping because there are no reviewers found.');
