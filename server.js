@@ -280,7 +280,7 @@ async function work(body) {
       user: data.repository.owner.login, // 'fbsamples'
       repo: data.repository.name, // 'bot-testing'
       number: data.pull_request.number, // 23
-      assignee: reviewers[0]
+      assignees: reviewers
     }, function(err) {
       if (err) {
         if (typeof reject === 'function') {
