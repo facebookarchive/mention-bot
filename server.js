@@ -141,7 +141,6 @@ async function work(body) {
       user: data.repository.owner.login,
       repo: data.repository.name,
       path: CONFIG_PATH,
-      ref: data.pull_request.head.ref,
       headers: {
         Accept: 'application/vnd.github.v3.raw'
       }
