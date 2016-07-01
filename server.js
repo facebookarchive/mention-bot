@@ -148,7 +148,8 @@ async function work(body) {
 
     repoConfig = {...repoConfig, ...JSON.parse(configRes)};
   } catch (e) {
-    if (e.code === 404 && e.message === 'Not Found') {
+    if (e.code === 404 &&
+        e.message === '{"message":"Not Found","documentation_url":"https://developer.github.com/v3"}') {
       console.log('Skipping because the repo is not visible from mention-bot.');
       return;
     }
