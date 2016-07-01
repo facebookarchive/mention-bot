@@ -149,6 +149,10 @@ async function work(body) {
 
     repoConfig = {...repoConfig, ...JSON.parse(configRes)};
   } catch (e) {
+    if (error.code === 404) {
+      console.log('Skipping because the repo is not visible from mention-bot.');
+      return;
+    }
     console.error(e);
   }
 
