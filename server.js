@@ -50,7 +50,6 @@ if (!process.env.GITHUB_USER) {
 }
 
 var github = new GitHubApi({
-  version: '3.0.0',
   host: config.github.apiHost,
   pathPrefix: config.github.pathPrefix,
   protocol: config.github.protocol,
