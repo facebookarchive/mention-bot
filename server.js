@@ -50,7 +50,6 @@ if (!process.env.GITHUB_USER) {
 }
 
 var github = new GitHubApi({
-  version: '3.0.0',
   host: config.github.apiHost,
   pathPrefix: config.github.pathPrefix,
   protocol: config.github.protocol,
@@ -142,11 +141,11 @@ async function work(body) {
       repo: data.repository.name,
       path: CONFIG_PATH,
       headers: {
-        Accept: 'application/vnd.github.v3.raw'
+        Accept: 'application/vnd.github.v3.raw+json'
       }
     });
 
-    repoConfig = {...repoConfig, ...JSON.parse(configRes)};
+    repoConfig = {...repoConfig, ...configRes};
   } catch (e) {
     if (e.code === 404 &&
         e.message === '{"message":"Not Found","documentation_url":"https://developer.github.com/v3"}') {
