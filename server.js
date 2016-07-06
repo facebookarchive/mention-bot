@@ -149,10 +149,10 @@ async function work(body) {
   } catch (e) {
     if (e.code === 404 &&
         e.message === '{"message":"Not Found","documentation_url":"https://developer.github.com/v3"}') {
-      console.log('Skipping because the repo is not visible from mention-bot.');
-      return;
+      console.log('Couldn\'t find ' + CONFIG_PATH + ' in repo. Continuing with default configuration.');
+    } else {
+      console.error(e);
     }
-    console.error(e);
   }
 
   function isValid(repoConfig, data) {
