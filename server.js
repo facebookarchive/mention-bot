@@ -356,7 +356,12 @@ async function work(body) {
 
 app.post('/', function(req, res) {
   req.pipe(bl(function(err, body) {
-    work(body).then(function() { res.end(); });
+    work(body)
+      .then(function() { res.end(); })
+      .catch(function(e) {
+        console.error(e.stack);
+        res.status(500).send('Internal Server Error');
+      });
   }));
 });
 
