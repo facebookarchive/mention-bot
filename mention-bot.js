@@ -306,7 +306,7 @@ async function getOwnerOrgs(
   github: Object
 ): Promise<Array<string>> {
   return new Promise(function(resolve, reject) {
-    github.orgs.getFromUser({ user: owner }, function(err, result) {
+    github.orgs.getForUser({ user: owner }, function(err, result) {
       if (err) {
         reject(err);
       } else {
