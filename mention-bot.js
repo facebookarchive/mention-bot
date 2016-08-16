@@ -483,7 +483,8 @@ async function guessOwnersForPullRequest(
   config: Object,
   github: Object
 ): Promise<Array<string>> {
-  var diff = await fetch(repoURL + '/pull/' + id + '.diff');
+  let url = repoURL + '/pull/' + id + '.diff';
+  let diff = await fetch(url);
   var files = parseDiff(diff);
   var defaultOwners = getMatchingOwners(files, config.alwaysNotifyForPaths);
   var fallbackOwners = getMatchingOwners(files, config.fallbackNotifyForPaths);

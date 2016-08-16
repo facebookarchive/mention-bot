@@ -24,6 +24,8 @@ var CONFIG_PATH = '.mention-bot';
 
 if (!process.env.GITHUB_TOKEN) {
   console.error('The bot was started without a GitHub account to post with.');
+  console.error(process.env.GITHUB_TOKEN);
+  console.error('The bot was started without a GitHub account to post with.');
   console.error('To get started:');
   console.error('1) Create a new account for the bot');
   console.error('2) Settings > Personal access tokens > Generate new token');
@@ -108,7 +110,7 @@ async function work(body) {
   var data = {};
   try {
     data = JSON.parse(body.toString());
-    console.log(data.pull_request.html_url);
+    console.log("data.pull_request.html_url", data.pull_request.html_url);
   } catch (e) {
     console.error(e);
   }
@@ -260,7 +262,11 @@ async function work(body) {
     );
   }
 
+  console.log("message", message);
+
   function createComment(data, message, reject) {
+    console.log("createComment", data, message, reject);
+    
     github.issues.createComment({
       user: data.repository.owner.login, // 'fbsamples'
       repo: data.repository.name, // 'bot-testing'
