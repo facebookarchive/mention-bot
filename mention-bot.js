@@ -139,7 +139,7 @@ function parseDiffFile(lines: Array<string>): FileInfo {
   return {
     path: fromFile,
     deletedLines: deletedLines,
-    createdLines
+    // createdLines
   };
 }
 
@@ -556,7 +556,7 @@ async function guessOwnersForPullRequest(
 async function getDiffSize(
   repoURL: string,
   id: number
-): Promise<Array<string>> {
+): Promise<number> {
   let url = repoURL + '/pull/' + id + '.diff';
   console.log(url, "url")
   let diff = await fetch(url);
