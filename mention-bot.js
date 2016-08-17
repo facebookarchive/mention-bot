@@ -139,7 +139,7 @@ function parseDiffFile(lines: Array<string>): FileInfo {
   return {
     path: fromFile,
     deletedLines: deletedLines,
-    // createdLines
+    createdLines
   };
 }
 
