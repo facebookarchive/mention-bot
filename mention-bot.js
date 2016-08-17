@@ -62,6 +62,7 @@ function startsWith(str, start) {
 
 function parseDiffFile(lines: Array<string>): FileInfo {
   var deletedLines = [];
+  let createdLines = [];
 
   // diff --git a/path b/path
   var line = lines.pop();
@@ -93,7 +94,9 @@ function parseDiffFile(lines: Array<string>): FileInfo {
       throw new Error('Invalid line, should start with `+++`, instead got \n' + line + '\n');
     }
 
-    var currentFromLine = 0;
+    var currentDeleteLine = 0;
+    let currentAddLine = 0;
+
     while (lines.length > 0) {
       line = lines.pop();
       if (startsWith(line, 'diff --git')) {
@@ -113,15 +116,22 @@ function parseDiffFile(lines: Array<string>): FileInfo {
         var to_line = matches[3];
         var to_count = matches[4];
 
-        currentFromLine = +from_line;
+        currentDeleteLine = currentAddLine = +from_line;
         continue;
       }
 
       if (startsWith(line, '-')) {
-        deletedLines.push(currentFromLine);
+        deletedLines.push(currentDeleteLine);
+      }
+      if (startsWith(line, '+')) {
+        createdLines.push(currentAddLine);
       }
       if (!startsWith(line, '+')) {
-        currentFromLine++;
+        currentDeleteLine++;
+      }
+
+      if(!startsWith(line, '-')) {
+        currentAddLine++;
       }
     }
   }
@@ -129,6 +139,7 @@ function parseDiffFile(lines: Array<string>): FileInfo {
   return {
     path: fromFile,
     deletedLines: deletedLines,
+    createdLines
   };
 }
 
@@ -257,6 +268,9 @@ function getMatchingOwners(
 ): Array<string> {
   var owners = [];
   var users = whitelist || [];
+
+  console.log(users, 'users');
+  console.dir(files);
 
   users.forEach(function(user) {
     let userHasChangedFile = false;
@@ -434,6 +448,9 @@ async function guessOwners(
   deletedOwners = getSortedOwners(deletedOwners);
   allOwners = getSortedOwners(allOwners);
 
+  console.log(deletedOwners, 'deletedOwners')
+  console.log(allOwners, 'allOwners')
+
   // Remove owners that are also in deletedOwners
   var deletedOwnersSet = new Set(deletedOwners);
   var allOwners = allOwners.filter(function(element) {
@@ -443,6 +460,10 @@ async function guessOwners(
   var owners = []
     .concat(deletedOwners)
     .concat(allOwners)
+    .map(function(owner){
+      console.log(owner,'owner');
+      return owner;
+    })
     .filter(function(owner) {
       return owner !== 'none';
     })
@@ -452,6 +473,8 @@ async function guessOwners(
     .filter(function(owner) {
       return config.userBlacklist.indexOf(owner) === -1;
     });
+
+  console.log(owners, 'owners');
 
   if (config.requiredOrgs.length > 0) {
     owners = await filterRequiredOrgs(owners, config, github);
@@ -483,13 +506,16 @@ async function guessOwnersForPullRequest(
   config: Object,
   github: Object
 ): Promise<Array<string>> {
-  var diff = await fetch(repoURL + '/pull/' + id + '.diff');
+  let url = repoURL + '/pull/' + id + '.diff';
+  console.log(url, "url")
+  let diff = await fetch(url);
   var files = parseDiff(diff);
   var defaultOwners = getMatchingOwners(files, config.alwaysNotifyForPaths);
   var fallbackOwners = getMatchingOwners(files, config.fallbackNotifyForPaths);
   if (!config.findPotentialReviewers) {
       return defaultOwners;
   }
+
 
   // There are going to be degenerated changes that end up modifying hundreds
   // of files. In theory, it would be good to actually run the algorithm on
@@ -521,9 +547,28 @@ async function guessOwnersForPullRequest(
     blames[files[index].path] = parseBlame(result);
   });
 
+  console.log(blames,'blames')
   // This is the line that implements the actual algorithm, all the lines
   // before are there to fetch and extract the data needed.
   return guessOwners(files, blames, creator, defaultOwners, fallbackOwners, privateRepo, org, config, github);
+}
+
+async function getDiffSize(
+  repoURL: string,
+  id: number
+): Promise<number> {
+  let url = repoURL + '/pull/' + id + '.diff';
+  console.log(url, "url")
+  let diff = await fetch(url);
+  var files = parseDiff(diff);
+
+  let changes = files
+    .reduce((previousValue, file) => file.deletedLines.length + file.createdLines.length
+    ,0);
+
+  console.log(changes, "changes")
+
+  return changes;
 }
 
 module.exports = {
@@ -531,4 +576,5 @@ module.exports = {
   parseDiff: parseDiff,
   parseBlame: parseBlame,
   guessOwnersForPullRequest: guessOwnersForPullRequest,
+  getDiffSize
 };

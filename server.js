@@ -24,6 +24,8 @@ var CONFIG_PATH = '.mention-bot';
 
 if (!process.env.GITHUB_TOKEN) {
   console.error('The bot was started without a GitHub account to post with.');
+  console.error(process.env.GITHUB_TOKEN);
+  console.error('The bot was started without a GitHub account to post with.');
   console.error('To get started:');
   console.error('1) Create a new account for the bot');
   console.error('2) Settings > Personal access tokens > Generate new token');
@@ -50,6 +52,7 @@ if (!process.env.GITHUB_USER) {
 }
 
 var github = new GitHubApi({
+  debug: true,
   host: config.github.apiHost,
   pathPrefix: config.github.pathPrefix,
   protocol: config.github.protocol,
@@ -108,7 +111,7 @@ async function work(body) {
   var data = {};
   try {
     data = JSON.parse(body.toString());
-    console.log(data.pull_request.html_url);
+    console.log("data.pull_request.html_url", data.pull_request.html_url);
   } catch (e) {
     console.error(e);
   }
@@ -128,7 +131,7 @@ async function work(body) {
     skipAlreadyMentionedPR: false,
     delayed: false,
     delayedUntil: '3d',
-    assignToReviewer: false,
+    assignToReviewer: true,
     skipTitle: '',
     withLabel: '',
     skipCollaboratorPR: false,
@@ -237,7 +240,26 @@ async function work(body) {
     github
   );
 
+  var diffSize = await mentionBot.getDiffSize(
+    data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
+    data.pull_request.number
+  );
+
   console.log('Reviewers:', reviewers);
+
+  if(diffSize > 50) {
+    github.issues.addLabels({
+      user: data.repository.owner.login, // 'fbsamples'
+      repo: data.repository.name, // 'bot-testing'
+      number: data.pull_request.number,
+      body: ['too large'],
+    }, function(err) {
+      if (err) {
+        console.log(err);
+        console.log('no label :()')
+      }
+    })
+  }
 
   if (reviewers.length === 0) {
     console.log('Skipping because there are no reviewers found.');
@@ -259,6 +281,8 @@ async function work(body) {
       defaultMessageGenerator
     );
   }
+
+  console.log("message", message);
 
   function createComment(data, message, reject) {
     github.issues.createComment({
