@@ -24,7 +24,7 @@ async function downloadFileAsync(url: string, cookies: ?string): Promise<string>
     }
 
     require('child_process')
-      .execFile('curl', args, {encoding: 'utf8', maxBuffer: 1000 * 1024}, function(error, stdout, stderr) {
+      .execFile('curl', args, {encoding: 'utf8', maxBuffer: 1000 * 1024 * 10}, function(error, stdout, stderr) {
         if (error) {
           reject(error);
         } else {
