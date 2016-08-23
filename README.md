@@ -56,6 +56,8 @@ The bot can be configured by adding a `.mention-bot` file to the base directory 
 
 The glob matching is an extended form of glob syntax performed by [`minimatch`](https://github.com/isaacs/minimatch), with the default options; read [the `minimatch` README](https://github.com/isaacs/minimatch/blob/master/README.md) for more details.
 
+**Note:** The `.mention-bot` file must be valid JSON.
+
 ## How Does It Work?
 
 Every time there's a new pull request, GitHub wakes up the mention bot <img src="https://avatars0.githubusercontent.com/u/15710697?v=3&s=40" width="20" height="20" /> using Webhooks.
