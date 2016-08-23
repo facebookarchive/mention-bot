@@ -58,6 +58,13 @@ The glob matching is an extended form of glob syntax performed by [`minimatch`](
 
 **Note:** The `.mention-bot` file must be valid JSON.
 
+The default config can be overridden via environment config. e.g.:
+
+```zsh
+MENTION_BOT_CONFIG={"maxReviewers":1,"delayed":true}
+```
+---
+
 ## How Does It Work?
 
 Every time there's a new pull request, GitHub wakes up the mention bot <img src="https://avatars0.githubusercontent.com/u/15710697?v=3&s=40" width="20" height="20" /> using Webhooks.
