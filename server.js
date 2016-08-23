@@ -99,7 +99,12 @@ function getRepoConfig(request) {
       if (err) {
         reject(err);
       }
-      resolve(result);
+      try {
+        var data = JSON.parse(result.data);
+        resolve(data);
+      } catch (e) {
+        reject(e);
+      }
     });
   });
 }
