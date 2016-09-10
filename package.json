@@ -4,12 +4,12 @@
   "license": "BSD-3-Clause",
   "repository": "facebook/mention-bot",
   "scripts": {
-    "test": "flow && jest",
+    "test": "flow & jest",
     "start": "node run-server.js"
   },
   "main": "./run-mention-bot.js",
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
@@ -27,7 +27,6 @@
     "babel-polyfill": "^6.1.4",
     "babel-preset-react": "^6.1.2",
     "bl": "^1.0.0",
-    "download-file-sync": "^1.0.3",
     "express": "^4.13.3",
     "flow-bin": "^0.18.1",
     "github": "^2.1.0",
