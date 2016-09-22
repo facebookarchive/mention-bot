@@ -24,7 +24,7 @@ async function downloadFileAsync(url: string, cookies: ?string): Promise<string>
     }
 
     require('child_process')
-      .execFile('curl', args, {encoding: 'utf8', maxBuffer: 1000 * 1024}, function(error, stdout, stderr) {
+      .execFile('curl', args, {encoding: 'utf8', maxBuffer: 1000 * 1024 * 10}, function(error, stdout, stderr) {
         if (error) {
           reject(error);
         } else {
@@ -78,7 +78,11 @@ function parseDiffFile(lines: Array<string>): FileInfo {
   }
 
   line = lines.pop();
-  if (startsWith(line, 'Binary files')) {
+  if (!line) {
+    // If the diff ends in an empty file with 0 additions or deletions, line will be null
+  } else if (startsWith(line, 'diff --git')) {
+    lines.push(line);
+  } else if (startsWith(line, 'Binary files')) {
     // We just ignore binary files (mostly images). If we want to improve the
     // precision in the future, we could look at the history of those files
     // to get more names.
@@ -302,7 +306,7 @@ async function getOwnerOrgs(
   github: Object
 ): Promise<Array<string>> {
   return new Promise(function(resolve, reject) {
-    github.orgs.getFromUser({ user: owner }, function(err, result) {
+    github.orgs.getForUser({ user: owner }, function(err, result) {
       if (err) {
         reject(err);
       } else {
