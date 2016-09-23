@@ -4,4 +4,4 @@ set -xue
 
 PATH=$PATH:/sbin
 
-start mention-bot
+start mention-bot ID=1
