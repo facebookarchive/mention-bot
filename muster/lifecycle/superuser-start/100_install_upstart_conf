@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+# Install (or overwrite) upstart configuration.
+#
+set -xue
+
+cp -v muster/lifecycle/superuser-start/mention-bot.conf /etc/init/mention-bot.conf

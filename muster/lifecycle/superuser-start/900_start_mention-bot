@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -xue
+
+PATH=$PATH:/sbin
+
+start mention-bot
