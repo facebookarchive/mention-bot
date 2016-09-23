@@ -11,4 +11,4 @@ set -xue
 
 PATH=$PATH:/sbin
 
-initctl emit mention-bot-stop
+initctl emit mention-bot-stop  ID=1
