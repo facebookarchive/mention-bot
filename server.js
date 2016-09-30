@@ -80,7 +80,7 @@ function defaultMessageGenerator(reviewers, pullRequester) {
   return util.format(
     '%s, thanks for your PR! ' +
     'By analyzing the annotation information on this pull request' +
-    ', we identified %s to be%s potential reviewer%s',
+    ', we identified %s to be%s potential reviewer%s.',
     pullRequester,
     buildMentionSentence(reviewers),
     reviewers.length > 1 ? '' : ' a',
