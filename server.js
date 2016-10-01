@@ -12,7 +12,6 @@
 var bl = require('bl');
 var config = require('./config');
 var express = require('express');
-var fs = require('fs');
 var mentionBot = require('./mention-bot.js');
 var messageGenerator = require('./message.js');
 var util = require('util');
@@ -34,19 +33,6 @@ if (!process.env.GITHUB_TOKEN) {
   console.error('curl -X POST -d @__tests__/data/23.webhook http://localhost:5000/');
   console.error('6) Check if it has commented here: https://github.com/fbsamples/bot-testing/pull/23');
   process.exit(1);
-}
-
-if (!process.env.GITHUB_USER) {
-  console.warn(
-    'There was no GitHub user detected.',
-    'This is fine, but mention-bot won\'t work with private repos.'
-  );
-  console.warn(
-    'To make mention-bot work with private repos, please expose',
-    'GITHUB_USER and GITHUB_PASSWORD as environment variables.',
-    'The username and password must have access to the private repo',
-    'you want to use.'
-  );
 }
 
 var github = new GitHubApi({
@@ -138,7 +124,7 @@ async function work(body) {
     withLabel: '',
     skipCollaboratorPR: false,
   };
-  
+
   if (process.env.MENTION_BOT_CONFIG) {
     try {
       repoConfig = {
@@ -247,7 +233,8 @@ async function work(body) {
   }
 
   var reviewers = await mentionBot.guessOwnersForPullRequest(
-    data.repository.html_url, // 'https://github.com/fbsamples/bot-testing'
+    data.repository.name, // 'bot-testing'
+    data.repository.owner.login, // 'facebook'
     data.pull_request.number, // 23
     data.pull_request.user.login, // 'mention-bot'
     data.pull_request.base.ref, // 'master'
