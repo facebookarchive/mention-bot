@@ -236,6 +236,44 @@ describe('Github Mention', function() {
         });
       });
 
+    pit('Ignores PRs made against files owned by a team you are a member of if `skipTeamPrs` is set', function() {
+      mentionBot.enableCachingForDebugging = true;
+      var githubMock = {
+        orgs: {
+          getTeams: jest.genMockFunction().mockImplementation(function(params, cb) {
+            cb(null, [{slug: 'myteam', id: 1}]);
+          }),
+          getTeamMembership: jest.genMockFunction().mockImplementation(function(params, cb) {
+            cb(null, {state: 'active'});
+          })
+        }
+      };
+      return mentionBot.guessOwnersForPullRequest(
+        reactNativePR.repoName,
+        reactNativePR.prNumber,
+        reactNativePR.prUser,
+        reactNativePR.prBaseBranch,
+        true, //Set private repo to true
+        reactNativePR.org,
+        {
+          maxReviewers: 3,
+          userBlacklist: [],
+          fileBlacklist: [],
+          requiredOrgs: [],
+          numFilesToCheck: 5,
+          findPotentialReviewers: false,
+          alwaysNotifyForPaths: [{
+            name: 'facebook/myteam',
+            files: ['website/server/*'],
+            skipTeamPrs: true
+          }]
+        },
+        githubMock
+      ).then(function(owners) {
+        expect(owners.length).toEqual(0);
+      });
+    });
+
     pit('Messages 5 users from config option maxUsersToPing', function() {
       mentionBot.enableCachingForDebugging = true;
       return mentionBot.guessOwnersForPullRequest(
