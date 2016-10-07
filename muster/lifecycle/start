@@ -1,7 +1,4 @@
 #!/bin/sh
-
 set -xue
-
-PATH=$PATH:/sbin
 
 npm start
