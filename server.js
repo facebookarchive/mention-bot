@@ -98,6 +98,7 @@ function getRepoConfig(request) {
     github.repos.getContent(request, function(err, result) {
       if (err) {
         reject(err);
+        return;
       }
       try {
         var data = JSON.parse(result.data);
