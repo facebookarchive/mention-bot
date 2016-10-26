@@ -49,7 +49,7 @@ The bot can be configured by adding a `.mention-bot` file to the base directory 
   "skipAlreadyMentionedPR": false, // mention-bot will ignore if there is already existing an exact mention
   "assignToReviewer": false, // mention-bot assigns the most appropriate reviewer for PR
   "skipTitle": "", // mention-bot will ignore PR that includes text in the title,
-  "withLabel": "", // mention-bot will only consider PR's with this label. Must set actions to ["labeled"].
+  "withLabel": "", // Can either be a single label or a list. mention-bot will only consider PR's with any of the labels specified. Must set actions to ["labeled"].
   "delayed": false, // mention-bot will wait to comment until specified time in `delayedUntil` value
   "delayedUntil": "3d", // Used if delayed is equal true, permitted values are: minutes, hours, or days, e.g.: '3 days', '40 minutes', '1 hour', '3d', '1h', '10m'
   "skipCollaboratorPR": false, // mention-bot will ignore if PR is made by collaborator

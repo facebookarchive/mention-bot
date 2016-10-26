@@ -138,7 +138,7 @@ async function work(body) {
     withLabel: '',
     skipCollaboratorPR: false,
   };
-  
+
   if (process.env.MENTION_BOT_CONFIG) {
     try {
       repoConfig = {
@@ -184,10 +184,20 @@ async function work(body) {
       return false;
     }
 
-    if (repoConfig.withLabel && data.label &&
-        data.label.name != repoConfig.withLabel) {
-      console.log('Skipping because pull request does not have label: ' + repoConfig.withLabel);
-      return false;
+    const withLabel: Array<string> | string = repoConfig.withLabel;
+    if (withLabel && data.label && data.label.name) {
+      if (typeof(withLabel) === 'array') {
+        if (withLabel.indexOf(data.label) === -1) {
+          console.log('Skipping because pull request does not ' +
+          'have any of the labels: ' + withLabel.join(', '));
+          return false;
+        }
+      }
+      else if (data.label.name != withLabel) {
+        console.log('Skipping because pull request does not have ' +
+        'label: ' + withLabel);
+        return false;
+      }
     }
 
     if (repoConfig.skipTitle &&
