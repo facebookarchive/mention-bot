@@ -168,7 +168,7 @@ async function work(body) {
     repoConfig = {...repoConfig, ...configRes};
   } catch (e) {
     if (e.code === 404 &&
-        e.message === '{"message":"Not Found","documentation_url":"https://developer.github.com/v3"}') {
+        e.message.match(/message.*Not Found.*documentation_url.*developer.github.com/)) {
       console.log('Couldn\'t find ' + CONFIG_PATH + ' in repo. Continuing with default configuration.');
     } else {
       console.error(e);
