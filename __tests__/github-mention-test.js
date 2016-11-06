@@ -16,8 +16,10 @@ jest
 require.requireActual('babel-polyfill');
 var mentionBot = require('../mention-bot.js');
 var fs = require('fs');
+const GitHubApi = require('github');
 
 describe('Github Mention', function() {
+  const github = new GitHubApi();
 
   function getFile(filename) {
     return fs.readFileSync(__dirname + '/data/' + filename, 'utf8');
@@ -72,7 +74,8 @@ describe('Github Mention', function() {
           requiredOrgs: [],
           numFilesToCheck: 5,
           findPotentialReviewers: true,
-        }
+        },
+        github
       ).then(function(owners) {
         expect(owners).toEqual(['corbt', 'vjeux', 'sahrens']);
       });
@@ -230,7 +233,8 @@ describe('Github Mention', function() {
               name: 'jcsmorais',
               files: ['website/server/*']
             }]
-          }
+          },
+          github
         ).then(function(owners) {
           expect(owners).toEqual(['jcsmorais']);
         });
@@ -290,7 +294,8 @@ describe('Github Mention', function() {
           requiredOrgs: [],
           numFilesToCheck: 5,
           findPotentialReviewers: true,
-        }
+        },
+        github
       ).then(function(owners) {
         expect(owners.length).toEqual(5);
       });
@@ -318,7 +323,8 @@ describe('Github Mention', function() {
               files: ['package.json', '**/*.js', 'README.md']
             }
           ]
-        }
+        },
+        github
       ).then(function(owners) {
         expect(owners.indexOf('ghuser')).toBeGreaterThan(-1);
       });
@@ -355,7 +361,8 @@ describe('Github Mention', function() {
               files: ['*.js']
             }
           ]
-        }
+        },
+        github
       ).then(function(owners) {
         expect(owners.indexOf('ghuser')).toBeGreaterThan(-1);
       });
@@ -377,7 +384,8 @@ describe('Github Mention', function() {
           requiredOrgs: [],
           numFilesToCheck: 5,
           findPotentialReviewers: true
-        }
+        },
+        github
       ).then(function (owners) {
         expect(owners.indexOf('ghuser')).toEqual(-1);
       });
