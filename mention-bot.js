@@ -262,6 +262,28 @@ function getSortedOwners(
   return sorted_owners;
 }
 
+async function getDiffForPullRequest(
+  owner: string,
+  repo: string,
+  id: number,
+  github: Object
+): Promise<string> {
+  return new Promise(function(resolve, reject) {
+    github.pullRequests.get({
+      user: owner,
+      repo: repo,
+      number: id,
+      headers: {Accept: 'application/vnd.github.diff'}
+    }, function (err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result.data);
+      }
+    });
+  });
+}
+
 async function getMatchingOwners(
   files: Array<FileInfo>,
   whitelist: Array<WhitelistUser>,
@@ -337,21 +359,29 @@ async function filterOwnTeam(
  * you won't be able to get anymore work done when it happens :(
  */
 async function fetch(url: string): Promise<string> {
+  const cacheKey = url.replace(/[^a-zA-Z0-9-_\.]/g, '-');
+  return cacheGet(cacheKey, () => downloadFileAsync(url, githubAuthCookies));
+}
+
+async function cacheGet(
+  cacheKey: string,
+  getFn: () => Promise<string>
+): Promise<string> {
   if (!module.exports.enableCachingForDebugging) {
-    return downloadFileAsync(url, githubAuthCookies);
+    return getFn();
   }
 
-  var cacheDir = __dirname + '/cache/';
-
+  const cacheDir = __dirname + '/cache/';
   if (!fs.existsSync(cacheDir)) {
     fs.mkdir(cacheDir);
   }
-  var cache_key = cacheDir + url.replace(/[^a-zA-Z0-9-_\.]/g, '-');
-  if (!fs.existsSync(cache_key)) {
-    var file = await downloadFileAsync(url, githubAuthCookies);
-    fs.writeFileSync(cache_key, file);
+
+  cacheKey = cacheDir + cacheKey;
+  if (!fs.existsSync(cacheKey)) {
+    const contents = await getFn();
+    fs.writeFileSync(cacheKey, contents);
   }
-  return readFileAsync(cache_key, 'utf8');
+  return readFileAsync(cacheKey, 'utf8');
 }
 
 async function getTeams(
@@ -594,7 +624,12 @@ async function guessOwnersForPullRequest(
   config: Object,
   github: Object
 ): Promise<Array<string>> {
-  var diff = await fetch(repoURL + '/pull/' + id + '.diff');
+  const ownerAndRepo = repoURL.split('/').slice(-2);
+  const cacheKey = `${repoURL}-pull-${id}.diff`.replace(/[^a-zA-Z0-9-_\.]/g, '-');
+  const diff = await cacheGet(
+    cacheKey,
+    () => getDiffForPullRequest(ownerAndRepo[0], ownerAndRepo[1], id, github)
+  );
   var files = parseDiff(diff);
   var defaultOwners = await getMatchingOwners(files, config.alwaysNotifyForPaths, creator, org, github);
   var fallbackOwners = await getMatchingOwners(files, config.fallbackNotifyForPaths, creator, org, github);
