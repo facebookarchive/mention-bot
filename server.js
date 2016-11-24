@@ -94,12 +94,20 @@ function configMessageGenerator(message, reviewers, pullRequester) {
 }
 
 function getRepoConfig(request) {
+  function removeLastAttributeComma(data) {
+    if (!data || typeof data !== 'string') {
+      console.log('RepoConfig is null or is not string type, no comma removed');
+      return data;
+    }
+    return data.replace(/\,(?!\s*[\{\"\w])/g, '');
+  }
   return new Promise(function(resolve, reject) {
     github.repos.getContent(request, function(err, result) {
       if (err) {
         reject(err);
       }
       try {
+        result.data = removeLastAttributeComma(result.data);
         var data = JSON.parse(result.data);
         resolve(data);
       } catch (e) {
