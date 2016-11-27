@@ -167,10 +167,11 @@ async function work(body) {
       if (e instanceof SyntaxError && repoConfig.actions.indexOf(data.action) !== -1) {
         // Syntax error while reading custom configuration file
         var message =
-          'Unable to parse mention-bot custom configuration file due to syntax error.\n' +
-          'Please check the potential errors below:\n\n' +
-          '1. Invalid JSON type\n' +
-          '2. Having extra "," in the last JSON attribute';
+          'Unable to parse mention-bot custom configuration file due to a syntax error.\n' +
+          'Please check the potential root causes below:\n\n' +
+          '1. Having comments\n' +
+          '2. Invalid JSON type\n' +
+          '3. Having extra "," in the last JSON attribute';
         createComment(data, message);
       }
     });
