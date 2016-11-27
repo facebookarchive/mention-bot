@@ -164,9 +164,14 @@ async function work(body) {
         Accept: 'application/vnd.github.v3.raw+json'
       }
     }).catch(function(e) {
-      if (e instanceof SyntaxError) {
+      if (e instanceof SyntaxError && repoConfig.actions.indexOf(data.action) !== -1) {
         // Syntax error while reading custom configuration file
-
+        var message =
+          'Unable to parse mention-bot custom configuration file due to syntax error.\n' +
+          'Please check the potential errors below:\n\n' +
+          '1. Invalid JSON type\n' +
+          '2. Having extra "," in the last JSON attribute';
+        createComment(data, message);
       }
     });
 
