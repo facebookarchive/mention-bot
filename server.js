@@ -163,6 +163,11 @@ async function work(body) {
       headers: {
         Accept: 'application/vnd.github.v3.raw+json'
       }
+    }).catch(function(e) {
+      if (e instanceof SyntaxError) {
+        // Syntax error while reading custom configuration file
+
+      }
     });
 
     repoConfig = {...repoConfig, ...configRes};
