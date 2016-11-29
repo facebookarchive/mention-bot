@@ -32,6 +32,7 @@
     "flow-bin": "^0.18.1",
     "github": "^2.1.0",
     "jest-cli": "^0.7.1",
+    "jsonlint": "^1.6.2",
     "minimatch": "^3.0.0",
     "node-schedule": "^1.0.0"
   }
