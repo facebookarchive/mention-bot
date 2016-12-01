@@ -182,6 +182,11 @@ async function work(body) {
         'We only care about: "' + repoConfig.actions.join("', '") + '"'
       );
       return false;
+    } else if (data.action === 'edited') {
+      if (!('title' in data.changes)) {
+        console.log('Skipping because something other than the title was edited.');
+        return false;
+      }
     }
 
     if (repoConfig.withLabel && data.label &&
@@ -190,14 +195,9 @@ async function work(body) {
       return false;
     }
 
-    if (repoConfig.skipTitle && data.changes) {
-      if ('title' in data.changes) {
-        if (data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
-          console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle);
-          return false;
-        }
-      } else {
-        console.log('Skipping because something other than the title was edited.');
+    if (repoConfig.skipTitle) {
+      if (data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
+        console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle);
         return false;
       }
     }
