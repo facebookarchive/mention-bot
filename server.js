@@ -138,7 +138,7 @@ async function work(body) {
     withLabel: '',
     skipCollaboratorPR: false,
   };
-  
+
   if (process.env.MENTION_BOT_CONFIG) {
     try {
       repoConfig = {
@@ -190,10 +190,16 @@ async function work(body) {
       return false;
     }
 
-    if (repoConfig.skipTitle &&
-        data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
-      console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle);
-      return false;
+    if (repoConfig.skipTitle && data.changes) {
+      if ('title' in data.changes) {
+        if (data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
+          console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle);
+          return false;
+        }
+      } else {
+        console.log('Skipping because something other than the title was edited.');
+        return false;
+      }
     }
 
     if (repoConfig.skipCollaboratorPR) {
@@ -224,12 +230,6 @@ async function work(body) {
 
     if (repoConfig.userBlacklistForPR.indexOf(data.pull_request.user.login) >= 0) {
       console.log('Skipping because blacklisted user created Pull Request.');
-      return false;
-    }
-
-    if (repoConfig.skipTitle &&
-        data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
-      console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle);
       return false;
     }
 
