@@ -19,7 +19,6 @@ var util = require('util');
 var schedule = require('./schedule.js');
 
 var GitHubApi = require('github');
-var jsonlint = require('jsonlint');
 
 var CONFIG_PATH = '.mention-bot';
 
@@ -104,7 +103,6 @@ function getRepoConfig(request) {
         var data = JSON.parse(result.data);
         resolve(data);
       } catch (e) {
-        e.repoConfig = result.data;
         reject(e);
       }
     });
@@ -168,20 +166,12 @@ async function work(body) {
     }).catch(function(e) {
       if (e instanceof SyntaxError && repoConfig.actions.indexOf(data.action) !== -1) {
         // Syntax error while reading custom configuration file
-        var errorLog = '';
-        try {
-          jsonlint.parse(e.repoConfig)
-        } catch(err) {
-          errorLog = err;
-        }
         var message =
           'Unable to parse mention-bot custom configuration file due to a syntax error.\n' +
           'Please check the potential root causes below:\n\n' +
           '1. Having comments\n' +
           '2. Invalid JSON type\n' +
-          '3. Having extra "," in the last JSON attribute\n\n' +
-          'Error message:\n' +
-          '```\n' + errorLog + '\n```';
+          '3. Having extra "," in the last JSON attribute';
         createComment(data, message);
       }
     });
