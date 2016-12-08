@@ -104,7 +104,9 @@ function getRepoConfig(request) {
         var data = JSON.parse(result.data);
         resolve(data);
       } catch (e) {
-        e.repoConfig = result.data;
+        try {
+          e.repoConfig = result.data;
+        } catch (e) {}
         reject(e);
       }
     });
