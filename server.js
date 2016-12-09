@@ -163,6 +163,7 @@ async function work(body) {
     var configRes = await getRepoConfig({
       user: data.repository.owner.login,
       repo: data.repository.name,
+      ref: data.pull_request.base.ref,
       path: CONFIG_PATH,
       headers: {
         Accept: 'application/vnd.github.v3.raw+json'
