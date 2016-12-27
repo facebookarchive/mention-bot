@@ -10,6 +10,8 @@ Do you have a GitHub project that is too big for people to subscribe to all the 
  - your project on GitHub > Settings > Webhooks & services > Add Webhook or
  - your organization on GitHub > Settings > Webhooks > Add Webhook
 - Payload URL: (https://mention-bot.herokuapp.com/)
+- Content type: `application/json`
+- Secret: Leave blank
 - Let me select individual events > Check `Pull Request`
 - Add Webhook
 
@@ -31,17 +33,17 @@ The bot can be configured by adding a `.mention-bot` file to the base directory 
       "files": ["src/js/**/*.js"], // The array of file globs associated with the user
       "skipTeamPrs": false // mention-bot will exclude the creator's own team from mentions
     }
-  ], // users will always be mentioned based on file glob
+  ], // Users will always be mentioned based on file glob
   "fallbackNotifyForPaths": [
     {
       "name": "ghuser", // The user's Github username
       "files": ["src/js/**/*.js"], // The array of file globs associated with the user
       "skipTeamPrs": false // mention-bot will exclude the creator's own team from mentions
     }
-  ], // users will be mentioned based on file glob if no other user was found
+  ], // Users will be mentioned based on file glob if no other user was found
   "findPotentialReviewers": true, // mention-bot will try to find potential reviewers based on files history, if disabled, `alwaysNotifyForPaths` is used instead
   "fileBlacklist": ["*.md"], // mention-bot will ignore any files that match these file globs
-  "userBlacklist": [], // users in this list will never be mentioned by mention-bot
+  "userBlacklist": [], // Users in this list will never be mentioned by mention-bot
   "userBlacklistForPR": [], // PR made by users in this list will be ignored
   "requiredOrgs": [], // mention-bot will only mention user who are a member of one of these organizations
   "actions": ["opened"], // List of PR actions that mention-bot will listen to, default is "opened"
