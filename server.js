@@ -138,6 +138,7 @@ async function work(body) {
     delayed: false,
     delayedUntil: '3d',
     assignToReviewer: false,
+    createReviewRequest: false,
     skipTitle: '',
     withLabel: '',
     skipCollaboratorPR: false,
@@ -337,6 +338,25 @@ async function work(body) {
     });
   }
 
+  function requestReview(data, reviewers, reject) {
+    if (!repoConfig.createReviewRequest) {
+      return;
+    }
+
+    github.pullRequests.createReviewRequest({
+      owner: data.repository.owner.login, // 'fbsamples'
+      repo: data.repository.name, // 'bot-testing'
+      number: data.pull_request.number, // 23
+      reviewers: reviewers
+    }, function(err) {
+      if (err) {
+        if (typeof reject === 'function') {
+          return reject(err);
+        }
+      }
+    });
+  }
+
   function getComments(data, page) {
     return new Promise(function(resolve, reject) {
       github.issues.getComments({
@@ -387,11 +407,13 @@ async function work(body) {
 
         createComment(currentData, message, reject);
         assignReviewer(currentData, reviewers, reject);
+        requestReview(currentData, reviewers, reject);
       });
     });
   } else {
     createComment(data, message);
     assignReviewer(data, reviewers);
+    requestReview(data, reviewers);
   }
 
   return;
