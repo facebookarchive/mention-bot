@@ -270,7 +270,7 @@ async function getDiffForPullRequest(
 ): Promise<string> {
   return new Promise(function(resolve, reject) {
     github.pullRequests.get({
-      user: owner,
+      owner: owner,
       repo: repo,
       number: id,
       headers: {Accept: 'application/vnd.github.diff'}
@@ -328,7 +328,7 @@ async function filterOwnTeam(
   })) {
     return owners;
   }
-  
+
   // GitHub does not provide an API to look up a team by name.
   // Instead, get all teams, then filter against those matching
   // our teams list who want to be excluded from their own PR's.
@@ -423,7 +423,7 @@ async function getOwnerOrgs(
   github: Object
 ): Promise<Array<string>> {
   return new Promise(function(resolve, reject) {
-    github.orgs.getForUser({ user: owner }, function(err, result) {
+    github.orgs.getForUser({ owner: owner }, function(err, result) {
       if (err) {
         reject(err);
       } else {
@@ -494,7 +494,7 @@ async function getTeamMembership(
   return new Promise(function(resolve, reject) {
     github.orgs.getTeamMembership({
       id: teamData.id,
-      user: creator
+      owner: creator
     }, function(err, data) {
       if (err) {
         if (err.code === 404 &&
