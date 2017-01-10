@@ -142,7 +142,7 @@ async function work(body) {
     withLabel: '',
     skipCollaboratorPR: false,
   };
-  
+
   if (process.env.MENTION_BOT_CONFIG) {
     try {
       repoConfig = {
@@ -403,6 +403,7 @@ app.post('/', function(req, res) {
     work(body)
       .then(function() { res.end(); })
       .catch(function(e) {
+        console.error(e);
         console.error(e.stack);
         res.status(500).send('Internal Server Error');
       });

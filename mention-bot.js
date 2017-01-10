@@ -300,7 +300,7 @@ async function getMatchingOwners(
     user.files.forEach(function(pattern) {
       if (!userHasChangedFile) {
         userHasChangedFile = files.find(function(file) {
-          return minimatch(file.path, pattern);
+          return minimatch(file.path, pattern, { dot: true });
         });
       }
     });
@@ -328,7 +328,7 @@ async function filterOwnTeam(
   })) {
     return owners;
   }
-  
+
   // GitHub does not provide an API to look up a team by name.
   // Instead, get all teams, then filter against those matching
   // our teams list who want to be excluded from their own PR's.
