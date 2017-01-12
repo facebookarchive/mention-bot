@@ -403,6 +403,7 @@ async function work(body) {
         }
 
         if (!isValid(repoConfig, currentData)) {
+          reject('PR validation failed');
           return;
         }
 
