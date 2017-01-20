@@ -73,22 +73,41 @@ function startsWith(str, start) {
 
 function parseDiffFile(lines: Array<string>): FileInfo {
   var deletedLines = [];
-
-  // diff --git a/path b/path
+  var fromFile;
+  
+  // diff --git "a/path" "b/path" or rename to path/file or rename from path/file
   var line = lines.pop();
-  if (!line.match(/^diff --git a\//)) {
-    throw new Error('Invalid line, should start with `diff --git a/`, instead got \n' + line + '\n');
+  if (line.match(/^rename to "?/)) { 
+    // rename from path/file
+    line = lines.pop();
   }
-  var fromFile = line.replace(/^diff --git a\/(.+) b\/.+/g, '$1');
+
+  if (line.match(/^diff --git "?a\//)) { 
+    fromFile = line.replace(/^diff --git "?a\/(.+)"? "?b\/.+"?/g, '$1');
+  } else if (line.match(/^rename from "?/)) {
+    fromFile = line.replace(/^rename from "?(.+)"?/g, '$1');
+  } else {
+    throw new Error('Invalid line, should start with something like `diff --git a/`, instead got \n' + line + '\n');
+  }
 
   // index sha..sha mode
   line = lines.pop();
   if (startsWith(line, 'deleted file') ||
-      startsWith(line, 'new file')) {
+      startsWith(line, 'new file') ||
+      startsWith(line, 'rename')) {
     line = lines.pop();
   }
-
-  line = lines.pop();
+  
+  if (startsWith(line, 'index ')) {
+    line = lines.pop();
+  } else if(startsWith(line, 'similarity index')) {
+    line = lines.pop();
+    while (startsWith(line, 'rename')) {
+      line = lines.pop();
+    }
+    // index sha..sha mode
+    line = lines.pop();
+  }
   if (!line) {
     // If the diff ends in an empty file with 0 additions or deletions, line will be null
   } else if (startsWith(line, 'diff --git')) {
