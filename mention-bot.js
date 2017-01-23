@@ -438,11 +438,11 @@ async function getTeams(
 }
 
 async function getOwnerOrgs(
-  owner: string,
+  username: string,
   github: Object
 ): Promise<Array<string>> {
   return new Promise(function(resolve, reject) {
-    github.orgs.getForUser({ owner: owner }, function(err, result) {
+    github.orgs.getForUser({ username: username }, function(err, result) {
       if (err) {
         reject(err);
       } else {
