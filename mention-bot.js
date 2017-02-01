@@ -73,16 +73,16 @@ function startsWith(str, start) {
 
 function parseDiffFile(lines: Array<string>): FileInfo {
   var deletedLines = [];
-  var fromFile;
-  
+  var fromFile = "";
+
   // diff --git "a/path" "b/path" or rename to path/file or rename from path/file
   var line = lines.pop();
-  if (line.match(/^rename to "?/)) { 
+  if (line.match(/^rename to "?/)) {
     // rename from path/file
     line = lines.pop();
   }
 
-  if (line.match(/^diff --git "?a\//)) { 
+  if (line.match(/^diff --git "?a\//)) {
     fromFile = line.replace(/^diff --git "?a\/(.+)"? "?b\/.+"?/g, '$1');
   } else if (line.match(/^rename from "?/)) {
     fromFile = line.replace(/^rename from "?(.+)"?/g, '$1');
@@ -97,7 +97,7 @@ function parseDiffFile(lines: Array<string>): FileInfo {
       startsWith(line, 'rename')) {
     line = lines.pop();
   }
-  
+
   if (startsWith(line, 'index ')) {
     line = lines.pop();
   } else if(startsWith(line, 'similarity index')) {
@@ -205,7 +205,7 @@ function parseBlame(blame: string): Array<string> {
   // The way the document is structured is that commits and lines are
   // interleaved. So every time we see a commit we grab the author's name
   // and every time we see a line we log the last seen author.
-  var re = /(<img alt="@([^"]+)" class="avatar blame-commit-avatar"|<td class="blame-commit-info")/g;
+  var re = /(<img alt="@([^"]+)" class="avatar blame-commit-avatar"|<tr class="blame-line")/g;
 
   var currentAuthor = 'none';
   var lines = [];
