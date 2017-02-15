@@ -16,8 +16,10 @@ jest
 require.requireActual('babel-polyfill');
 var mentionBot = require('../mention-bot.js');
 var fs = require('fs');
+const GitHubApi = require('github');
 
 describe('Github Mention', function() {
+  const github = new GitHubApi();
 
   function getFile(filename) {
     return fs.readFileSync(__dirname + '/data/' + filename, 'utf8');
@@ -72,7 +74,8 @@ describe('Github Mention', function() {
           requiredOrgs: [],
           numFilesToCheck: 5,
           findPotentialReviewers: true,
-        }
+        },
+        github
       ).then(function(owners) {
         expect(owners).toEqual(['corbt', 'vjeux', 'sahrens']);
       });
@@ -230,11 +233,50 @@ describe('Github Mention', function() {
               name: 'jcsmorais',
               files: ['website/server/*']
             }]
-          }
+          },
+          github
         ).then(function(owners) {
           expect(owners).toEqual(['jcsmorais']);
         });
       });
+
+    pit('Ignores PRs made against files owned by a team you are a member of if `skipTeamPrs` is set', function() {
+      mentionBot.enableCachingForDebugging = true;
+      var githubMock = {
+        orgs: {
+          getTeams: jest.genMockFunction().mockImplementation(function(params, cb) {
+            cb(null, [{slug: 'myteam', id: 1}]);
+          }),
+          getTeamMembership: jest.genMockFunction().mockImplementation(function(params, cb) {
+            cb(null, {state: 'active'});
+          })
+        }
+      };
+      return mentionBot.guessOwnersForPullRequest(
+        reactNativePR.repoName,
+        reactNativePR.prNumber,
+        reactNativePR.prUser,
+        reactNativePR.prBaseBranch,
+        true, //Set private repo to true
+        reactNativePR.org,
+        {
+          maxReviewers: 3,
+          userBlacklist: [],
+          fileBlacklist: [],
+          requiredOrgs: [],
+          numFilesToCheck: 5,
+          findPotentialReviewers: false,
+          alwaysNotifyForPaths: [{
+            name: 'facebook/myteam',
+            files: ['website/server/*'],
+            skipTeamPrs: true
+          }]
+        },
+        githubMock
+      ).then(function(owners) {
+        expect(owners.length).toEqual(0);
+      });
+    });
 
     pit('Messages 5 users from config option maxUsersToPing', function() {
       mentionBot.enableCachingForDebugging = true;
@@ -252,7 +294,8 @@ describe('Github Mention', function() {
           requiredOrgs: [],
           numFilesToCheck: 5,
           findPotentialReviewers: true,
-        }
+        },
+        github
       ).then(function(owners) {
         expect(owners.length).toEqual(5);
       });
@@ -280,7 +323,8 @@ describe('Github Mention', function() {
               files: ['package.json', '**/*.js', 'README.md']
             }
           ]
-        }
+        },
+        github
       ).then(function(owners) {
         expect(owners.indexOf('ghuser')).toBeGreaterThan(-1);
       });
@@ -317,7 +361,8 @@ describe('Github Mention', function() {
               files: ['*.js']
             }
           ]
-        }
+        },
+        github
       ).then(function(owners) {
         expect(owners.indexOf('ghuser')).toBeGreaterThan(-1);
       });
@@ -339,7 +384,8 @@ describe('Github Mention', function() {
           requiredOrgs: [],
           numFilesToCheck: 5,
           findPotentialReviewers: true
-        }
+        },
+        github
       ).then(function (owners) {
         expect(owners.indexOf('ghuser')).toEqual(-1);
       });
@@ -465,50 +511,168 @@ describe('Github Mention', function() {
       'vjeux', 'vjeux', 'vjeux', 'vjeux', 'vjeux', 'vjeux',
       'tadeuzagallo', 'tadeuzagallo',
       'bhosmer',
-      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
-      'sahrens',
-      'tadeuzagallo',
-      'kmagiera',
-      'tadeuzagallo', 'tadeuzagallo',
-      'kmagiera',
       'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
-      'sahrens',
-      'tadeuzagallo',
-      'bhosmer',
-      'philikon', 'philikon', 'philikon', 'philikon', 'philikon', 'philikon',
-      'bhosmer',
-      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
-      'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn',
-      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
-      'ultralame',
-      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
-      'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn',
-      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
-      'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar',
-      'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn',
-      'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar',
-      'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn',
-      'ginamdar', 'ginamdar', 'ginamdar',
-      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
-      'dvcrn', 'dvcrn',
-      'ultralame',
-      'dvcrn', 'dvcrn',
-      'tadeuzagallo', 'tadeuzagallo',
-      'bhosmer',
-      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
-      'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn',
-      'tadeuzagallo',
-      'dvcrn',
-      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
-      'sahrens',
-      'kmagiera',
-      'sahrens',
-      'kmagiera',
-      'fkgozali',
-      'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens', 'sahrens',
+      'shtefanntz',
+      'nicklockwood', 'nicklockwood',
+      'davidaurelio',
+      'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'janicduplessis',
       'nicklockwood', 'nicklockwood', 'nicklockwood',
-      'sahrens',
+      'tadeuzagallo',
+      'bhosmer', 'bhosmer',
+      'caabernathy',
+      'mkonicek',
+      'caabernathy',
+      'browniefed',
+      'caabernathy', 'caabernathy', 'caabernathy',
+      'davidaurelio',
+      'caabernathy', 'caabernathy', 'caabernathy',
+      'davidaurelio',
+      'caabernathy', 'caabernathy', 'caabernathy',
+      'davidaurelio',
+      'caabernathy', 'caabernathy', 'caabernathy',
+      'davidaurelio',
+      'caabernathy', 'caabernathy', 'caabernathy',
+      'davidaurelio',
+      'browniefed', 'browniefed',
+      'benhoyt',
+      'mkonicek', 'mkonicek', 'mkonicek', 'mkonicek', 'mkonicek', 'mkonicek', 'mkonicek', 'mkonicek', 'mkonicek',
+      'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy',
+      'benhoyt', 'benhoyt',
+      'nicklockwood',
+      'browniefed',
+      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
+      'kmagiera',
+      'tadeuzagallo',
+      'caabernathy',
+      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
+      'Crash--', 'Crash--',
+      'tadeuzagallo',
+      'caabernathy',
+      'Crash--',
+      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
+      'Crash--', 'Crash--', 'Crash--', 'Crash--', 'Crash--',
+      'janicduplessis',
+      'Crash--',
+      'Andr3wHur5t', 'Andr3wHur5t', 'Andr3wHur5t', 'Andr3wHur5t', 'Andr3wHur5t', 'Andr3wHur5t',
+      'caabernathy',
+      'gilchenzion', 'gilchenzion', 'gilchenzion', 'gilchenzion', 'gilchenzion',
+      'donyu', 'donyu', 'donyu', 'donyu', 'donyu', 'donyu', 'donyu',
+      'tadeuzagallo',
+      'ultralame',
+      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
+      'davidaurelio',
+      'caabernathy', 'caabernathy', 'caabernathy',
+      'davidaurelio',
+      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
+      'davidaurelio',
+      'caabernathy', 'caabernathy',
+      'davidaurelio',
+      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
+      'dvcrn',
+      'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy', 'caabernathy',
+      'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn', 'dvcrn',
+      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
+      'jutaz',
       'tadeuzagallo', 'tadeuzagallo',
+      'nicklockwood', 'nicklockwood',
+      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
+      'caabernathy',
+      'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar', 'ginamdar',
+      'dvcrn', 'dvcrn', 'dvcrn',
+      'janicduplessis',
+      'browniefed', 'browniefed', 'browniefed', 'browniefed', 'browniefed', 'browniefed', 'browniefed',
+      'janicduplessis',
+      'browniefed',
+      'dvcrn', 'dvcrn',
+      'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov',
+      'caabernathy',
+      'ginamdar', 'ginamdar', 'ginamdar',
+      'gabelevi',
+      'dvcrn',
+      'nicklockwood',
+      'dvcrn',
+      'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'gabelevi',
+      'dvcrn',
+      'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'jutaz',
+      'nicklockwood', 'nicklockwood',
+      'shtefanntz',
+      'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'trave7er',
+      'timfpark',
+      'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'timfpark', 'timfpark', 'timfpark',
+      'gabelevi',
+      'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis', 'janicduplessis',
+      'timfpark', 'timfpark', 'timfpark', 'timfpark', 'timfpark', 'timfpark', 'timfpark', 'timfpark', 'timfpark', 'timfpark', 'timfpark', 'timfpark', 'timfpark',
+      'dvcrn',
+      'timfpark', 'timfpark', 'timfpark', 'timfpark',
+      'shtefanntz', 'shtefanntz',
+      'timfpark', 'timfpark', 'timfpark', 'timfpark', 'timfpark',
+      'ginamdar', 'ginamdar', 'ginamdar',
+      'caabernathy',
+      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
+      'caabernathy',
+      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
+      'dvcrn', 'dvcrn',
+      'caabernathy',
+      'dvcrn', 'dvcrn',
+      'kmagiera', 'kmagiera', 'kmagiera', 'kmagiera', 'kmagiera',
+      'tadeuzagallo', 'tadeuzagallo',
+      'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'Crash--',
+      'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'gabelevi',
+      'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'gabelevi',
+      'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'janicduplessis',
+      'davidaurelio',
+      'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'davidaurelio', 'davidaurelio',
+      'timfpark', 'timfpark', 'timfpark', 'timfpark',
+      'nicklockwood', 'nicklockwood',
+      'timfpark',
+      'dvcrn',
+      'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov',
+      'nicklockwood',
+      'jerolimov',
+      'timfpark',
+      'jerolimov',
+      'nicklockwood',
+      'jerolimov',
+      'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov',
+      'nicklockwood',
+      'dvcrn', 'dvcrn',
+      'nicklockwood',
+      'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov',
+      'browniefed',
+      'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov',
+      'browniefed',
+      'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov', 'jerolimov',
+      'nicklockwood',
+      'dvcrn',
+      'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'dvcrn', 'dvcrn',
+      'Crash--', 'Crash--', 'Crash--', 'Crash--', 'Crash--',
+      'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'Crash--',
+      'timfpark',
+      'nicklockwood', 'nicklockwood',
+      'browniefed',
+      'jerolimov', 'jerolimov',
+      'nicklockwood', 'nicklockwood',
+      'tadeuzagallo', 'tadeuzagallo', 'tadeuzagallo',
+      'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood', 'nicklockwood',
+      'browniefed', 'browniefed',
+      'jerolimov', 'jerolimov',
+      'browniefed', 'browniefed', 'browniefed',
+      'kmagiera',
+      'tadeuzagallo', 'tadeuzagallo'
     ]);
   });
 });
