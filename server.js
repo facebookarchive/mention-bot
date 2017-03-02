@@ -140,6 +140,7 @@ async function work(body) {
     delayedUntil: '3d',
     assignToReviewer: false,
     createReviewRequest: false,
+    createComment: true,
     skipTitle: '',
     withLabel: '',
     skipCollaboratorPR: false,
@@ -306,6 +307,10 @@ async function work(body) {
   }
 
   function createComment(data, message, reject) {
+    if (!repoConfig.createComment) {
+      return;
+    }
+
     github.issues.createComment({
       owner: data.repository.owner.login, // 'fbsamples'
       repo: data.repository.name, // 'bot-testing'
