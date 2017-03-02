@@ -492,16 +492,14 @@ async function filterRequiredOrgs(
   config: Object,
   github: Object
 ): Promise<Array<string>> {
-  var promises = owners.map(function(owner) {
-    return getOwnerOrgs(owner, github);
-  });
+  var promises = config.requiredOrgs.map(function(reqOrg) {
+    return getMembersOfOrg(reqOrg, github, 0);
+  })
 
-  var userOrgs = await Promise.all(promises);
-  return owners.filter(function(owner, index) {
-    // user passes if he is in any of the required organizations
-    return config.requiredOrgs.some(function(reqOrg) {
-      return userOrgs[index].indexOf(reqOrg) >= 0;
-    });
+  var currentMembers = [].concat.apply([], await Promise.all(promises));
+  return owners.filter(function(owner) {
+    // User passes if they are in any of the required organizations
+    return currentMembers.indexOf(owner) >= 0;
   });
 }
 
