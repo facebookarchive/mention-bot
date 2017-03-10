@@ -204,7 +204,7 @@ async function work(body) {
   function isValid(repoConfig, data) {
     if (repoConfig.actions.indexOf(data.action) === -1) {
       console.log(
-        'Skipping because action is ' + data.action + '.',
+        'Skipping because action is "' + data.action + '".',
         'We only care about: "' + repoConfig.actions.join("', '") + '"'
       );
       return false;
@@ -212,13 +212,13 @@ async function work(body) {
 
     if (repoConfig.withLabel && data.label &&
         data.label.name != repoConfig.withLabel) {
-      console.log('Skipping because pull request does not have label: ' + repoConfig.withLabel);
+      console.log('Skipping because pull request does not have label: "' + repoConfig.withLabel + '".');
       return false;
     }
 
     if (repoConfig.skipTitle &&
         data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
-      console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle);
+      console.log('Skipping because pull request title contains: "' + repoConfig.skipTitle + '".');
       return false;
     }
 
@@ -255,7 +255,7 @@ async function work(body) {
 
     if (repoConfig.skipTitle &&
         data.pull_request.title.indexOf(repoConfig.skipTitle) > -1) {
-      console.log('Skipping because pull request title contains: ' + repoConfig.skipTitle);
+      console.log('Skipping because pull request title contains: "' + repoConfig.skipTitle + '".');
       return false;
     }
 
