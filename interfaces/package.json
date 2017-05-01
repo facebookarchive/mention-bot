@@ -1,5 +1,7 @@
-declare module "./package.json" {
-  declare var config: {
+declare module "./package.json" 
+{
+  declare var config: 
+  {
     gheHost: string,
     ghePathPrefix: string,
     gheProtocol: string,
