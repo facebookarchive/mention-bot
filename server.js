@@ -134,6 +134,7 @@ async function work(body) {
     requiredOrgs: [],
     findPotentialReviewers: true,
     actions: ['opened'],
+    branches:[],
     skipAlreadyAssignedPR: false,
     skipAlreadyMentionedPR: false,
     delayed: false,
@@ -202,6 +203,14 @@ async function work(body) {
   }
 
   function isValid(repoConfig, data) {
+    if (repoConfig.branches && repoConfig.branches.indexOf(data.pull_request.base.ref) === -1) {
+      console.log(
+        'Skipping because base ref is "' + data.pull_request.base.ref + '".',
+        'We only care about: "' + repoConfig.branches.join("', '") + '"'
+      );
+      return false;
+    }
+
     if (repoConfig.actions.indexOf(data.action) === -1) {
       console.log(
         'Skipping because action is "' + data.action + '".',
