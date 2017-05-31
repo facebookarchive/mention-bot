@@ -203,7 +203,7 @@ async function work(body) {
   }
 
   function isValid(repoConfig, data) {
-    if (repoConfig.branches && repoConfig.branches.indexOf(data.pull_request.base.ref) === -1) {
+    if (repoConfig.branches && repoConfig.branches.length > 0 && repoConfig.branches.indexOf(data.pull_request.base.ref) === -1) {
       console.log(
         'Skipping because base ref is "' + data.pull_request.base.ref + '".',
         'We only care about: "' + repoConfig.branches.join("', '") + '"'
