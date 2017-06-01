@@ -1,8 +1,10 @@
-# mention-bot [![Build Status](https://travis-ci.org/facebook/mention-bot.svg?branch=master)](https://travis-ci.org/facebook/mention-bot)
+# mention-bot
 
 Do you have a GitHub project that is too big for people to subscribe to all the notifications? The mention bot will automatically mention potential reviewers on pull requests. It helps getting faster turnaround on pull requests by involving the right people early on.
 
 <img width="769" src="https://cloud.githubusercontent.com/assets/197597/11023035/a2f8733e-8622-11e5-84df-49a3d9425938.png">
+
+* [Muster](https://muster.intercom.io/apps/mention-bot)
 
 ## How To Use?
 
