@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    restart: always
+    ports:
+      - "80:5000"
+    environment:
+      GITHUB_USER: "${GITHUB_USER}"
+      GITHUB_TOKEN: "${GITHUB_TOKEN}"
