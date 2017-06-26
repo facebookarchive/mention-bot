@@ -143,6 +143,17 @@ docker build -t mention-bot .
 docker run -e GITHUB_USER="a" -p 5000:5000  mention-bot
 ```
 
+**Build & run the bot locally with docker-compose**
+
+Copy `.env.example` to `.env` and fill in your bot's information. Build and run
+the bot:
+
+```bash
+docker-compose up
+```
+
+The bot will be available at http://localhost.
+
 ## Configuring a custom message
 
 If you want to change the default message, you can write your custom logic in [message.js](https://github.com/facebook/mention-bot/blob/master/message.js), or add 'message' in the [.mention-bot configuration](#configuration) file.
