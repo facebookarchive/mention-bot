@@ -400,6 +400,30 @@ describe('Github Mention', function() {
     expect(function() { mentionBot.parseBlame(''); }).not.toThrow();
   });
 
+  it('ParsePR229', function() {
+    var parsed = mentionBot.parseDiff(
+      getFile('pr229.diff')
+    );
+    expect(parsed).toEqual([
+      {
+        path: 'public/tagging_templates/some_binary.xlsx',
+        deletedLines: []
+      },
+      {
+        path: 'public/tagging_templates/other_binary.xlsx',
+        deletedLines: []
+      },
+      {
+        path: 'public/tagging_templates/different_binary.xlsx',
+        deletedLines: []
+      },
+      {
+        path: 'spec/fixtures/some_binary.xlsx',
+        deletedLines: []
+      }
+    ]);
+  });
+
   it('ParseDiff3119', function() {
     var parsed = mentionBot.parseDiff(
       // https://github.com/facebook/react-native/pull/3119.diff
