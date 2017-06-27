@@ -71,95 +71,34 @@ function startsWith(str, start) {
   return str.substr(0, start.length) === start;
 }
 
-function parseDiffFile(lines: Array<string>): FileInfo {
-  var deletedLines = [];
-  var fromFile = "";
-
+function parseDiffFile(lines: Array<string>): Array<FileInfo> {
   // diff --git "a/path" "b/path" or rename to path/file or rename from path/file
-  var line = lines.pop();
-  if (line.match(/^rename to "?/)) {
-    // rename from path/file
-    line = lines.pop();
-  }
-
-  if (line.match(/^diff --git "?a\//)) {
-    fromFile = line.replace(/^diff --git "?a\/(.+)"? "?b\/.+"?/g, '$1');
-  } else if (line.match(/^rename from "?/)) {
-    fromFile = line.replace(/^rename from "?(.+)"?/g, '$1');
-  } else {
-    throw new Error('Invalid line, should start with something like `diff --git a/`, instead got \n' + line + '\n');
-  }
-
-  // index sha..sha mode
-  line = lines.pop();
-  if (startsWith(line, 'deleted file') ||
-      startsWith(line, 'new file') ||
-      startsWith(line, 'rename')) {
-    line = lines.pop();
-  }
-
-  if (startsWith(line, 'index ')) {
-    line = lines.pop();
-  } else if(startsWith(line, 'similarity index')) {
-    line = lines.pop();
-    while (startsWith(line, 'rename')) {
-      line = lines.pop();
+  var diffRegex = /^diff --git "?a\/(.+)"?\s/;
+  // @@ -from_line,from_count +to_line,to_count @@ first line
+  var offsetRegex = /^@@ -(\d+).+@@/;
+  var offset = null;
+  var current = 0;
+  return lines.reduce((f, line) => {
+    var match = diffRegex.exec(line);
+    if (match) {
+      offset = null;
+      f.push({path: match[1], deletedLines: []});
+      return f;
     }
-    // index sha..sha mode
-    line = lines.pop();
-  }
-  if (!line) {
-    // If the diff ends in an empty file with 0 additions or deletions, line will be null
-  } else if (startsWith(line, 'diff --git')) {
-    lines.push(line);
-  } else if (startsWith(line, 'Binary files')) {
-    // We just ignore binary files (mostly images). If we want to improve the
-    // precision in the future, we could look at the history of those files
-    // to get more names.
-  } else if (startsWith(line, '--- ')) {
-    // +++ path
-    line = lines.pop();
-    if (!line.match(/^\+\+\+ /)) {
-      throw new Error('Invalid line, should start with `+++`, instead got \n' + line + '\n');
+    var offsetMatch = offsetRegex.exec(line);
+    if (offsetMatch) {
+      offset = parseInt(offsetMatch[1], 10)
+      current = 0;
+      return f;
     }
-
-    var currentFromLine = 0;
-    while (lines.length > 0) {
-      line = lines.pop();
-      if (startsWith(line, 'diff --git')) {
-        lines.push(line);
-        break;
-      }
-
-      // @@ -from_line,from_count +to_line,to_count @@ first line
-      if (startsWith(line, '@@')) {
-        var matches = line.match(/^\@\@ -([0-9]+),?([0-9]+)? \+([0-9]+),?([0-9]+)? \@\@/);
-        if (!matches) {
-          continue;
-        }
-
-        var from_line = matches[1];
-        var from_count = matches[2];
-        var to_line = matches[3];
-        var to_count = matches[4];
-
-        currentFromLine = +from_line;
-        continue;
-      }
-
-      if (startsWith(line, '-')) {
-        deletedLines.push(currentFromLine);
-      }
-      if (!startsWith(line, '+')) {
-        currentFromLine++;
-      }
+    if (line.startsWith('-') && offset) {
+      f[f.length -1].deletedLines.push(current + offset);
     }
-  }
-
-  return {
-    path: fromFile,
-    deletedLines: deletedLines,
-  };
+    if (!line.startsWith('+')) {
+      current++;
+    }
+    return f;
+  }, [])
 }
 
 function parseDiff(diff: string): Array<FileInfo> {
@@ -171,13 +110,7 @@ function parseDiff(diff: string): Array<FileInfo> {
   }
 
   var lines = diff.trim().split('\n');
-  // Hack Array doesn't have shift/unshift to work from the beginning of the
-  // array, so we reverse the entire array in order to be able to use pop/add.
-  lines.reverse();
-
-  while (lines.length > 0) {
-    files.push(parseDiffFile(lines));
-  }
+  files = parseDiffFile(lines);
 
   return files;
 }
