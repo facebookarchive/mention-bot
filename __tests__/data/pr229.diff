@@ -1,0 +1,18 @@
+diff --git a/public/tagging_templates/some_binary.xlsx b/public/tagging_templates/some_binary.xlsx
+new file mode 100644
+index 0000000..d70cdb6
+Binary files /dev/null and b/public/tagging_templates/some_binary.xlsx differ
+diff --git a/public/tagging_templates/other_binary.xlsx b/public/tagging_templates/other_binary.xlsx
+old mode 100755
+new mode 100644
+index 0724fbf..bc2a9c8
+Binary files a/public/tagging_templates/other_binary.xlsx and b/public/tagging_templates/other_binary.xlsx differ
+diff --git a/public/tagging_templates/different_binary.xlsx b/public/tagging_templates/different_binary.xlsx
+old mode 100755
+new mode 100644
+index 019b5ac..938446e
+Binary files a/public/tagging_templates/different_binary.xlsx and b/public/tagging_templates/different_binary.xlsx differ
+diff --git a/spec/fixtures/some_binary.xlsx b/spec/fixtures/some_binary.xlsx
+new file mode 100644
+index 0000000..f8c0a1d
+Binary files /dev/null and b/spec/fixtures/some_binary.xlsx differ
