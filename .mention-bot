@@ -1,0 +1,13 @@
+{
+  "4": 3,
+  "numFilesToCheck": 10,
+  "message": "@pullRequester, thanks! @reviewers, please review this.",
+  "findPotentialReviewers": true,
+  "skipAlreadyAssignedPR": true,
+  "skipAlreadyMentionedPR": true,
+  "assignToReviewer": true,
+  "createReviewRequest": true,
+  "createComment": true,
+  "withLabel": "ready for review",
+  "action": ["opened", "labeled", "edited"]
+}
