@@ -89,8 +89,9 @@ function defaultMessageGenerator(reviewers, pullRequester) {
   );
 }
 
-function configMessageGenerator(message, reviewers, pullRequester) {
+function configMessageGenerator(message, reviewers, roundRobinReviewers, pullRequester) {
   var withReviewers = message.replace(/@reviewers/g, buildMentionSentence(reviewers));
+  var withRoundRobinReviewers = message.replace(/@roundRobinReviewers/g, buildMentionSentence(roundRobinReviewers));
   return withReviewers.replace(/@pullRequester/g, pullRequester);
 }
 
@@ -211,6 +212,7 @@ async function work(body) {
       return false;
     }
 
+    //  repoConfig.actions = ['opened', 'labeled']; // just for now TODO
     if (repoConfig.actions.indexOf(data.action) === -1) {
       console.log(
         'Skipping because action is "' + data.action + '".',
@@ -293,8 +295,18 @@ async function work(body) {
   );
 
   console.log('Reviewers:', reviewers);
+  var roundRobinReviewers = [];
+  if (repoConfig.numRoundRobinReviewers) {
+    roundRobinReviewers = (await mentionBot.getRoundRobinReviewersForPullRequest(
+      data.repository.html_url,
+      data.pull_request.user.login,
+      repoConfig,
+      github
+    ) || []).slice(0, numRoundRobinReviewers);
+  }
 
-  if (reviewers.length === 0) {
+  console.log('round robin reviewers', roundRobinReviewers);
+  if (roundRobinReviewers.length === 0 && reviewers.length === 0) {
     console.log('Skipping because there are no reviewers found.');
     return;
   }
@@ -304,6 +316,7 @@ async function work(body) {
     message = configMessageGenerator(
       repoConfig.message,
       reviewers,
+      roundRobinReviewers,
       '@' + data.pull_request.user.login
     );
   } else {

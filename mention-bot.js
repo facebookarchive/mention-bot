@@ -15,6 +15,25 @@ var githubAuthCookies = require('./githubAuthCookies');
 var fs = require('fs');
 var minimatch = require('minimatch');
 
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
 async function downloadFileAsync(url: string, cookies: ?string): Promise<string> {
   return new Promise(function(resolve, reject) {
     var args = ['--silent', '-L', url];
@@ -234,6 +253,35 @@ async function getDiffForPullRequest(
       }
     });
   });
+}
+
+async function getPRReviewerCounts(
+  owner: string,
+  repo: string,
+  github: Object
+): Promise<object> {
+  const pullRequests = await new Promise(function(resolve, reject) {
+    github.pullRequests.getAll({
+      owner: owner,
+      repo: repo,
+    }, function(err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+
+  const reviewers = {};
+  pullRequests.forEach((pullRequest) => {
+    pullRequest.requested_reviewers.forEach((reviewer) => {
+      if (!reviewers[reviewer.login]) reviewers[reviewer.login] = 0;
+      reviewers[reviewer.login] = reviewers[reviewer.login] + 1;
+    });
+  });
+
+  return reviewers;
 }
 
 async function getMatchingOwners(
@@ -564,6 +612,27 @@ async function guessOwners(
     });
 }
 
+async function getRoundRobinReviewersForPullRequest(
+  repoURL: string,
+  creator: string,
+  config: object,
+  github: Object
+): Promise<Array<string>> {
+  const ownerAndRepo = repoURL.split('/').slice(-2);
+  const activeReviewers = await getPRReviewerCounts(ownerAndRepo[0], ownerAndRepo[1], github);
+  const allReviewers = {};
+
+  const reviewers = config.reviewers || [];
+  // make sure creator isn't in list
+  if (reviewers.indexOf(creator) > -1) reviewers.splice(reviewers.indexOf(creator), 1);
+
+  reviewers.forEach(reviewer => allReviewers[reviewer] = 0);
+  Object.keys(activeReviewers).forEach(reviewer => {
+    if (allReviewers.hasOwnProperty(reviewer)) allReviewers[reviewer] = activeReviewers[reviewer];
+  });
+  return shuffle(Object.keys(allReviewers)).sort((a, b) => allReviewers[a] - allReviewers[b]);
+}
+
 async function guessOwnersForPullRequest(
   repoURL: string,
   id: number,
@@ -627,4 +696,5 @@ module.exports = {
   parseDiff: parseDiff,
   parseBlame: parseBlame,
   guessOwnersForPullRequest: guessOwnersForPullRequest,
+  getRoundRobinReviewersForPullRequest: getRoundRobinReviewersForPullRequest,
 };
