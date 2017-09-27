@@ -77,16 +77,18 @@ function buildMentionSentence(reviewers) {
   );
 }
 
-function defaultMessageGenerator(reviewers, pullRequester) {
-  return util.format(
-    '%s, thanks for your PR! ' +
-    'By analyzing the history of the files in this pull request' +
-    ', we identified %s to be%s potential reviewer%s.',
-    pullRequester,
-    buildMentionSentence(reviewers),
-    reviewers.length > 1 ? '' : ' a',
-    reviewers.length > 1 ? 's' : ''
-  );
+function getDefaultMessageGenerator(findPotentialReviewers) {
+  return function(reviewers, pullRequester) {
+    return util.format(
+      '%s, thanks for your PR! ' +
+      '%se identified %s to be%s potential reviewer%s.',
+      pullRequester,
+      findPotentialReviewers ? 'By analyzing the history of the files in this pull request, w' : 'W',
+      buildMentionSentence(reviewers),
+      reviewers.length > 1 ? '' : ' a',
+      reviewers.length > 1 ? 's' : ''
+    );
+  }
 }
 
 function configMessageGenerator(message, reviewers, pullRequester) {
@@ -311,7 +313,7 @@ async function work(body) {
       reviewers,
       '@' + data.pull_request.user.login, // pull-requester
       buildMentionSentence,
-      defaultMessageGenerator
+      getDefaultMessageGenerator(repoConfig.findPotentialReviewers)
     );
   }
 
