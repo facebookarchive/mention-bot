@@ -19,7 +19,7 @@ var schedule: { jobs: Array<any>, work: Function, performAt: Function, parse: Fu
   jobs: [],
 
   work: function(time: Date, callback: Function){
-    var promise: Promise = new Promise(function(resolve, reject: (error: any) => void){
+    var promise: Promise<void> = new Promise(function(resolve, reject: (error: any) => void){
       callback(resolve, reject);
     });
 
