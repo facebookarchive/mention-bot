@@ -44,7 +44,7 @@ var getAuthenticityToken = function() {
   var login = githubLogin();
   jar.parseHeaders(login.headers);
   return encodeURIComponent(
-    (login.body.match(/name="authenticity_token".*value="([^"]+)"/) || [''])[1]
+    (login.body.match(/action="\/session".*name="authenticity_token".*value="([^"]+)"/) || [''])[1]
   );
 };
 
