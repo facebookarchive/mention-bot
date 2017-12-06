@@ -29,7 +29,7 @@
     "bl": "^1.0.0",
     "download-file-sync": "^1.0.3",
     "express": "^4.13.3",
-    "flow-bin": "^0.18.1",
+    "flow-bin": "^0.60.1",
     "github": "^7.3.2",
     "jest-cli": "^0.7.1",
     "jsonlint": "^1.6.2",
