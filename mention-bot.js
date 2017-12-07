@@ -444,11 +444,11 @@ async function getTeamMembership(
   return new Promise(function(resolve, reject) {
     github.orgs.getTeamMembership({
       id: teamData.id,
-      owner: creator
+      username: creator
     }, function(err, data) {
       if (err) {
         if (err.code === 404 &&
-                err.message === '{"message":"Not Found","documentation_url":"https://developer.github.com/v3"}') {
+                err.message === '{"message":"Not Found","documentation_url":"https://developer.github.com/v3/orgs/teams/#get-team-membership"}') {
           resolve({name: teamData.name, state: 'nonmember'});
         } else {
           reject(err);
