@@ -138,7 +138,7 @@ function parseBlame(blame: string): Array<string> {
   // The way the document is structured is that commits and lines are
   // interleaved. So every time we see a commit we grab the author's name
   // and every time we see a line we log the last seen author.
-  var re = /(<img alt="@([^"]+)" class="avatar blame-commit-avatar"|<tr class="blame-line")/g;
+  var re = /(<img alt="@([^"]+)" class="avatar blame-commit-avatar"|<div class="blob-code blob-code-inner js-file-line" id="LC(\d+)">)/g;
 
   var currentAuthor = 'none';
   var lines = [];
@@ -146,8 +146,11 @@ function parseBlame(blame: string): Array<string> {
   while (match = re.exec(blame)) {
     if (match[2]) {
       currentAuthor = match[2];
-    } else {
-      lines.push(currentAuthor);
+    } else if(match[3]) {
+      var the_line = parseInt(match[3]);
+      while(lines.length < the_line) {
+        lines.push(currentAuthor);
+      }
     }
   }
 
