@@ -1,0 +1,48 @@
+diff --git a/Libraries/Image/Image.ios.js b/Libraries/Image/Image.ios.js
+index fd99b986b88..f8ae5a17211 100644
+--- a/Libraries/Image/Image.ios.js
++++ b/Libraries/Image/Image.ios.js
+@@ -241,6 +241,10 @@ const Image = createReactClass({
+      *
+      * - `repeat`: Repeat the image to cover the frame of the view. The
+      * image will keep it's size and aspect ratio. (iOS only)
++     *
++     * - 'center': Scale the image down so that it is completely visible,
++     * if bigger than the area of the view.
++     * The image will not be scaled up.
+      */
+     resizeMode: PropTypes.oneOf([
+       'cover',
+diff --git a/RNTester/js/ImageExample.js b/RNTester/js/ImageExample.js
+index 6e677890404..7577b5b349c 100644
+--- a/RNTester/js/ImageExample.js
++++ b/RNTester/js/ImageExample.js
+@@ -572,18 +572,16 @@ exports.examples = [
+                     />
+                   </View>
+                 : null }
+-                { Platform.OS === 'android' ?
+-                  <View style={styles.leftMargin}>
+-                    <Text style={[styles.resizeModeText]}>
+-                      Center
+-                    </Text>
+-                    <Image
+-                      style={styles.resizeMode}
+-                      resizeMode={Image.resizeMode.center}
+-                      source={image}
+-                    />
+-                  </View>
+-                : null }
++                <View style={styles.leftMargin}>
++                  <Text style={[styles.resizeModeText]}>
++                    Center
++                  </Text>
++                  <Image
++                    style={styles.resizeMode}
++                    resizeMode={Image.resizeMode.center}
++                    source={image}
++                  />
++                </View>
+               </View>
+             </View>
+           );
