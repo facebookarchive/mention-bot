@@ -44,7 +44,7 @@ var getAuthenticityToken = function() {
   var login = githubLogin();
   jar.parseHeaders(login.headers);
   return encodeURIComponent(
-    (login.body.match(/name="authenticity_token".*value="([^"]+)"/) || [''])[1]
+    (login.body.match(/action="\/session".*name="authenticity_token".*value="([^"]+)"/) || [''])[1]
   );
 };
 
@@ -59,8 +59,8 @@ var getGithubLoginResponseHeaders = function(): string {
     `--silent`,
     `-v`,
     `-d`, `utf8=%E2%9C%93&authenticity_token=${authenticity_token}`,
-    `-d`, `login=${USERNAME}`,
-    `--data-urlencode`, `password=${PASSWORD}`,
+    `-d`, `login=${USERNAME || ''}`,
+    `--data-urlencode`, `password=${PASSWORD || ''}`,
     `-H`, `Pragma: no-cache`,
     `-H`, `Origin: ${ghProtocol}://${ghHost}`,
     `-H`, `Accept-Encoding: gzip, deflate`,
